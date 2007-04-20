@@ -6,6 +6,8 @@
     <property name="lib" location="lib" />
     <property name="resources" location="resources"  />
     <property name="dist" location="dist" />
+    <property name="tmp" location="tmp" />
+    
     <property name="version" value="0.1" />
 
     <path id="library.classpath">
@@ -21,6 +23,7 @@
 
     <target name="clean">
         <delete dir="${build}" />
+        <delete dir="${tmp}" />
     </target>
 
     <target name="compile" depends="init">
@@ -31,19 +34,19 @@
 
     <target name="dist" depends="compile">
 
-        <mkdir dir="${build}/exploded" />
+        <mkdir dir="${tmp}" />
 
 
         <!-- copy the classes over -->
-        <copy todir="${build}/exploded/css">
+        <copy todir="${tmp}/css">
             <fileset dir="${resources}/css" />
         </copy>
 
-        <copy todir="${build}/exploded/images">
+        <copy todir="${tmp}/images">
             <fileset dir="${resources}/images" />
         </copy>
 
-        <copy todir="${build}/exploded/js">
+        <copy todir="${tmp}/js">
             <fileset dir="${resources}/js" />
         </copy>
         <mkdir dir="${dist}/builds/${version}" />
@@ -51,7 +54,7 @@
 
         <!-- build the deployment war file -->
         <war destfile="${dist}/builds/${version}/${ant.project.name}.war" webxml="${resources}/web.xml">
-            <fileset dir="${build}/exploded" />
+            <fileset dir="${tmp}" />
 
             <lib dir="${lib}">
                 <include name="**/*.jar" />
@@ -61,6 +64,8 @@
         </war>
 
         <copy file="${dist}/builds/${version}/${ant.project.name}.war" tofile="${dist}/builds/deploy/${ant.project.name}.war" />
+
+        <delete dir="${tmp}" />
     </target>
 
     
