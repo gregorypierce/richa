@@ -1,0 +1,67 @@
+<project name="richa" default="dist" basedir=".">
+    <description>Rich Internet Client Has Arrived</description>
+
+    <property name="src" location="src" />
+    <property name="build" location="classes" />
+    <property name="lib" location="lib" />
+    <property name="resources" location="resources"  />
+    <property name="dist" location="dist" />
+    <property name="version" value="0.1" />
+
+    <path id="library.classpath">
+        <fileset dir="${lib}">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+
+    <target name="init">
+        <tstamp/>
+        <mkdir dir="${build}"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}" />
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${build}">
+            <classpath id="app.classpath" refid="library.classpath" />
+        </javac>
+    </target>
+
+    <target name="dist" depends="compile">
+
+        <mkdir dir="${build}/exploded" />
+
+
+        <!-- copy the classes over -->
+        <copy todir="${build}/exploded/css">
+            <fileset dir="${resources}/css" />
+        </copy>
+
+        <copy todir="${build}/exploded/images">
+            <fileset dir="${resources}/images" />
+        </copy>
+
+        <copy todir="${build}/exploded/js">
+            <fileset dir="${resources}/js" />
+        </copy>
+        <mkdir dir="${dist}/builds/${version}" />
+        <mkdir dir="${dist}/builds/deploy" />
+
+        <!-- build the deployment war file -->
+        <war destfile="${dist}/builds/${version}/${ant.project.name}.war" webxml="${resources}/web.xml">
+            <fileset dir="${build}/exploded" />
+
+            <lib dir="${lib}">
+                <include name="**/*.jar" />
+                <exclude name="javax.servlet.jar" />
+            </lib>
+            <classes dir="${build}" />
+        </war>
+
+        <copy file="${dist}/builds/${version}/${ant.project.name}.war" tofile="${dist}/builds/deploy/${ant.project.name}.war" />
+    </target>
+
+    
+</project>
