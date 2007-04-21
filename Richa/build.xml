@@ -1,72 +1,127 @@
-<project name="richa" default="dist" basedir=".">
-    <description>Rich Internet Client Has Arrived</description>
+<project name="richa" default="explode.jboss" basedir=".">
+	<description>Rich Internet Client Has Arrived</description>
 
-    <property name="src" location="src" />
-    <property name="build" location="classes" />
-    <property name="lib" location="lib" />
-    <property name="resources" location="resources"  />
-    <property name="dist" location="dist" />
-    <property name="tmp" location="tmp" />
-    
-    <property name="version" value="0.1" />
+	<property file="${basedir}/build.properties" />
 
-    <path id="library.classpath">
-        <fileset dir="${lib}">
-            <include name="**/*.jar" />
-        </fileset>
-    </path>
+	<property name="src" location="src" />
+	<property name="build" location="classes" />
+	<property name="lib" location="lib" />
+	<property name="resources" location="resources" />
+	<property name="dist" location="dist" />
+	<property name="tmp" location="tmp" />
+	<property name="explode.dir" location="${dist}/${ant.project.name}.war" />
 
-    <target name="init">
-        <tstamp/>
-        <mkdir dir="${build}"/>
-    </target>
+	<property name="version" value="0.1" />
 
-    <target name="clean">
-        <delete dir="${build}" />
-        <delete dir="${tmp}" />
-    </target>
+	<path id="library.classpath">
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
 
-    <target name="compile" depends="init">
-        <javac srcdir="${src}" destdir="${build}">
-            <classpath id="app.classpath" refid="library.classpath" />
-        </javac>
-    </target>
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${build}" />
+	</target>
 
-    <target name="dist" depends="compile">
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${tmp}" />
+	</target>
 
-        <mkdir dir="${tmp}" />
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${build}" >
+			<classpath id="app.classpath" refid="library.classpath" />
+		</javac>
+	</target>
+
+	<target name="explode" depends="compile">
+		<mkdir dir="${explode.dir}/css" />
+		<mkdir dir="${explode.dir}/images" />
+		<mkdir dir="${explode.dir}/js" />
+		<!-- copy the classes over -->
+		<copy todir="${explode.dir}">
+			<fileset dir="${resources}">
+				<include name="css/*.css" />
+				<include name="js/*.js" />
+				<include name="images/*" />
+				<include name="*.html" />
+				<include name="*.htm" />
+				<include name="*.sim" />
+				<include name="*.jsb" />
+			</fileset>			
+		</copy>
+		<copy todir="${explode.dir}/WEB-INF/classes">
+			<fileset dir="${build}" />
+		</copy>		
+
+		<copy todir="${explode.dir}/WEB-INF" file="${resources}/web.xml"/>
+
+		<copy todir="${explode.dir}/WEB-INF/lib">
+			<fileset dir="${lib}">
+				<include name="**/*.jar" />
+				<exclude name="javax.servlet.jar" />
+			</fileset>
+		</copy>		
+	</target>
+
+	<target name="explode.jboss" depends="explode">
+		<copy todir="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}/${ant.project.name}.war" >
+			<fileset dir="${explode.dir}"/>
+		</copy>
+	</target>
+	
+	<target name="reload.jboss">
+		<touch file="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}/${ant.project.name}.war/WEB-INF/web.xml"/>
+	</target>
+
+	<!-- left the dist and deploy.jboss targets, but i think build and explode are better for dev -->
+	<target name="dist" depends="compile">
+		<mkdir dir="${tmp}" />
+		<!-- copy the classes over -->
+		<copy todir="${tmp}/css">
+			<fileset dir="${resources}/css" />
+		</copy>
+
+		<copy todir="${tmp}/images">
+			<fileset dir="${resources}/images" />
+		</copy>
+
+		<copy todir="${tmp}/js">
+			<fileset dir="${resources}/js" />
+		</copy>
+
+		<copy todir="${tmp}">
+			<fileset dir="${resources}/">
+				<include name="*.html" />
+				<include name="*.htm" />
+				<include name="*.sim" />
+				<include name="*.jsb" />
+			</fileset>
+		</copy>
+		<mkdir dir="${dist}/builds/${version}" />
+		<mkdir dir="${dist}/builds/deploy" />
+
+		<!-- build the deployment war file -->
+		<war destfile="${dist}/builds/${version}/${ant.project.name}.war" webxml="${resources}/web.xml">
+			<fileset dir="${tmp}" />
+
+			<lib dir="${lib}">
+				<include name="**/*.jar" />
+				<exclude name="javax.servlet.jar" />
+			</lib>
+			<classes dir="${build}" />
+		</war>
+
+		<copy file="${dist}/builds/${version}/${ant.project.name}.war" tofile="${dist}/builds/deploy/${ant.project.name}.war" />
+
+		<delete dir="${tmp}" />
+	</target>
+
+	<!-- Deploy the WAR to jboss -->
+	<target name="deploy.jboss" depends="dist">
+		<copy file="${dist}/builds/${version}/${ant.project.name}.war" todir="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}" />
+	</target>
 
 
-        <!-- copy the classes over -->
-        <copy todir="${tmp}/css">
-            <fileset dir="${resources}/css" />
-        </copy>
-
-        <copy todir="${tmp}/images">
-            <fileset dir="${resources}/images" />
-        </copy>
-
-        <copy todir="${tmp}/js">
-            <fileset dir="${resources}/js" />
-        </copy>
-        <mkdir dir="${dist}/builds/${version}" />
-        <mkdir dir="${dist}/builds/deploy" />
-
-        <!-- build the deployment war file -->
-        <war destfile="${dist}/builds/${version}/${ant.project.name}.war" webxml="${resources}/web.xml">
-            <fileset dir="${tmp}" />
-
-            <lib dir="${lib}">
-                <include name="**/*.jar" />
-                <exclude name="javax.servlet.jar" />
-            </lib>
-            <classes dir="${build}" />
-        </war>
-
-        <copy file="${dist}/builds/${version}/${ant.project.name}.war" tofile="${dist}/builds/deploy/${ant.project.name}.war" />
-
-        <delete dir="${tmp}" />
-    </target>
-
-    
 </project>
