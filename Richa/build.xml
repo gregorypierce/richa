@@ -1,4 +1,4 @@
-<project name="richa" default="explode.jboss" basedir=".">
+<project name="richa" default="explode" basedir=".">
 	<description>Rich Internet Client Has Arrived</description>
 
 	<property file="${basedir}/build.properties" />
