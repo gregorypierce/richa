@@ -1,0 +1,96 @@
+<j:jelly xmlns:j="jelly:core"
+	xmlns:s="jelly:org.richa.tags.extjs.ExtJSTagLibrary">
+	<html>
+	<head>
+	<s:script />
+	<s:style />
+	</head>
+	<body>
+	<s:page name="customer">
+		<s:formwrapper width="375px" title="Customer Information">
+			<s:form name="customer" labelWidth="100" buttonAlign="left">
+				<s:fieldset name="legper" legend="Personal">
+					<s:textfield name="name" fieldLabel="Name" width="170" />
+					<s:numberfield name="age" fieldLabel="Age" width="45" />
+					<s:datefield name="dob" fieldLabel="Date Of Birth" width="100" />
+				</s:fieldset>
+				<s:fieldset name="legaddr" legend="Address">
+					<s:textfield name="addr1" fieldLabel="Address 1" width="170" />
+					<s:textfield name="addr2" width="170" fieldLabel="Address2" />
+					<s:textfield name="city" fieldLabel="City" width="170" />
+					<s:numberfield name="zip" fieldLabel="Zip" width="55" maxLength="5" />
+					<s:textarea name="comment" fieldLabel="Comments" width="170" />
+				</s:fieldset>
+				<s:formbutton text="Save" handler="test" />
+			</s:form>
+		</s:formwrapper>
+		<s:formwrapper width="700px" title="Order Information">
+			<s:form name="order" labelWidth="100">
+				<s:column width="320px">
+					<s:fieldset name="legord" legend="Orders">
+						<s:textfield name="orderid" fieldLabel="Order#" width="170" />
+						<s:datefield name="createdt" fieldLabel="Created On" width="100" />
+					</s:fieldset>
+				</s:column>
+				<s:fieldset name="legord1" legend="Orders1">
+					<s:column width="320px">
+						<s:numberfield name="amount" fieldLabel="Amount" width="170" />
+						<s:datefield name="shipdt" fieldLabel="Shipped On" width="100" />
+					</s:column>
+				</s:fieldset>
+			</s:form>
+		</s:formwrapper>
+	</s:page>
+	<!-- TODO: Need to add this stuff to the s:script tag. -->
+	<script type="text/javascript">
+    function test()
+    {
+        ajaxFunction("testButton/onclick");
+    }
+    
+  function ajaxFunction(event)
+  {
+  var xmlHttp;
+  try
+    {
+    // Firefox, Opera 8.0+, Safari
+    xmlHttp=new XMLHttpRequest();
+    }
+  catch (e)
+    {
+    // Internet Explorer
+    try
+      {
+      xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+      }
+    catch (e)
+      {
+      try
+        {
+        xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+      catch (e)
+        {
+        alert("Your browser does not support AJAX!");
+        return false;
+        }
+      }
+    }
+
+    xmlHttp.onreadystatechange=function()
+      {
+      if(xmlHttp.readyState==4)
+        {
+        	eval(xmlHttp.responseText);
+        }
+      }
+
+    xmlHttp.open("POST","event/"+event,true);
+    xmlHttp.send(null);
+  }
+  
+  
+</script>
+	</body>
+	</html>
+</j:jelly>
