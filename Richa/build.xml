@@ -6,9 +6,12 @@
 	<property name="core" location="core" />
 	<property name="src" location="${core}/src" />
 	<property name="example-src" location="example-web-app/src" />
+	<property name="extjs" location="extjs" />
+	<property name="extjs-src" location="${extjs}/src" />
 	<property name="build" location="classes" />
 	<property name="lib" location="${core}/lib" />
 	<property name="resources" location="example-web-app/resources" />
+	<property name="extjs-resources" location="${extjs}/resources" />
 	<property name="dist" location="dist" />
 	<property name="tmp" location="tmp" />
 	<property name="explode.dir" location="${dist}/${ant.project.name}.war" />
@@ -39,6 +42,9 @@
 	<target name="compile" depends="init">
 		<javac srcdir="${src}" destdir="${build}">
 			<classpath id="app.classpath" refid="library.classpath" />
+		</javac>
+		<javac srcdir="${extjs-src}" destdir="${build}">
+			<classpath refid="library.classpath" />
 		</javac>
 	</target>
 
@@ -71,6 +77,7 @@
 			</fileset>
 			<fileset dir="${dist}">
 				<include name="richa.jar" />
+				<include name="richa-extjs.jar" />
 			</fileset>
 		</copy>
 	</target>
@@ -90,6 +97,16 @@
 		<jar destfile="${dist}/${ant.project.name}.jar">
 			<fileset dir="${build}">
 			    <include name="org/richa/**"/>
+				<exclude name="org/richa/tags/extjs/**"/>
+			</fileset>
+		</jar>
+
+		<jar destfile="${dist}/${ant.project.name}-extjs.jar">
+			<fileset dir="${build}">
+				<include name="org/richa/tags/extjs/**"/>
+			</fileset>
+			<fileset dir="${extjs-resources}">
+				<include name="**"/>
 			</fileset>
 		</jar>
 	</target>
@@ -138,7 +155,8 @@
 			<lib dir="${lib}">
 				<include name="**/*.jar" />
 				<exclude name="javax.servlet.jar" />
-				<include name="${dist}/richa.jar" />
+				<include name="${dist}/${ant.project.name}.jar" />
+				<include name="${dist}/${ant.project.name}-extjs.jar" />
 			</lib>
 			<classes>
 				<fileset dir="${build}" id="example-classes">
