@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="core/src"/>
 	<classpathentry kind="src" path="example-web-app/src"/>
+	<classpathentry kind="src" path="extjs/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="core/lib/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="core/lib/commons-collections-3.2.jar"/>
