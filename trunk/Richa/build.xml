@@ -1,12 +1,14 @@
-<project name="richa" default="explode" basedir=".">
+<project name="richa" default="example-explode" basedir=".">
 	<description>Rich Internet Client Has Arrived</description>
 
 	<property file="${basedir}/build.properties" />
 
-	<property name="src" location="src" />
+	<property name="core" location="core" />
+	<property name="src" location="${core}/src" />
+	<property name="example-src" location="example-web-app/src" />
 	<property name="build" location="classes" />
-	<property name="lib" location="lib" />
-	<property name="resources" location="resources" />
+	<property name="lib" location="${core}/lib" />
+	<property name="resources" location="example-web-app/resources" />
 	<property name="dist" location="dist" />
 	<property name="tmp" location="tmp" />
 	<property name="explode.dir" location="${dist}/${ant.project.name}.war" />
@@ -17,6 +19,11 @@
 		<fileset dir="${lib}">
 			<include name="**/*.jar" />
 		</fileset>
+	</path>
+
+	<path id="example.classpath">
+		<path refid="library.classpath" />
+		<pathelement location="${dist}/richa.jar" />
 	</path>
 
 	<target name="init">
@@ -30,12 +37,12 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}" >
+		<javac srcdir="${src}" destdir="${build}">
 			<classpath id="app.classpath" refid="library.classpath" />
 		</javac>
 	</target>
 
-	<target name="explode" depends="compile">
+	<target name="example-explode" depends="dist,example-compile">
 		<mkdir dir="${explode.dir}/css" />
 		<mkdir dir="${explode.dir}/images" />
 		<mkdir dir="${explode.dir}/js" />
@@ -44,39 +51,61 @@
 			<fileset dir="${resources}">
 				<include name="css/*.css" />
 				<include name="js/*.js" />
-				<include name="images/*" />
+				<include name="images/**" />
 				<include name="*.html" />
 				<include name="*.htm" />
 				<include name="*.sim" />
 				<include name="*.jsb" />
-			</fileset>			
+			</fileset>
 		</copy>
 		<copy todir="${explode.dir}/WEB-INF/classes">
-			<fileset dir="${build}" />
-		</copy>		
+			<fileset refid="example-classes" />
+		</copy>
 
-		<copy todir="${explode.dir}/WEB-INF" file="${resources}/web.xml"/>
+		<copy todir="${explode.dir}/WEB-INF" file="${resources}/web.xml" />
 
 		<copy todir="${explode.dir}/WEB-INF/lib">
 			<fileset dir="${lib}">
 				<include name="**/*.jar" />
 				<exclude name="javax.servlet.jar" />
 			</fileset>
-		</copy>		
-	</target>
-
-	<target name="explode.jboss" depends="explode">
-		<copy todir="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}/${ant.project.name}.war" >
-			<fileset dir="${explode.dir}"/>
+			<fileset dir="${dist}">
+				<include name="richa.jar" />
+			</fileset>
 		</copy>
 	</target>
-	
+
+	<target name="explode.jboss" depends="example-explode">
+		<copy todir="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}/${ant.project.name}.war">
+			<fileset dir="${explode.dir}" />
+		</copy>
+	</target>
+
 	<target name="reload.jboss">
-		<touch file="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}/${ant.project.name}.war/WEB-INF/web.xml"/>
+		<touch file="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}/${ant.project.name}.war/WEB-INF/web.xml" />
 	</target>
 
 	<!-- left the dist and deploy.jboss targets, but i think build and explode are better for dev -->
 	<target name="dist" depends="compile">
+		<jar destfile="${dist}/${ant.project.name}.jar">
+			<fileset dir="${build}">
+			    <include name="org/richa/**"/>
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="example-compile" depends="dist">
+		<javac srcdir="${example-src}" destdir="${build}">
+			<classpath id="example.app.classpath" refid="example.classpath" />
+		</javac>
+		<copy todir="${build}">
+			<fileset dir="${example-src}">
+    			<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="example-dist" depends="example-compile">
 		<mkdir dir="${tmp}" />
 		<!-- copy the classes over -->
 		<copy todir="${tmp}/css">
@@ -109,8 +138,13 @@
 			<lib dir="${lib}">
 				<include name="**/*.jar" />
 				<exclude name="javax.servlet.jar" />
+				<include name="${dist}/richa.jar" />
 			</lib>
-			<classes dir="${build}" />
+			<classes>
+				<fileset dir="${build}" id="example-classes">
+				    <exclude name="org/**"/>
+				</fileset>
+			</classes>
 		</war>
 
 		<copy file="${dist}/builds/${version}/${ant.project.name}.war" tofile="${dist}/builds/deploy/${ant.project.name}.war" />
@@ -119,7 +153,7 @@
 	</target>
 
 	<!-- Deploy the WAR to jboss -->
-	<target name="deploy.jboss" depends="dist">
+	<target name="deploy.jboss" depends="example-dist">
 		<copy file="${dist}/builds/${version}/${ant.project.name}.war" todir="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}" />
 	</target>
 

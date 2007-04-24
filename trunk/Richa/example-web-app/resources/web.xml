@@ -44,4 +44,10 @@
         <servlet-name>RichaRunner</servlet-name>
         <url-pattern>*.html</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RichaRunner</servlet-name>
+        <url-pattern>/event/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
