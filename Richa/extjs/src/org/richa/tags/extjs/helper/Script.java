@@ -18,8 +18,8 @@ public class Script extends BaseExtJSTag
 	 */
 	protected void beforeBody(final XMLOutput output) throws JellyTagException, SAXException
 	{
-		output.write("<script type=\"text/javascript\" src=\"" + webContext + "/js/yui-utilities.js\"></script>\n") ;
-		output.write("<script type=\"text/javascript\" src=\"" + webContext + "/js/ext-yui-adapter.js\"></script>\n") ; 
-	    output.write("<script type=\"text/javascript\" src=\"" + webContext + "/js/ext-all.js\"></script>\n") ;		
+		output.write("<script type=\"text/javascript\" src=\"" + webContext + "/resources/js/yui-utilities.js\"></script>\n") ;
+		output.write("<script type=\"text/javascript\" src=\"" + webContext + "/resources/js/ext-yui-adapter.js\"></script>\n") ; 
+	    output.write("<script type=\"text/javascript\" src=\"" + webContext + "/resources/js/ext-all.js\"></script>\n") ;		
 	}
 }

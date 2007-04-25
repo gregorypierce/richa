@@ -34,7 +34,17 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	protected String currentFormName ;
 	
 	/**
-	 * Name of the web context 
+	 * Current Active tabpanel name
+	 */
+	protected String currentTabPanelName ;
+	
+	/**
+	 * Current Active border layout name
+	 */
+	protected String currentBorderLayoutName ;
+	
+	/**
+	 * Name of the web context
 	 */
 	protected String webContext ;
 	
@@ -122,6 +132,12 @@ public abstract class BaseExtJSTag extends MapTagSupport
     		
     		//Get the current form name
     		currentFormName = (String)(getContext().findVariable(RichaRunner.CURRENTFORMNAME)) ;
+    		
+    		//Get the current tab panel name
+    		currentTabPanelName = (String)(getContext().findVariable(RichaRunner.CURRENTTABPANELNAME)) ;
+    		
+    		//Get the current border layout name
+    		currentBorderLayoutName = (String)(getContext().findVariable(RichaRunner.CURRENTBORDERLAYOUTNAME)) ;
     		
 	    	//Call the before 
 	    	beforeBody(output);
@@ -264,6 +280,60 @@ public abstract class BaseExtJSTag extends MapTagSupport
     protected void clearCurrentFormName()
     {
     	context.setVariable(RichaRunner.CURRENTFORMNAME, null) ;
+    }
+    
+    /**
+     * Get the current tab panel name
+     * @return
+     */
+    protected String getCurrentTabPanelName()
+    {
+    	return currentTabPanelName ;
+    }
+    
+    /**
+     * Set the current tab panel name
+     * @return
+     */
+    protected void setCurrentTabPanelName(String name)
+    {
+    	context.setVariable(RichaRunner.CURRENTTABPANELNAME, name) ;
+    }
+    
+    /**
+     * Clear the current tab panel name
+     * @return
+     */
+    protected void clearCurrentTabPanelName()
+    {
+    	context.setVariable(RichaRunner.CURRENTTABPANELNAME, null) ;
+    }
+    
+    /**
+     * Get the current border layout name
+     * @return
+     */
+    protected String getCurrentBorderLayoutName()
+    {
+    	return currentBorderLayoutName ;
+    }
+    
+    /**
+     * Set the current border layout name
+     * @return
+     */
+    protected void setCurrentBorderLayoutName(String name)
+    {
+    	context.setVariable(RichaRunner.CURRENTBORDERLAYOUTNAME, name) ;
+    }
+    
+    /**
+     * Clear the current border layout name
+     * @return
+     */
+    protected void clearCurrentBorderLayoutName()
+    {
+    	context.setVariable(RichaRunner.CURRENTBORDERLAYOUTNAME, null) ;
     }
     
     /**
