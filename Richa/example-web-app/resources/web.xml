@@ -32,7 +32,7 @@
 
     <servlet-mapping>
         <servlet-name>RichaRunner</servlet-name>
-        <url-pattern>*.sim</url-pattern>
+        <url-pattern>*.rich</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
