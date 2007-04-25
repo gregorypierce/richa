@@ -1,7 +1,6 @@
 package org.richa.runner;
 
 import java.net.URL;
-import java.util.Hashtable;
 
 import org.apache.commons.jelly.JellyContext;
 import org.apache.commons.jelly.Script;
@@ -16,9 +15,6 @@ import org.richa.util.StringBufferWriter;
  */
 public class RichaRunner
 {
-	//Cache for the script object
-	private static Hashtable<String,Script> scriptCache = new Hashtable<String,Script>() ;
-	
 	public static final String SCRIPTBUFFER = "scriptbuffer" ;
 	public static final String CURRENTFORMNAME = "currentFormName" ;
 	public static final String CURRENTTABPANELNAME = "currentTabPanelName" ;
@@ -46,7 +42,7 @@ public class RichaRunner
 	    XMLOutput xmlOutput = XMLOutput.createXMLOutput(output) ;
 	
 	    //Check if we have a script object in the cache
-	    Script script = scriptCache.get(pageurl.getPath()) ;
+	    Script script = RichaScriptCache.get(pageurl.getPath()) ;
 	   
  	    //If we don't find the script
 	    if (script == null)
@@ -55,7 +51,7 @@ public class RichaRunner
 	    	script = context.compileScript(pageurl) ;
 	    	
 	    	//Cache
-	    	//scriptCache.put(pageurl.getPath(), script) ;
+	    	RichaScriptCache.put(pageurl.getPath(), script) ;
 	    }
 	    
 	    //Run the script
