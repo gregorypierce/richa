@@ -11,15 +11,7 @@ import org.xml.sax.SAXException;
  *
  */
 public class FormWrapper extends BaseExtJSTag
-{
-	/**
-	 * Return the javascript object name to generate
-	 */
-	protected String getObjectName()
-	{
-		return ("Ext.form.CheckBox") ;
-	}
-	
+{	
 	/**
 	 * Generate html and js before the body is processed
 	 */
