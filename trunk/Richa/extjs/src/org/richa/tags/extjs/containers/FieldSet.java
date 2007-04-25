@@ -37,4 +37,3 @@ public class FieldSet extends BaseContainerTag
 		scriptBuffer.appendln("    " + getCurrentFormName()+ ".end();"); 
 	}
 }
-

@@ -26,7 +26,7 @@ public class Form extends BaseContainerTag
 	{
 		String name = getName() ;
 		if (isEmpty(name))
-			throw new JellyTagException("Name is a required parameter for a form tag") ;
+			throw new JellyTagException("name is a required parameter for this tag") ;
 		
 		//Generate a div for the form place holder
 		output.write("<div id=\"" + "form-" + name + "-id" + "\"></div>") ;
@@ -51,4 +51,3 @@ public class Form extends BaseContainerTag
 	    clearCurrentFormName() ;
 	}   
 }
-

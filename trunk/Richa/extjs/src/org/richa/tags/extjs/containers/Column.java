@@ -37,4 +37,3 @@ public class Column extends BaseContainerTag
 		scriptBuffer.appendln("    " + getCurrentFormName()+ ".end();");
 	}   
 }
-

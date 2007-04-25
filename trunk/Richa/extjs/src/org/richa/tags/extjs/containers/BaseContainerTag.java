@@ -25,5 +25,3 @@ public abstract class BaseContainerTag extends BaseExtJSTag
 	} 
 
 }
-
-
