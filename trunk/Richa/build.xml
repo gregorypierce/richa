@@ -49,9 +49,6 @@
 	</target>
 
 	<target name="example-explode" depends="dist,example-compile">
-		<mkdir dir="${explode.dir}/css" />
-		<mkdir dir="${explode.dir}/images" />
-		<mkdir dir="${explode.dir}/js" />
 		<!-- copy the classes over -->
 		<copy todir="${explode.dir}">
 			<fileset dir="${resources}">
