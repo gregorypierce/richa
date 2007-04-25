@@ -1,0 +1,62 @@
+<j:jelly xmlns:j="jelly:core" xmlns:s="jelly:org.richa.tags.extjs.ExtJSTagLibrary">
+<html>
+<head>
+<s:script/>
+<s:style/>
+</head>
+<body>
+<s:page name="customer">
+    <div id="center">
+    <s:formwrapper width="375px" title="Customer Information">
+		<s:form name="customer" labelWidth="100" buttonAlign="left">
+		    <s:fieldset name="legper" legend="Personal">
+				<s:textfield name="name" fieldLabel="Name" width="170"/>
+				<s:numberfield name="age" fieldLabel="Age" width="45"/>
+				<s:datefield name="dob" fieldLabel="Date Of Birth" width="100"/>
+			</s:fieldset>
+			<s:fieldset name="legaddr" legend="Address">
+				<s:textfield name="addr1" fieldLabel="Address 1" width="170"/>
+				<s:textfield name="addr2" width="170" fieldLabel="Address2"/>
+				<s:textfield name="city"  fieldLabel = "City" width="170"/>
+				<s:numberfield name="zip" fieldLabel="Zip" width="55" maxLength="5"/>
+				<s:textarea name="comment" fieldLabel="Comments" width="170"/>
+			</s:fieldset>
+			<s:formbutton text="Save"/>
+		</s:form>
+	</s:formwrapper>
+	</div>
+	<div id="south">
+	</div>
+
+	<div id="north">
+	</div>
+
+	<div id="east">
+	</div>
+	
+	<div id="center2">
+	</div>
+
+	<div id="west">
+	</div>
+
+	<div id="autoTabs">
+	</div>
+
+	
+	<s:borderlayout name="laycustomer" element="document.body">
+		<s:layoutregion region="north" initialSize="25" titlebar="false"/>
+		<s:layoutregion region="east" split="true" initialSize="202" minSize="175" maxSize="400" titlebar="true" collapsible="true"/>
+		<s:layoutregion region="west" split="true" initialSize="200" minSize="175" maxSize="400" titlebar="true" collapsible="true"/>
+		<s:layoutregion region="center" titlebar="true" autoScroll="true" resizeTabs="true" minTabWidth="50" preferredTabWidth="150"/>
+		<s:layoutregion region="south" split="true" initialSize="100" minSize="100" titlebar="true" collapsible="true"/>
+		<s:contentpanel region="north" element="north"/>
+		<s:contentpanel region="east" element="east" title="East" colesable="true"/>
+		<s:contentpanel region="west" element="west" title="West" colesable="true"/>
+		<s:contentpanel region="south" element="south" title="South" colesable="true"/>
+		<s:contentpanel region="center" element="center" title="Customer" colesable="false"/>
+	</s:borderlayout>
+</s:page>
+</body>
+</html>
+</j:jelly>
