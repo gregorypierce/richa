@@ -1,6 +1,7 @@
 package org.richa.runner;
 
 import java.net.URL;
+import java.util.Hashtable;
 
 import org.apache.commons.jelly.JellyContext;
 import org.apache.commons.jelly.Script;
@@ -15,9 +16,13 @@ import org.richa.util.StringBufferWriter;
  */
 public class RichaRunner
 {
+	//Cache for the script object
+	private static Hashtable<String,Script> scriptCache = new Hashtable<String,Script>() ;
+	
 	public static final String SCRIPTBUFFER = "scriptbuffer" ;
 	public static final String CURRENTFORMNAME = "currentFormName" ;
-	public static final String CURRENTTABNAME = "currentTabName" ;
+	public static final String CURRENTTABPANELNAME = "currentTabPanelName" ;
+	public static final String CURRENTBORDERLAYOUTNAME = "currentBorderLayoutName" ;
 	public static final String WEBCONTEXT = "webcontext" ;
 	
 	public static AppendingStringBuffer runPage(URL pageurl,String webcontext) throws Exception
@@ -25,7 +30,8 @@ public class RichaRunner
 		StringBufferWriter output = new StringBufferWriter() ;
 		AppendingStringBuffer scriptBuffer = new AppendingStringBuffer() ;
 		String currentFormName = null;
-		String currentTabName = null;
+		String currentTabPanelName = null;
+		String currentBorderLayoutName = null ;
 		
 	    JellyContext context = new JellyContext();
 	    
@@ -33,13 +39,24 @@ public class RichaRunner
 	    context.setVariable(SCRIPTBUFFER, scriptBuffer);
 	    context.setVariable(WEBCONTEXT, webcontext) ;
 	    context.setVariable(CURRENTFORMNAME, currentFormName) ;
-	    context.setVariable(CURRENTTABNAME, currentTabName) ;
+	    context.setVariable(CURRENTTABPANELNAME, currentTabPanelName) ;
+	    context.setVariable(CURRENTBORDERLAYOUTNAME, currentBorderLayoutName) ;
 	    
 	    //Create the output
 	    XMLOutput xmlOutput = XMLOutput.createXMLOutput(output) ;
-	    
-	    //Compile the script
-	    Script script = context.compileScript(pageurl) ;
+	
+	    //Check if we have a script object in the cache
+	    Script script = scriptCache.get(pageurl.getPath()) ;
+	   
+ 	    //If we don't find the script
+	    if (script == null)
+	    {
+	    	//Compile the script
+	    	script = context.compileScript(pageurl) ;
+	    	
+	    	//Cache
+	    	//scriptCache.put(pageurl.getPath(), script) ;
+	    }
 	    
 	    //Run the script
 	    script.run(context, xmlOutput);
@@ -50,6 +67,4 @@ public class RichaRunner
 	    //Return the stringbuffer
 	    return output.getStringBuffer() ;
 	}
-	
-	
 }
