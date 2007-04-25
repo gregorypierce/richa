@@ -8,6 +8,7 @@
 	<classpathentry kind="lib" path="core/lib/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="core/lib/commons-jelly-1.0.jar"/>
 	<classpathentry kind="lib" path="core/lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="core/lib/commons-vfs-1.0.jar"/>
 	<classpathentry kind="lib" path="core/lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="core/lib/javassist.jar"/>
 	<classpathentry kind="lib" path="core/lib/javax.servlet.jar"/>
