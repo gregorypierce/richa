@@ -18,7 +18,7 @@ public class FormButton extends BaseControlTag
 	{
 		String text = getAttribute("text") ;
 		if (isEmpty(text))
-			throw new JellyTagException("Text is a required parameter for this tag") ;
+			throw new JellyTagException("text is a required parameter for this tag") ;
 		
 		String handler = getAttribute("handler") ;
 		if (isEmpty(handler))
@@ -27,4 +27,3 @@ public class FormButton extends BaseControlTag
 			scriptBuffer.appendln("    " + getCurrentFormName() + ".addButton(\"" + text + "\"," + handler + ");") ;
 	}
 }
-

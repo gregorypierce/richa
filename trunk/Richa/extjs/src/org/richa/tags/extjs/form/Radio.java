@@ -26,10 +26,9 @@ public class Radio extends BaseControlTag
 	{
 		String name = getName() ;
 		if (isEmpty(name))
-			throw new JellyTagException("Name is a required parameter for this tag") ;
+			throw new JellyTagException("name is a required parameter for this tag") ;
 		
 		//Serialize the creation of the tag
 		serializeCreation() ;	
 	}
 }
-
