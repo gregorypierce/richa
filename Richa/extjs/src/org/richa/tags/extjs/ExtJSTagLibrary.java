@@ -28,8 +28,8 @@ public class ExtJSTagLibrary extends TagLibrary
 		registerTag("column",org.richa.tags.extjs.containers.Column.class) ;
 		
 		//Controls
-		registerTag("tabpanel",org.richa.tags.extjs.controls.tabs.TabPanel.class) ;
-		registerTag("tabpanelitem",org.richa.tags.extjs.controls.tabs.TabPanelItem.class) ;
+		registerTag("tabpanel",org.richa.tags.extjs.controls.tab.TabPanel.class) ;
+		registerTag("tabpanelitem",org.richa.tags.extjs.controls.tab.TabPanelItem.class) ;
 		
 		//Eye Candy
 		registerTag("formwrapper",org.richa.tags.extjs.eyecandy.FormWrapper.class) ;
