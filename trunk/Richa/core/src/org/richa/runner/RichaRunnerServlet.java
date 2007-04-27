@@ -2,7 +2,6 @@ package org.richa.runner ;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +13,21 @@ import org.richa.util.AppendingStringBuffer;
 @SuppressWarnings("serial")
 public class RichaRunnerServlet extends HttpServlet
 {
+	@Override
+	public void init() throws ServletException
+	{
+		super.init();
+			
+		//Get the root path for the context
+		String rootpath = getServletContext().getRealPath("/") ;
+		
+		//Strip out the last /
+		rootpath = rootpath.substring(0,rootpath.length() - 1) ;
+		
+		//Set the path in Richa Runner
+		RichaRunner.setRootPath(rootpath) ;
+	}
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		PrintWriter pw = null ;
@@ -23,32 +37,30 @@ public class RichaRunnerServlet extends HttpServlet
 			//Get a print writer      
 			pw = response.getWriter() ;
 			
-			//Get the path name of the template
-			String template = request.getServletPath() ;
-			if (template == null)
+			//Get the page name
+			String pagename = request.getServletPath() ;
+			if (pagename == null)
 			{
-				sendError(response,template);
+				sendError(response,pagename);
 				return ;
 			}
-			
-			//Get a URL to the resources
-			URL pageurl = getServletContext().getResource(template) ;
-			if (pageurl == null)
-			{
-				sendError(response,template);
-				return ;
-			}
-			
+						
 			//Get the name of the context
 			String context = request.getContextPath() ;
 			if (context == null)
 			{ 
-				sendError(response,template);
+				sendError(response,pagename);
 				return ;
 			}
 			
+			//Get the web context
+			RichaRunner runner = new RichaRunner() ;
+			runner.setWebContext(context) ;
+			runner.setServletContext(getServletContext()) ;
+			runner.setPageName(pagename) ;
+			
 			//Invoke the page runner
-			AppendingStringBuffer output = RichaRunner.runPage(pageurl,context) ;
+			AppendingStringBuffer output = runner.runPage() ;
 			
 			//Send the output
 			pw.print(output.getValue()) ;	
@@ -77,4 +89,5 @@ public class RichaRunnerServlet extends HttpServlet
 		response.sendError(HttpServletResponse.SC_NOT_FOUND,template) ;
 		return ;
 	}
+	
 }
