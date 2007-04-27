@@ -33,12 +33,11 @@ public class RichaResourcesServlet extends HttpServlet
 
 		try
 		{
-			// Get the resource path
+			// Get the resource path for the extjs jar with the resources
 			String resourcePath = getServletContext().getRealPath("/WEB-INF/lib/richa-extjs.jar");
 
 			// Open the jar file
-			jarFile = VFS.getManager().resolveFile("jar:" + resourcePath);
-
+			jarFile = VFS.getManager().resolveFile("jar:" + resourcePath);			
 		} 
 		catch (FileSystemException eFSE)
 		{
@@ -64,8 +63,8 @@ public class RichaResourcesServlet extends HttpServlet
 				return;
 			}
 
-			ResourceFileSelector fileSelector = new ResourceFileSelector(
-					resource);
+			//Create a file selector for the appropriate resource name
+			ResourceFileSelector fileSelector = new ResourceFileSelector(resource);
 
 			// Search the jar file
 			FileObject[] fo = jarFile.findFiles(fileSelector);
@@ -128,6 +127,11 @@ public class RichaResourcesServlet extends HttpServlet
 		super.destroy();
 	}
 
+	/**
+	 * Send the file to the browser
+	 * @param content
+	 * @param out
+	 */
 	private void sendFile(FileContent content, OutputStream out)
 	{
 		BufferedInputStream bis = null;
