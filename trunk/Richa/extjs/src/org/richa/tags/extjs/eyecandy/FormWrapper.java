@@ -19,7 +19,6 @@ public class FormWrapper extends BaseExtJSTag
 	{
 		String width = getAttribute("width") ;
 		String title = getAttribute("title") ;
-		String titlestyle = getAttribute("titlestyle") ;
 		
 		output.write("<div style=\"width:" + width + ";\">\n") ;
 	    output.write("<div class=\"x-box-tl\"><div class=\"x-box-tr\"><div class=\"x-box-tc\"></div></div></div>\n") ;
