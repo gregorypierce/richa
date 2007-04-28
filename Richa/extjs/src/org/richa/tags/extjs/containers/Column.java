@@ -34,6 +34,6 @@ public class Column extends BaseContainerTag
 	protected void afterBody(final XMLOutput output) throws JellyTagException, SAXException
 	{
 		//Close the container
-		scriptBuffer.appendln("    " + getCurrentFormName()+ ".end();");
+		scriptBuffer.appendln("    " + getCurrentForm().getName()+ ".end();");
 	}   
 }

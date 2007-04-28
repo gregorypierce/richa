@@ -2,6 +2,7 @@ package org.richa.tags.extjs.containers;
 
 import org.apache.commons.jelly.JellyTagException;
 import org.apache.commons.jelly.XMLOutput;
+import org.richa.metadata.ContainerMetaData;
 import org.xml.sax.SAXException;
 
 /**
@@ -35,7 +36,7 @@ public class Form extends BaseContainerTag
 		serializeCreation() ;
 		
 		//Set the current form name
-		setCurrentFormName(name) ;
+		setCurrentForm(new ContainerMetaData(name, getAttribute("listener"))) ;
 	}
 	
 	/**
@@ -48,6 +49,6 @@ public class Form extends BaseContainerTag
 	    scriptBuffer.appendln("    " + getName() + ".render('" + "form-" + getName() + "-id" + "');");
 	    
 	    //Clear the current form name
-	    clearCurrentFormName() ;
+	    clearCurrentForm() ;
 	}   
 }

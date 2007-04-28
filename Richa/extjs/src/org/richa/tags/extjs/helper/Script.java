@@ -21,5 +21,6 @@ public class Script extends BaseExtJSTag
 		output.write("<script type=\"text/javascript\" src=\"" + webContext + "/resources/js/yui-utilities.js\"></script>\n") ;
 		output.write("<script type=\"text/javascript\" src=\"" + webContext + "/resources/js/ext-yui-adapter.js\"></script>\n") ; 
 	    output.write("<script type=\"text/javascript\" src=\"" + webContext + "/resources/js/ext-all.js\"></script>\n") ;		
+	    output.write("<script type=\"text/javascript\" src=\"" + webContext + "/resources/js/richa-ext.js\"></script>\n") ;
 	}
 }

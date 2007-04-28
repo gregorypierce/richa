@@ -6,9 +6,20 @@
 	<s:style />
 	</head>
 	<body>
-	<s:page name="customer">
-		<s:formwrapper width="375px" title="Customer Information">
-			<s:form name="customer" labelWidth="100" buttonAlign="left">
+	<s:page name="eventtest" listener="pageListener">
+		<s:formwrapper width="375px" title="Page Event Listener">
+			<s:form name="page" labelWidth="100" buttonAlign="left">
+				<s:formbutton text="Page Event" handler="pageHandler" />
+			</s:form>
+		</s:formwrapper>
+		<s:formwrapper width="375px" title="Form Event Listener">
+			<s:form name="form" labelWidth="100" buttonAlign="left"
+				listener="formListener">
+				<s:formbutton text="Form Event" handler="formHandler" />
+			</s:form>
+		</s:formwrapper>
+		<s:formwrapper width="375px" title="Customer Information Event Handler">
+			<s:form name="customer" labelWidth="100" buttonAlign="left" listener="customerListener">
 				<s:fieldset name="legper" legend="Personal">
 					<s:textfield name="name" fieldLabel="Name" width="170" />
 					<s:numberfield name="age" fieldLabel="Age" width="45" />
@@ -21,23 +32,7 @@
 					<s:numberfield name="zip" fieldLabel="Zip" width="55" maxLength="5" />
 					<s:textarea name="comment" fieldLabel="Comments" width="170" />
 				</s:fieldset>
-				<s:formbutton text="Save" />
-			</s:form>
-		</s:formwrapper>
-		<s:formwrapper width="700px" title="Order Information">
-			<s:form name="order" labelWidth="100">
-				<s:column width="320px">
-					<s:fieldset name="legord" legend="Orders">
-						<s:textfield name="orderid" fieldLabel="Order#" width="170" />
-						<s:datefield name="createdt" fieldLabel="Created On" width="100" />
-					</s:fieldset>
-				</s:column>
-				<s:fieldset name="legord1" legend="Orders1">
-					<s:column width="320px">
-						<s:numberfield name="amount" fieldLabel="Amount" width="170" />
-						<s:datefield name="shipdt" fieldLabel="Shipped On" width="100" />
-					</s:column>
-				</s:fieldset>
+				<s:formbutton text="Save" handler="customerDataHandler" scope="form" />
 			</s:form>
 		</s:formwrapper>
 	</s:page>
