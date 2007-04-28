@@ -5,6 +5,7 @@ import javax.servlet.ServletContext;
 import org.apache.commons.jelly.JellyContext;
 import org.apache.commons.jelly.Script;
 import org.apache.commons.jelly.XMLOutput;
+import org.richa.metadata.ContainerMetaData;
 import org.richa.util.AppendingStringBuffer;
 import org.richa.util.StringBufferWriter;
 
@@ -19,7 +20,8 @@ public class RichaRunner
 	private static String rootpath ;
 	
 	public static final String SCRIPTBUFFER = "scriptbuffer" ;
-	public static final String CURRENTFORMNAME = "currentFormName" ;
+	public static final String CURRENTPAGE = "currentPage" ;
+	public static final String CURRENTFORM = "currentForm" ;
 	public static final String CURRENTTABPANELNAME = "currentTabPanelName" ;
 	public static final String CURRENTBORDERLAYOUTNAME = "currentBorderLayoutName" ;
 	public static final String WEBCONTEXT = "webcontext" ;
@@ -116,7 +118,8 @@ public class RichaRunner
 	private JellyContext initContext()
 	{
 		AppendingStringBuffer scriptBuffer = new AppendingStringBuffer() ;
-		String currentFormName = null;
+		ContainerMetaData currentForm = null;
+		ContainerMetaData currentPage = null;
 		String currentTabPanelName = null;
 		String currentBorderLayoutName = null ;
 		
@@ -125,7 +128,8 @@ public class RichaRunner
 	    //Add a buffer to build the script
 	    context.setVariable(SCRIPTBUFFER, scriptBuffer);
 	    context.setVariable(WEBCONTEXT, webcontext) ;
-	    context.setVariable(CURRENTFORMNAME, currentFormName) ;
+	    context.setVariable(CURRENTFORM, currentForm) ;
+	    context.setVariable(CURRENTPAGE, currentPage) ;
 	    context.setVariable(CURRENTTABPANELNAME, currentTabPanelName) ;
 	    context.setVariable(CURRENTBORDERLAYOUTNAME, currentBorderLayoutName) ;
 	    context.setVariable(SERVLETCONTEXT, servletcontext) ;

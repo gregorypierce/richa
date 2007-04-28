@@ -2,6 +2,7 @@ package org.richa.tags.extjs.helper ;
 
 import org.apache.commons.jelly.JellyTagException;
 import org.apache.commons.jelly.XMLOutput;
+import org.richa.metadata.ContainerMetaData;
 import org.richa.tags.extjs.BaseExtJSTag;
 import org.xml.sax.SAXException;
 
@@ -19,6 +20,9 @@ public class Page extends BaseExtJSTag
 	{
 		//Initialize the script
 		startScript() ;
+		
+		//Set the current page meta data
+		setCurrentPage(new ContainerMetaData(getAttribute("name"), getAttribute("listener")));
 	}
 	
 	/**
@@ -31,6 +35,9 @@ public class Page extends BaseExtJSTag
 		
 		//Write to the output stream
 		output.write(scriptBuffer.toString()) ;
+		
+		//Clear the current page meta data
+		clearCurrentPage();
 	}
 	
 	private void startScript()

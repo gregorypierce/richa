@@ -21,7 +21,7 @@ public abstract class BaseControlTag extends BaseExtJSTag
     	scriptBuffer.appendln("    });") ;
     	
     	//Add it to thecurrent container
-    	scriptBuffer.appendln("    " + getCurrentFormName() + ".add(" + getName() + ");") ;
+    	scriptBuffer.appendln("    " + getCurrentForm().getName() + ".add(" + getName() + ");") ;
     }    
     
     /**
@@ -37,7 +37,7 @@ public abstract class BaseControlTag extends BaseExtJSTag
     	scriptBuffer.appendln("    });") ;
     	
     	//Add it to thecurrent container
-    	scriptBuffer.appendln("    " + getCurrentFormName() + ".add(" + getName() + ");") ;
+    	scriptBuffer.appendln("    " + getCurrentForm().getName() + ".add(" + getName() + ");") ;
     }   
 
     /**

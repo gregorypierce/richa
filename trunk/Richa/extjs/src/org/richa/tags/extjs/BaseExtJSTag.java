@@ -5,6 +5,7 @@ import java.util.Iterator;
 import org.apache.commons.jelly.JellyTagException;
 import org.apache.commons.jelly.MapTagSupport;
 import org.apache.commons.jelly.XMLOutput;
+import org.richa.metadata.ContainerMetaData;
 import org.richa.runner.RichaRunner;
 import org.richa.util.AppendingStringBuffer;
 import org.xml.sax.SAXException;
@@ -29,9 +30,14 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	protected AppendingStringBuffer scriptBuffer ;
 	
 	/**
-	 * Current Active form name
+	 * Current Active Page
 	 */
-	protected String currentFormName ;
+	protected ContainerMetaData currentPage ;
+
+	/**
+	 * Current Active form
+	 */
+	protected ContainerMetaData currentForm ;
 	
 	/**
 	 * Current Active tabpanel name
@@ -129,9 +135,12 @@ public abstract class BaseExtJSTag extends MapTagSupport
 
     		//Get the Web Context
     		webContext = (String)(getContext().findVariable(RichaRunner.WEBCONTEXT)) ;
-    		
-    		//Get the current form name
-    		currentFormName = (String)(getContext().findVariable(RichaRunner.CURRENTFORMNAME)) ;
+
+    		//Get the current page
+    		currentPage = (ContainerMetaData)(getContext().findVariable(RichaRunner.CURRENTPAGE));
+
+    		//Get the current form
+    		currentForm = (ContainerMetaData)(getContext().findVariable(RichaRunner.CURRENTFORM));
     		
     		//Get the current tab panel name
     		currentTabPanelName = (String)(getContext().findVariable(RichaRunner.CURRENTTABPANELNAME)) ;
@@ -254,32 +263,60 @@ public abstract class BaseExtJSTag extends MapTagSupport
     {
     	return (String)getAttributes().get(name) ;
     }
- 
+
     /**
-     * Get the current form name
+     * Get the current page
      * @return
      */
-    protected String getCurrentFormName()
+    protected ContainerMetaData getCurrentPage()
     {
-    	return currentFormName ;
+    	return currentPage ;
     }
     
     /**
      * Set the current form name
      * @return
      */
-    protected void setCurrentFormName(String name)
+    protected void setCurrentPage(ContainerMetaData page)
     {
-    	context.setVariable(RichaRunner.CURRENTFORMNAME, name) ;
+    	context.setVariable(RichaRunner.CURRENTPAGE, page) ;
     }
     
     /**
      * Clear the current form name
      * @return
      */
-    protected void clearCurrentFormName()
+    protected void clearCurrentPage()
     {
-    	context.setVariable(RichaRunner.CURRENTFORMNAME, null) ;
+    	context.setVariable(RichaRunner.CURRENTPAGE, null) ;
+    }
+
+    
+    /**
+     * Get the current form name
+     * @return
+     */
+    protected ContainerMetaData getCurrentForm()
+    {
+    	return currentForm ;
+    }
+    
+    /**
+     * Set the current form name
+     * @return
+     */
+    protected void setCurrentForm(ContainerMetaData form)
+    {
+    	context.setVariable(RichaRunner.CURRENTFORM, form) ;
+    }
+    
+    /**
+     * Clear the current form name
+     * @return
+     */
+    protected void clearCurrentForm()
+    {
+    	context.setVariable(RichaRunner.CURRENTFORM, null) ;
     }
     
     /**
