@@ -32,6 +32,7 @@
 	<target name="init">
 		<tstamp />
 		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
 	</target>
 
 	<target name="clean">
