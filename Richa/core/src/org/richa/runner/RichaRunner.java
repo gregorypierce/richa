@@ -1,5 +1,8 @@
 package org.richa.runner;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import javax.servlet.ServletContext;
 
 import org.apache.commons.jelly.JellyContext;
@@ -115,7 +118,7 @@ public class RichaRunner
 	 * Initalize a Jelly Context
 	 * @return
 	 */
-	private JellyContext initContext()
+	protected JellyContext initContext()
 	{
 		AppendingStringBuffer scriptBuffer = new AppendingStringBuffer() ;
 		ContainerMetaData currentForm = null;
@@ -152,12 +155,22 @@ public class RichaRunner
 	    if (script == null)
 	    {
 	    	//Compile the script
-	    	script = context.compileScript(servletcontext.getResource(pagename)) ;
+	    	script = context.compileScript(getResource(pagename)) ;
 	    	
-	    	//Cache it
-	    	RichaPageCache.put(pagename, script) ;
+	    	if (isCachingEnabled())
+	    	    RichaPageCache.put(pagename, script) ;
 	    }	
 	    
 	    return script ;
 	}
+    
+    protected URL getResource(String pageName) throws MalformedURLException
+    {
+        return servletcontext.getResource(pagename);
+    }
+    
+    protected boolean isCachingEnabled()
+    {
+        return true;
+    }
 }
