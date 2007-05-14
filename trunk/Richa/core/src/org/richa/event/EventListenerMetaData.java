@@ -6,7 +6,6 @@ import java.util.Map;
 
 public class EventListenerMetaData
 {
-	
 	private Class eventListener;
 	
 	private Map<String,Method> eventHandlerMap;
