@@ -1,14 +1,15 @@
 package org.richa.runner;
 
+
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Stack;
 
 import javax.servlet.ServletContext;
 
 import org.apache.commons.jelly.JellyContext;
 import org.apache.commons.jelly.Script;
 import org.apache.commons.jelly.XMLOutput;
-import org.richa.metadata.ContainerMetaData;
 import org.richa.util.AppendingStringBuffer;
 import org.richa.util.StringBufferWriter;
 
@@ -22,13 +23,14 @@ public class RichaRunner
 	//Root path of the contex
 	private static String rootpath ;
 	
-	public static final String SCRIPTBUFFER = "scriptbuffer" ;
-	public static final String CURRENTPAGE = "currentPage" ;
-	public static final String CURRENTFORM = "currentForm" ;
-	public static final String CURRENTTABPANELNAME = "currentTabPanelName" ;
-	public static final String CURRENTBORDERLAYOUTNAME = "currentBorderLayoutName" ;
-	public static final String WEBCONTEXT = "webcontext" ;
-	public static final String SERVLETCONTEXT = "servletcontext" ;
+	public static final String SCRIPTBUFFER = "!scriptbuffer!" ;
+	public static final String EVENTBUFFER = "!eventbuffer!" ;
+	public static final String CURRENTFORM = "!currentform!" ;
+	public static final String CURRENTTABPANELNAME = "!currenttabpanelname!" ;
+	public static final String CURRENTBORDERLAYOUTNAME = "!currentborderlayoutname!" ;
+	public static final String WEBCONTEXT = "!webcontext!" ;
+	public static final String LISTENERSTACK = "!listenertack!" ;
+	public static final String SERVLETCONTEXT = "!servletcontext!" ;
 	
 	//Context name
 	private String webcontext ;
@@ -103,7 +105,7 @@ public class RichaRunner
 	
 	    //Check if we have a script object in the cache
 	    Script script = getScript(context) ;
-	       
+	   
 	    //Run the script
 	    script.run(context, xmlOutput);
 	    
@@ -121,30 +123,29 @@ public class RichaRunner
 	protected JellyContext initContext()
 	{
 		AppendingStringBuffer scriptBuffer = new AppendingStringBuffer() ;
-		ContainerMetaData currentForm = null;
-		ContainerMetaData currentPage = null;
+		AppendingStringBuffer eventBuffer = new AppendingStringBuffer() ;
 		String currentTabPanelName = null;
 		String currentBorderLayoutName = null ;
+		String currentFormName = null ;
+		Stack<String> listenerStack = new Stack<String>() ;
 		
 	    JellyContext context = new JellyContext();
 	    
 	    //Add a buffer to build the script
 	    context.setVariable(SCRIPTBUFFER, scriptBuffer);
+	    context.setVariable(EVENTBUFFER, eventBuffer);
 	    context.setVariable(WEBCONTEXT, webcontext) ;
-	    context.setVariable(CURRENTFORM, currentForm) ;
-	    context.setVariable(CURRENTPAGE, currentPage) ;
+	    context.setVariable(CURRENTFORM, currentFormName) ;
 	    context.setVariable(CURRENTTABPANELNAME, currentTabPanelName) ;
 	    context.setVariable(CURRENTBORDERLAYOUTNAME, currentBorderLayoutName) ;
 	    context.setVariable(SERVLETCONTEXT, servletcontext) ;
+	    context.setVariable(LISTENERSTACK, listenerStack) ;
 	    
 	    return context ;
 	}
 	
 	/**
 	 * Get the Jelly Script object from the cache
-	 * @param context
-	 * @return Jelly Script 
-	 * @throws Exception
 	 */
 	private Script getScript(JellyContext context) throws Exception
 	{	
@@ -153,7 +154,7 @@ public class RichaRunner
 	    	
  	    //If we don't find  the script
 	    if (script == null)
-	    {
+	    {	  
 	    	//Compile the script
 	    	script = context.compileScript(getResource(pagename)) ;
 	    	
