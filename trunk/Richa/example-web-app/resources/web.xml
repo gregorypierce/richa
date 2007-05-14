@@ -35,6 +35,12 @@
         <servlet-class>org.richa.resources.RichaResourcesServlet</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
+    
+    <servlet>
+        <servlet-name>RichaEvent</servlet-name>
+        <servlet-class>org.richa.event.RichaEventServlet</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>RichaRunner</servlet-name>
@@ -52,10 +58,10 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>RichaRunner</servlet-name>
+        <servlet-name>RichaEvent</servlet-name>
         <url-pattern>/event/*</url-pattern>
     </servlet-mapping>
-
+    
 	<servlet-mapping>
         <servlet-name>RichaResources</servlet-name>
         <url-pattern>/resources/*</url-pattern>
