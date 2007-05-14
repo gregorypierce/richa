@@ -11,7 +11,7 @@ public abstract class BaseControlTag extends BaseExtJSTag
     /**
      * Serialize the creation of the the tag and its attributes
      */
-    protected void serializeCreation()
+    protected void serialize(boolean add)
     {   
 	    scriptBuffer.appendln("    var " + getName() + " =  new " + getObjectName() + "({");
     	
@@ -21,13 +21,14 @@ public abstract class BaseControlTag extends BaseExtJSTag
     	scriptBuffer.appendln("    });") ;
     	
     	//Add it to thecurrent container
-    	scriptBuffer.appendln("    " + getCurrentForm().getName() + ".add(" + getName() + ");") ;
+    	if (add)
+    		scriptBuffer.appendln("    " + getCurrentFormName() + ".add(" + getName() + ");") ;
     }    
     
     /**
      * Serialize the creation of the the tag and its attributes
      */
-    protected void serializeCreation(String data)
+    protected void serialize(String data, boolean add)
     {   
 	    scriptBuffer.appendln("    var " + getName() + " =  new " + getObjectName() + "(" + data +  ",{");
     	
@@ -37,13 +38,14 @@ public abstract class BaseControlTag extends BaseExtJSTag
     	scriptBuffer.appendln("    });") ;
     	
     	//Add it to thecurrent container
-    	scriptBuffer.appendln("    " + getCurrentForm().getName() + ".add(" + getName() + ");") ;
+    	if (add)
+    		scriptBuffer.appendln("    " + getCurrentFormName() + ".add(" + getName() + ");") ;
     }   
 
     /**
      * Serialize the apply to creation of the the tag and its attributes
      */
-    protected void serializeApplyToCreation()
+    protected void serializeApplyTo(boolean apply)
     {
     	scriptBuffer.appendln("    var " + getName() + " = new " + getObjectName() + "({");
     	
@@ -53,7 +55,7 @@ public abstract class BaseControlTag extends BaseExtJSTag
     	scriptBuffer.appendln("    });") ;
     	
     	//Append the applyTo method call
-    	scriptBuffer.appendln(getName() + ".applyTo('" + getAttribute("applyTo") + "');") ;
-    }    
-
+    	if (apply)
+    		scriptBuffer.appendln(getName() + ".applyTo('" + getAttribute("applyTo") + "');") ;
+    }  
 }

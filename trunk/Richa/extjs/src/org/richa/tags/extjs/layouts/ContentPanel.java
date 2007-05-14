@@ -25,11 +25,11 @@ public class ContentPanel extends BaseExtJSTag
 	 */
 	protected void beforeBody(final XMLOutput output) throws JellyTagException, SAXException
 	{
-		String region = getAttribute("region") ;
+		String region = getAttribute(REGION) ;
 		if (isEmpty(region))
 			throw new JellyTagException("region is a required parameter for this tag") ;
 		
-		String element = getAttribute("element") ;
+		String element = getAttribute(ELEMENT) ;
 		if (isEmpty(element))
 			throw new JellyTagException("element is a required parameter for this tag") ;
 		
@@ -38,11 +38,15 @@ public class ContentPanel extends BaseExtJSTag
 			throw new JellyTagException("contentpanel tag can only be enclosed inside a borderlayout tag") ;
 		
 		//Serialize the creation of the tag
-		serializeCreation(region,element) ;
+		serialize(region,element) ;
 	}
 	
-	
-	protected void serializeCreation(String region, String element)
+	/**
+	 * Generate the create of the layout
+	 * @param region
+	 * @param element
+	 */
+	protected void serialize(String region, String element)
 	{
 		scriptBuffer.appendln("    " + getCurrentBorderLayoutName() + ".add(\"" + region + "\", new " + getObjectName() + "(\"" + element + "\", {" ) ;
 		

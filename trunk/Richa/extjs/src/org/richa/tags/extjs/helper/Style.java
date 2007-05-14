@@ -18,6 +18,10 @@ public class Style extends BaseExtJSTag
 	 */
 	protected void beforeBody(final XMLOutput output) throws JellyTagException, SAXException
 	{
+		
+		String theme = (String)getAttributes().get(THEME) ;
+		
 		output.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + webContext + "/resources/css/ext-all.css\"/>\n") ;
+		output.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + webContext + "/resources/css/" + theme + ".css\"/>\n") ;
 	}
 }

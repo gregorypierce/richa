@@ -17,8 +17,15 @@ public class FormWrapper extends BaseExtJSTag
 	 */
 	protected void beforeBody(final XMLOutput output) throws JellyTagException, SAXException
 	{
-		String width = getAttribute("width") ;
-		String title = getAttribute("title") ;
+		String width = getAttribute(WIDTH) ;
+		if (isEmpty(width))	
+			throw new JellyTagException("width is a required parameter for this tag") ;
+		
+		
+		String title = getAttribute(TITLE) ;
+		if (isEmpty(title))	
+			throw new JellyTagException("title is a required parameter for this tag") ;
+		
 		
 		output.write("<div style=\"width:" + width + ";\">\n") ;
 	    output.write("<div class=\"x-box-tl\"><div class=\"x-box-tr\"><div class=\"x-box-tc\"></div></div></div>\n") ;

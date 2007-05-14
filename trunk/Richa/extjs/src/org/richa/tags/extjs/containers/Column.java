@@ -25,7 +25,7 @@ public class Column extends BaseContainerTag
 	protected void beforeBody(final XMLOutput output) throws JellyTagException, SAXException
 	{		
 		//Serialize the creation of the tag
-		serializeChildCreation() ;
+		serializeChild() ;
 	}
 	
 	/**
@@ -34,6 +34,6 @@ public class Column extends BaseContainerTag
 	protected void afterBody(final XMLOutput output) throws JellyTagException, SAXException
 	{
 		//Close the container
-		scriptBuffer.appendln("    " + getCurrentForm().getName()+ ".end();");
+		scriptBuffer.appendln("    " + getCurrentFormName() + ".end();");
 	}   
 }

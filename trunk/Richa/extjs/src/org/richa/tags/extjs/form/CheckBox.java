@@ -29,6 +29,6 @@ public class CheckBox extends BaseControlTag
 			throw new JellyTagException("name is a required parameter for this tag") ;
 		
 		//Serialize the creation of the tag
-		serializeCreation() ;	
+		serialize(true) ;	
 	}
 }

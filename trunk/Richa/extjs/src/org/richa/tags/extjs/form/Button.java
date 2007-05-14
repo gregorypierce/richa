@@ -29,6 +29,6 @@ public class Button extends BaseControlTag
 			throw new JellyTagException("name is a required parameter for this tag") ;
 		
 		//Serialize the creation of the tag
-		serializeCreation("null") ;	
+		serialize("null",true) ;	
 	}
 }

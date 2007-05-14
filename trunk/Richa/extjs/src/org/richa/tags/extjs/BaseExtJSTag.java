@@ -1,11 +1,14 @@
 package org.richa.tags.extjs;
 
 import java.util.Iterator;
+import java.util.Stack;
 
 import org.apache.commons.jelly.JellyTagException;
 import org.apache.commons.jelly.MapTagSupport;
 import org.apache.commons.jelly.XMLOutput;
-import org.richa.metadata.ContainerMetaData;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.richa.event.EventListeners;
 import org.richa.runner.RichaRunner;
 import org.richa.util.AppendingStringBuffer;
 import org.xml.sax.SAXException;
@@ -21,8 +24,38 @@ import org.xml.sax.SAXException;
 
 public abstract class BaseExtJSTag extends MapTagSupport
 {
+	protected static Log log = LogFactory.getLog(BaseExtJSTag.class);
+	
+	public static final String NAME = "name" ;
+	public static final String PARAMS = "params" ;
+	public static final String ID = "id" ;
+	public static final String CLASS = "class" ;
+	public static final String CLIENT = "client" ;
+	public static final String SERVER = "server" ;
+	public static final String TEXT = "text" ;
+	public static final String HIDDEN = "hidden" ;
+	public static final String ACTIVE = "active" ;
+	public static final String DISABLE = "disable" ;
+	public static final String CONTENTURL = "contentURL" ;
+	public static final String WIDTH = "width" ;
+	public static final String TITLE = "title" ;
+	public static final String REGION = "region" ;
+	public static final String ELEMENT = "element" ;
+	public static final String BORDERLAYOUT = "borderlayout" ;
+	public static final String SENDDATA = "senddata" ;
+	public static final String THEME = "theme" ;
+	public static final String BIND = "bind" ;
+	
+	
+	public static final String FIELD = "field" ;
+	public static final String FORM = "form" ;
+	public static final String PAGE = "page" ;
+	public static final String NONE = "none" ;
+	
 	private static final String TRUE = "true" ;
 	private static final String FALSE = "false" ;
+	
+	private static final String RICHADISPATCHEVENT = "RichaDispatchEvent" ;
 	
 	/**
 	 * Script Buffer
@@ -30,14 +63,14 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	protected AppendingStringBuffer scriptBuffer ;
 	
 	/**
-	 * Current Active Page
+	 * EventHandler Buffer
 	 */
-	protected ContainerMetaData currentPage ;
-
+	protected AppendingStringBuffer eventBuffer ;
+	
 	/**
 	 * Current Active form
 	 */
-	protected ContainerMetaData currentForm ;
+	protected String currentForm ;
 	
 	/**
 	 * Current Active tabpanel name
@@ -60,6 +93,11 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	protected String objectName ;
 	
 	/**
+	 * Listener Stack 
+	 */
+	protected Stack<String> listenerStack ;
+	
+	/**
 	 * true indicates the engine will skip all the subelements of this tag
 	 */
 	protected boolean skipBody = false;
@@ -79,7 +117,7 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	 */
 	protected String getName()
 	{
-		return ((String) getAttributes().get("name")) ;
+		return ((String) getAttributes().get(NAME)) ;
 	}
 	
 	/**
@@ -88,7 +126,7 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	 */
 	protected String getId()
 	{
-		return ((String)getAttributes().get("id")) ;
+		return ((String)getAttributes().get(ID)) ;
 	}
 	
 	/**
@@ -97,7 +135,7 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	 */
 	protected String getStyle()
 	{
-		return ((String)getAttributes().get("class")) ;
+		return ((String)getAttributes().get(CLASS)) ;
 	}
 	
 	/**
@@ -132,21 +170,24 @@ public abstract class BaseExtJSTag extends MapTagSupport
     	{
     		//Get the Script Buffer
     		scriptBuffer = (AppendingStringBuffer)(getContext().findVariable(RichaRunner.SCRIPTBUFFER)) ;
+    		
+    		//Get the Event Buffer
+    		eventBuffer = (AppendingStringBuffer)(getContext().findVariable(RichaRunner.EVENTBUFFER)) ;
 
     		//Get the Web Context
     		webContext = (String)(getContext().findVariable(RichaRunner.WEBCONTEXT)) ;
 
-    		//Get the current page
-    		currentPage = (ContainerMetaData)(getContext().findVariable(RichaRunner.CURRENTPAGE));
-
     		//Get the current form
-    		currentForm = (ContainerMetaData)(getContext().findVariable(RichaRunner.CURRENTFORM));
+    		currentForm = (String)(getContext().findVariable(RichaRunner.CURRENTFORM));
     		
     		//Get the current tab panel name
     		currentTabPanelName = (String)(getContext().findVariable(RichaRunner.CURRENTTABPANELNAME)) ;
     		
     		//Get the current border layout name
     		currentBorderLayoutName = (String)(getContext().findVariable(RichaRunner.CURRENTBORDERLAYOUTNAME)) ;
+    		
+    		//Get the listener stack
+    		listenerStack = (Stack<String>)(getContext().findVariable(RichaRunner.LISTENERSTACK)) ;
     		
 	    	//Call the before 
 	    	beforeBody(output);
@@ -221,6 +262,8 @@ public abstract class BaseExtJSTag extends MapTagSupport
      */
     protected void serializeAttributes()
     {
+    	int i = 0;
+    	
     	//Get the iterator
     	Iterator attrs = getAttributes().keySet().iterator();
     	
@@ -228,13 +271,68 @@ public abstract class BaseExtJSTag extends MapTagSupport
     	while (attrs.hasNext())
     	{
     		String name = (String) attrs.next() ;
-       		if (attrs.hasNext())
-       			scriptBuffer.appendln("        " + name + ":" + serializeValue((String)getAttributes().get(name)) + ",") ;
-       		else
-       			scriptBuffer.appendln("        " + name + ":" + serializeValue((String)getAttributes().get(name))) ;       			
+    		
+    		if (!excludeParam(name))
+    		{
+    			scriptBuffer.append("        ") ;
+    			if (i > 0)	     	
+    				scriptBuffer.append(",") ;
+    			
+    			scriptBuffer.appendln(name + ":" + serializeValue((String)getAttributes().get(name))) ;
+    			i++ ;    			    	
+    		}
     	}	
     }
     
+    
+    /**
+     * Serialize all the events in the tag
+     */
+    protected void serializeEvents() throws JellyTagException
+    {
+    	//Get the iterator
+    	Iterator attrs = getAttributes().keySet().iterator();
+    	
+    	//Loop through the keys except name and serialize it
+    	while (attrs.hasNext())
+    	{
+    		//Is this is a server side event
+    		String name = (String) attrs.next() ;
+    		if (name.startsWith(SERVER))
+    			serializeEvent(name,SERVER) ;
+    		else if (name.startsWith(CLIENT))
+    			serializeEvent(name,CLIENT) ;
+    	}	
+    }
+    
+    /**
+     * Serialize an event
+     */
+    protected void serializeEvent(String name, String type) throws JellyTagException
+    {
+    	String senddata = null ;
+    	String jshandler = null ;
+    	String listener = getCurrentListener() ;
+		if (listener == null)
+			throw new JellyTagException("A listener is not defined for this tag. Please enclose this tag inside a listener tag.") ;
+		
+		String eventName = name.substring(type.length()).toLowerCase() ;
+		String handler = (String)getAttributes().get(name) ;
+		
+		//Get send data if it is a server side event
+		if (SERVER.equals(type))
+		{
+			senddata = (String)getAttributes().get(SENDDATA) ;
+			if (senddata == null)
+				senddata = FIELD ;
+			jshandler = RICHADISPATCHEVENT ;
+		}
+		else
+			jshandler = handler ;
+		
+		
+		eventBuffer.appendln("    RichaBindEvent(" + getName() + ",'" + getObjectName() + "','" + eventName + "'," + jshandler + ",'" + listener + "','" + handler + "','" + senddata + "');") ;   		
+    }
     /**
      * Serialize one value ;
      * @param value
@@ -263,40 +361,12 @@ public abstract class BaseExtJSTag extends MapTagSupport
     {
     	return (String)getAttributes().get(name) ;
     }
-
-    /**
-     * Get the current page
-     * @return
-     */
-    protected ContainerMetaData getCurrentPage()
-    {
-    	return currentPage ;
-    }
-    
-    /**
-     * Set the current form name
-     * @return
-     */
-    protected void setCurrentPage(ContainerMetaData page)
-    {
-    	context.setVariable(RichaRunner.CURRENTPAGE, page) ;
-    }
-    
-    /**
-     * Clear the current form name
-     * @return
-     */
-    protected void clearCurrentPage()
-    {
-    	context.setVariable(RichaRunner.CURRENTPAGE, null) ;
-    }
-
     
     /**
      * Get the current form name
      * @return
      */
-    protected ContainerMetaData getCurrentForm()
+    protected String getCurrentFormName()
     {
     	return currentForm ;
     }
@@ -305,16 +375,16 @@ public abstract class BaseExtJSTag extends MapTagSupport
      * Set the current form name
      * @return
      */
-    protected void setCurrentForm(ContainerMetaData form)
+    protected void setCurrentFormName(String name)
     {
-    	context.setVariable(RichaRunner.CURRENTFORM, form) ;
+    	context.setVariable(RichaRunner.CURRENTFORM, name) ;
     }
     
     /**
      * Clear the current form name
      * @return
      */
-    protected void clearCurrentForm()
+    protected void clearCurrentFormName()
     {
     	context.setVariable(RichaRunner.CURRENTFORM, null) ;
     }
@@ -373,16 +443,80 @@ public abstract class BaseExtJSTag extends MapTagSupport
     	context.setVariable(RichaRunner.CURRENTBORDERLAYOUTNAME, null) ;
     }
     
-    /**
-	 * Serialize the creation of the the tag and its attributes
+	/**
+     * Serialize the creation of the the tag and its attributes
+     */
+    protected void serialize(boolean add)
+    {   
+	    scriptBuffer.appendln("    var " + getName() + " =  new " + getObjectName() + "({");
+    	
+	    //Serialize the attributes
+    	serializeAttributes() ;
+    	
+    	scriptBuffer.appendln("    });") ;
+    	
+    	//Add it to thecurrent container
+    	if (add)
+    		scriptBuffer.appendln("    " + getCurrentFormName() + ".add(" + getName() + ");") ;
+    }    
+	/**
+	 * Get the current listener
+	 * @return listener name
 	 */
-	protected void serializeCreation()
-	{	
-		scriptBuffer.appendln("    var " + getName() + " = new " + getObjectName() + "({");
+	protected String getCurrentListener()
+	{
+		if (listenerStack != null)
+		{
+			try
+			{
+				String listener = listenerStack.peek() ;
+				return listener ;
+			}
+			catch (Exception e)
+			{
+				return null ;
+			}
+		}
+		else
+			return null ;
+	}
+	
+
+	/**
+	 * Add a new listener on the stack
+	 */
+	protected void addListener(String name)
+	{
+		if (listenerStack != null)
+			listenerStack.push(name) ;
+	}
+	
+	/**
+	 * Remove the current listener
+	 */
+	protected void removeCurrentListener()
+	{
+		if (listenerStack != null)
+			listenerStack.pop() ;
+	}
+	
+	/**
+	 * Does this parameter need to be serialized
+	 * @param name
+	 */
+	protected static boolean excludeParam(String name)
+	{
+		boolean exclude = false ;
 		
-		//Serialize all the attributes
-		serializeAttributes() ;
+		if (name.startsWith(CLIENT)) 
+			exclude = true ;
+		else if (name.startsWith(SERVER))
+			exclude = true ;
+		else if (name.equals(PARAMS))
+			exclude = true ;
+		else if (name.equals(SENDDATA))
+			exclude = true ;
 		
-		scriptBuffer.appendln("    });") ;
-	}    
+		return exclude ;
+	}
 }

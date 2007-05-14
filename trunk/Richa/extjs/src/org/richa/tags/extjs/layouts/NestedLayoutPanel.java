@@ -25,24 +25,28 @@ public class NestedLayoutPanel extends BaseExtJSTag
 	 */
 	protected void beforeBody(final XMLOutput output) throws JellyTagException, SAXException
 	{
-		String region = getAttribute("region") ;
+		String region = getAttribute(REGION) ;
 		if (isEmpty(region))
-			throw new JellyTagException("region is a required parameter for this tag") ;
+			throw new JellyTagException(REGION + " is a required parameter for this tag") ;
 		
-		String borderlayout = getAttribute("borderLayout") ;
+		String borderlayout = getAttribute(BORDERLAYOUT) ;
 		if (isEmpty(borderlayout))
-			throw new JellyTagException("borderLayout is a required parameter for this tag") ;
+			throw new JellyTagException(BORDERLAYOUT + " is a required parameter for this tag") ;
 		
 		//Ensure that there is a layout tag active
 		if (isEmpty(getCurrentBorderLayoutName()))
 			throw new JellyTagException("nestedlayoutpanel tag can only be enclosed inside a borderlayout tag") ;
 		
 		//Serialize the creation of the tag
-		serializeCreation(region,borderlayout) ;
+		serialize(region,borderlayout) ;
 	}
 	
-	
-	protected void serializeCreation(String region, String borderlayout)
+	/**
+	 * Serialize the creation of the layout
+	 * @param region
+	 * @param borderlayout
+	 */
+	protected void serialize(String region, String borderlayout)
 	{
 		scriptBuffer.appendln("    " + getCurrentBorderLayoutName() + ".add(\"" + region + "\", new " + getObjectName() + "(\"" + borderlayout + "\", {" ) ;
 		

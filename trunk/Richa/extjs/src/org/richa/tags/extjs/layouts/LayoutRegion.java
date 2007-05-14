@@ -17,7 +17,7 @@ public class LayoutRegion extends BaseExtJSTag
 	 */
 	protected void beforeBody(final XMLOutput output) throws JellyTagException, SAXException
 	{
-		String region = getAttribute("region") ;
+		String region = getAttribute(REGION) ;
 		if (isEmpty(region))
 			throw new JellyTagException("region is a required parameter for this tag") ;
 		
@@ -26,14 +26,14 @@ public class LayoutRegion extends BaseExtJSTag
 			throw new JellyTagException("layoutregion tag can only be enclosed inside a borderlayout tag") ;
 		
 		//Serialize the creation of the tag 
-		serializeCreation(region) ;	
+		serialize(region) ;	
 	}
 	
 	
 	/**
-	 * Serialize the region object
+	 * Serialize the content panel object
 	 */
-	protected void serializeCreation(String region)
+	protected void serialize(String region)
 	{
 		scriptBuffer.appendln("    " + getCurrentBorderLayoutName() + ".addRegion(\"" + region + "\", {");
 		
