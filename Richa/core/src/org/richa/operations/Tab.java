@@ -12,34 +12,34 @@ public interface Tab
 	 * @param name - Tab Name
 	 * @return JS Fragment that performs this operation
 	 */
-	public JSFragment show(String name) ;
+	public JSONFragment show(String name) ;
 	
 	/**
 	 * Hide the tab
 	 * @param name - Tab Name
 	 * @return JS Fragment that performs this operation
 	 */
-	public JSFragment hide(String name) ;
+	public JSONFragment hide(String name) ;
 	
 	/**
 	 * Disable the tab
 	 * @param name - Tab Name
 	 * @return JS Fragment that performs this operation
 	 */
-	public JSFragment disable(String name) ;
+	public JSONFragment disable(String name) ;
 	
 	/**
 	 * Enable the tab
 	 * @param name - Tab Name
 	 * @return JS Fragment that performs this operation
 	 */
-	public JSFragment enable(String name) ;
+	public JSONFragment enable(String name) ;
 	
 	/**
 	 * Add a tab item
 	 * @param name - Tab Item Name
 	 * @return JS Fragment that performs this operation
 	 */
-	public JSFragment addItem(String name) ;
+	public JSONFragment addItem(String name) ;
 	
 }

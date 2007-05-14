@@ -12,5 +12,5 @@ public interface Helper
 	 * @param message to be displayed
 	 * @return JS Fragment that performs this operation
 	 */
-	public JSFragment alert(String message) ;
+	public JSONFragment alert(String message) ;
 }

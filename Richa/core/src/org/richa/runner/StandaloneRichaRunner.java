@@ -10,8 +10,6 @@ import java.net.URL;
  */
 public class StandaloneRichaRunner extends RichaRunner
 {
-	
-	
     protected URL getResource(String pageName) throws MalformedURLException
     {
         URL url = null;

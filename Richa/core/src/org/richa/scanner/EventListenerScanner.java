@@ -15,8 +15,7 @@ import org.richa.event.EventListenerMetaData;
 
 public class EventListenerScanner extends Scanner
 {
-	private static final Logger log = Logger
-			.getLogger(EventListenerScanner.class.getName());
+	private static final Logger log = Logger.getLogger(EventListenerScanner.class.getName());
 
 	private Map<String, EventListenerMetaData> classes;
 
@@ -31,7 +30,7 @@ public class EventListenerScanner extends Scanner
 	}
 
 	/**
-	 * Returns only Simpli Event Handlers (ie: classes annotated with
+	 * Returns only Richa Event Handlers (ie: classes annotated with
 	 * 
 	 * @EventHandler)
 	 */
