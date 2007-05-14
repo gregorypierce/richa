@@ -172,7 +172,7 @@ RichaDispatchEvent = function(event)
 	  	
 	//Add other event parameters
 	if (params != "")
-		params = params + '",pagex:":"'
+		params = params + ',"pagex:":"'
 	else
 		params = params + '"pagex:":"'
 		
@@ -195,31 +195,58 @@ RichaEventData = function()
 	var cancelEvent ;
 }
 
+/** Function called whtn the request is successful **/
 RichaSuccess = function(response)
 {
-	alert ("Success") ;
+	var res = Ext.util.JSON.decode(response.responseText) ;
+	
+	if (res.CODE == "FAIL") ;
+		RichaShowErrorDialog("Server Error",res.DATA) ;
 }
 
+/** Function called when a client request fails **/
 RichaFailure = function(response)
 {
-	var dlg = new Ext.BasicDialog("my-dlg", {
-        height: 200,
-        width: 300,
+	RichaShowErrorDialog("Server Error",response.responseText) ;
+}
+/** Show an error Dialog **/
+RichaShowErrorDialog = function(title, text)
+{
+	//Create an element
+	var dlgElem = document.getElementById("serverErrorDlg") ;
+	if (dlgElem == null)
+	{
+		dlgElem = document.createElement("div") ;
+		document.body.appendChild(dlgElem) ;
+		
+		//Set the id
+		dlgElem.setAttribute("id","serverErrorDlg") ;
+		
+		dlgElem.style.fontFamily = "'Lucida Console', 'Bitstream Vera Sans Mono', 'Courier New', Monaco, Courier, monospace;" 
+		dlgElem.style.whiteSpace = "pre;" 
+		dlgElem.style.lineHeight = "1.4em;" 
+		dlgElem.style.fontSize =  "70%;" 
+	}
+	
+	var dlg = new Ext.BasicDialog(dlgElem, {
+        height: 500,
+        width: 600,
         minHeight: 100,
         minWidth: 150,
         modal: true,
-        title: 'Server Error'
+        collapasable: false,
+        title: title,
         autoScroll: true
     });
     dlg.addKeyListener(27, dlg.hide, dlg); // ESC can also close the dialog
     dlg.addButton('OK', dlg.hide, dlg);    // Could call a save function instead of hiding
-    dlg.addButton('Cancel', dlg.hide, dlg);
     
-    dlg.body.updateText = response.responseText ;
+    dlg.body.update(text) ;
     
     dlg.show();
 }
 
+/** Function used to bind an event to an element **/
 RichaBindEvent = function(control,controlType, event, jshandler, listener, handler, sendData)
 {
 	//Get the controls element
