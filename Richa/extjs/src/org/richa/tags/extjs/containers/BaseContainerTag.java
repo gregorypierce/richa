@@ -11,10 +11,10 @@ public abstract class BaseContainerTag extends BaseExtJSTag
 	/**
 	 * Serialize a child creation 
 	 */
-	protected void serializeChildCreation()
+	protected void serializeChild()
 	{	
 		//Get the current form name
-		String parent = getCurrentForm().getName() ;
+		String parent = getCurrentFormName() ;
 		
 		scriptBuffer.appendln("    " + parent + "." + getObjectName() + "({");
 		

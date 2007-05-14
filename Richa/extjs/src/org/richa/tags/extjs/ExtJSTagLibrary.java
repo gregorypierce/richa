@@ -39,5 +39,8 @@ public class ExtJSTagLibrary extends TagLibrary
 		registerTag("layoutregion",org.richa.tags.extjs.layouts.LayoutRegion.class) ;
 		registerTag("contentpanel",org.richa.tags.extjs.layouts.ContentPanel.class) ;
 		registerTag("nestedlayoutpanel",org.richa.tags.extjs.layouts.NestedLayoutPanel.class) ;
+		
+		//Event
+		registerTag("listener",org.richa.tags.extjs.event.EventListener.class) ;
 	}
 }

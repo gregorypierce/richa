@@ -30,7 +30,7 @@ public class TabPanelItem extends BaseExtJSTag
 		if (isEmpty(name))
 			throw new JellyTagException("name is a required parameter for this tag") ;
 		
-		String text  = getAttribute("text") ;
+		String text  = getAttribute(TEXT) ;
 		
 		//Is an active tab panel name
 		if (isEmpty(getCurrentTabPanelName()))
@@ -47,22 +47,22 @@ public class TabPanelItem extends BaseExtJSTag
 		scriptBuffer.appendln("    " + "var " + name + " = " + getCurrentTabPanelName() + ".addTab(\"tabitem-" + name + "-id\",\"" + text + "\");") ;
 		
 		//Does this tab need to be active
-		String active = getAttribute("active") ;
+		String active = getAttribute(ACTIVE) ;
 		if (!isEmpty(active))
 			scriptBuffer.appendln("    " + getCurrentTabPanelName() + ".activate(\"tabitem-" + name + "-id\")") ;
 		
 		//Does this tab need to be hidden
-		String hidden = getAttribute("hidden") ;
+		String hidden = getAttribute(HIDDEN) ;
 		if (!isEmpty(hidden))
 			scriptBuffer.appendln("    " + getCurrentTabPanelName() + ".hideTab(\"tabitem-" + name + "-id\")") ;
 		
 		//Does this tab need to be disabled
-		String disable = getAttribute("disable") ;
+		String disable = getAttribute(DISABLE) ;
 		if (!isEmpty(disable))
 			scriptBuffer.appendln("    " + getCurrentTabPanelName() + ".disableTab(\"tabitem-" + name + "-id\")") ;
 		
 		//If the tab item has a url where the tab content will be loaded from
-		String contentURL = getAttribute("contentURL") ;
+		String contentURL = getAttribute(CONTENTURL) ;
 		if (!isEmpty(contentURL))
 		{
 			scriptBuffer.appendln("    Ext.get(\"tabitem-" + name + "-id\").load({") ;
