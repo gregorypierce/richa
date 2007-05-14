@@ -6,11 +6,14 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="core/lib/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="core/lib/commons-collections-3.2.jar"/>
-	<classpathentry kind="lib" path="core/lib/commons-jelly-1.0.jar"/>
+	<classpathentry kind="lib" path="core/lib/commons-jelly-1.0.jar" sourcepath="/home/ram/commons-jelly-1.0-src/src/java"/>
 	<classpathentry kind="lib" path="core/lib/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="core/lib/commons-vfs-1.0.jar"/>
 	<classpathentry kind="lib" path="core/lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="core/lib/javassist.jar"/>
 	<classpathentry kind="lib" path="core/lib/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="core/lib/activation.jar"/>
+	<classpathentry kind="lib" path="core/lib/commons-lang-2.1.jar" sourcepath="/home/ram/commons-jelly-1.0-src/src/java"/>
+	<classpathentry kind="lib" path="core/lib/json.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
