@@ -79,11 +79,16 @@ public class RichaEventServlet extends HttpServlet
 				//Generate an Event context for all the posted data
 				EventContext context = getContext(request) ;
 				context.print() ;					
+			
+				//Get an instance of the listener object
+				Object listener = listeners.getEventListener(eventListener) ;
 				
 				//Get the method object for the handler
-				Method eventMethod = listeners.getHandlerMethod(eventListener, eventHandler) ;
+				Method eventMethod = listeners.getEventHandlerMethod(eventListener, eventHandler) ;
 				if (eventMethod != null)
-					pw.println(eventMethod.invoke(eventListener));
+				{
+					pw.println(eventMethod.invoke(listener));
+				}
 				else
 					ResponseUtils.sendResponse(pw, Response.FAIL, "Unable to load an event handler method for listener: " + eventListener + " and handler: " + eventHandler);
 			}

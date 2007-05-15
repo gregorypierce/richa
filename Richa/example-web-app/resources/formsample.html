@@ -12,19 +12,19 @@
 	</head>
 	<body>
 		<extJS:formwrapper width="375px" title="Customer Information">
-			<extJS:listener name="formListener">
+			<extJS:listener name="formListener" bind="testBindHandler">
 				<extJS:form name="customer" labelWidth="100" buttonAlign="left">
 					<extJS:fieldset name="legper" legend="Personal">
-						<extJS:textfield name="name" fieldLabel="Name" width="170" />
-						<extJS:numberfield name="age" fieldLabel="Age" width="45" clientclick="testing" serverchange="formHandler" senddata="field"/>
-						<extJS:datefield name="dob" fieldLabel="Date Of Birth" width="100" />
+						<extJS:textfield name="name" fieldLabel="Name" width="170" value="#{cust1.name}" render="#{cust1.render}"/>
+						<extJS:numberfield name="age" fieldLabel="Age" width="45" value="#{cust1.age}" clientclick="testing" serverchange="formHandler" senddata="field"/>
+						<extJS:datefield name="dob" fieldLabel="Date Of Birth" width="100" value="#{cust1.dob}"/>
 					</extJS:fieldset>
 					<extJS:fieldset name="legaddr" legend="Address">
-						<extJS:textfield name="addr1" fieldLabel="Address 1" width="170" />
-						<extJS:textfield name="addr2" width="170" fieldLabel="Address2" />
-						<extJS:textfield name="city" fieldLabel="City" width="170" />
-						<extJS:numberfield name="zip" fieldLabel="Zip" width="55" maxLength="5" />
-						<extJS:textarea name="comment" fieldLabel="Comments" width="170" />
+						<extJS:textfield name="addr1" fieldLabel="Address 1" width="170" value="#{cust1.address1}"/>
+						<extJS:textfield name="addr2" width="170" fieldLabel="Address2" value="#{cust1.address2}"/>
+						<extJS:textfield name="city" fieldLabel="City" width="170" value="#{cust1.city}"/>
+						<extJS:numberfield name="zip" fieldLabel="Zip" width="55" maxLength="5" value="#{cust1.zip}"/>
+						<extJS:textarea name="comment" fieldLabel="Comments" width="170" value="#{cust1.comments}"/>
 					</extJS:fieldset>
 					<extJS:formbutton name="save" text="Save"/>
 					<extJS:formbutton name="cancel" text="Cancel" serverclick="formHandler" senddata="page"/>

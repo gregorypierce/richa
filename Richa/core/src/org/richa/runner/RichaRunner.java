@@ -3,6 +3,8 @@ package org.richa.runner;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import javax.servlet.ServletContext;
@@ -31,6 +33,7 @@ public class RichaRunner
 	public static final String WEBCONTEXT = "!webcontext!" ;
 	public static final String LISTENERSTACK = "!listenertack!" ;
 	public static final String SERVLETCONTEXT = "!servletcontext!" ;
+	public static final String BINDINGCONTEXT = "!bindingcontext!" ;
 	
 	//Context name
 	private String webcontext ;
@@ -127,6 +130,7 @@ public class RichaRunner
 		String currentTabPanelName = null;
 		String currentBorderLayoutName = null ;
 		String currentFormName = null ;
+		Map<String,Object> bindingcontext = new HashMap<String,Object>() ;
 		Stack<String> listenerStack = new Stack<String>() ;
 		
 	    JellyContext context = new JellyContext();
@@ -140,6 +144,7 @@ public class RichaRunner
 	    context.setVariable(CURRENTBORDERLAYOUTNAME, currentBorderLayoutName) ;
 	    context.setVariable(SERVLETCONTEXT, servletcontext) ;
 	    context.setVariable(LISTENERSTACK, listenerStack) ;
+	    context.setVariable(BINDINGCONTEXT, bindingcontext) ;
 	    
 	    return context ;
 	}

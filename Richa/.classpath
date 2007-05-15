@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="core/lib/activation.jar"/>
 	<classpathentry kind="lib" path="core/lib/commons-lang-2.1.jar" sourcepath="/home/ram/commons-jelly-1.0-src/src/java"/>
 	<classpathentry kind="lib" path="core/lib/json.jar"/>
+	<classpathentry kind="lib" path="core/lib/mvel.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

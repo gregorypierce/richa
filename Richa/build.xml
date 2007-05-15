@@ -41,10 +41,10 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}">
+		<javac srcdir="${src}" destdir="${build}" debug="true" debuglevel="lines">
 			<classpath id="app.classpath" refid="library.classpath" />
 		</javac>
-		<javac srcdir="${extjs-src}" destdir="${build}">
+		<javac srcdir="${extjs-src}" destdir="${build}" debug="true" debuglevel="lines">
 			<classpath refid="library.classpath" />
 		</javac>
 	</target>
@@ -110,7 +110,7 @@
 	</target>
 
 	<target name="example-compile" depends="dist">
-		<javac srcdir="${example-src}" destdir="${build}">
+		<javac srcdir="${example-src}" destdir="${build}" debug="true" debuglevel="lines">
 			<classpath id="example.app.classpath" refid="example.classpath" />
 		</javac>
 		<copy todir="${build}">

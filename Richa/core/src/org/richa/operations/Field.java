@@ -110,7 +110,7 @@ public class Field extends BaseOperation
 	 */
 	public ResponseItem set(String name, Date value) 
 	{
-		SimpleDateFormat fmt = (SimpleDateFormat) Application.get("dateformatobj") ;
+		SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("dateformatobj") ;
 		
 		//Convert the value
 		String temp = fmt.format(value) ;
@@ -124,7 +124,7 @@ public class Field extends BaseOperation
 	 */
 	public ResponseItem set(String name, Timestamp value)
 	{
-		SimpleDateFormat fmt = (SimpleDateFormat) Application.get("timeformatobj") ;
+		SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("timeformatobj") ;
 		
 		//Convert the value
 		String temp = fmt.format(value) ;

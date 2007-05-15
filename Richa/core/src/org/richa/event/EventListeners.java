@@ -7,6 +7,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.richa.scanner.EventListenerScanner;
 
+/**
+ * Singleton that holds the collection of the Eventlisteners in the application. 
+ * It also has helper methods to get class level metadata from the listeners
+ * @author ram
+ *
+ */
 public class EventListeners
 {
 	private static Log log = LogFactory.getLog(EventListeners.class); 
@@ -57,7 +63,7 @@ public class EventListeners
 	/**
 	 * Get the event handler method object
 	 */
-	public Method getHandlerMethod(String eventListener, String eventHandler)
+	public Method getEventHandlerMethod(String eventListener, String eventHandler)
 	{
 		Method eventMethod = null ;
 		
@@ -87,5 +93,68 @@ public class EventListeners
 		}
 		
 		return eventMethod ;
+	}
+	
+	/**
+	 * Get the event handler method object
+	 */
+	public Method getBindHandlerMethod(String eventListener, String bindHandler)
+	{
+		Method bindMethod = null ;
+		
+		EventListenerMetaData eventListenerMetaData = listeners.get(eventListener) ;
+		if (eventListenerMetaData != null)
+		{
+			Class eventListenerClass = eventListenerMetaData.getEventListener();
+
+			if (eventListenerClass != null)
+			{
+				// Find the method that is associated with the bind event name
+				bindMethod = eventListenerMetaData.getBindHandler(bindHandler);
+
+				if (bindMethod == null)
+				{
+					log.error("Couldn't find bind handler method for the listener: " + eventListener + " and handler: " + bindHandler);
+				}
+			}
+			else
+			{
+				log.error("Couldn't find event listener class for the listener: " + eventListener);
+			}
+		}
+		else
+		{
+			log.error("No registered event listener for the listener: " + eventListener);
+		}
+		
+		return bindMethod ;
+	}
+	
+	/**
+	 * Get the event listener object
+	 */
+	public Object getEventListener(String eventListener) throws InstantiationException, IllegalAccessException
+	{		
+		Object listener = null ;
+		
+		EventListenerMetaData eventListenerMetaData = listeners.get(eventListener) ;
+		if (eventListenerMetaData != null)
+		{
+			Class eventListenerClass = eventListenerMetaData.getEventListener();
+			if (eventListenerClass != null)
+			{
+				listener = eventListenerClass.newInstance() ;
+			}
+			else
+			{
+				log.error("Couldn't find event listener class for the listener: " + eventListener);
+			}
+		}
+		else
+		{
+			log.error("No registered event listener for the listener: " + eventListener);
+		}
+		
+		return listener ;
 	}
 }
