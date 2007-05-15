@@ -9,6 +9,7 @@ public class EventListenerMetaData
 	private Class eventListener;
 	
 	private Map<String,Method> eventHandlerMap;
+	private Map<String,Method> bindHandlerMap;
 	
 	public EventListenerMetaData()
 	{
@@ -17,13 +18,14 @@ public class EventListenerMetaData
 	
 	public EventListenerMetaData(Class eventListener)
 	{
-		this(eventListener, new HashMap<String,Method>());
+		this(eventListener, new HashMap<String,Method>(), new HashMap<String,Method>());
 	}
 	
-	public EventListenerMetaData(Class eventListener, Map<String,Method> eventHandlerMap)
+	public EventListenerMetaData(Class eventListener, Map<String,Method> eventHandlerMap, Map<String,Method> bindHandlerMap)
 	{
 		this.eventListener = eventListener;
 		this.eventHandlerMap = eventHandlerMap;
+		this.bindHandlerMap = bindHandlerMap ;
 	}
 
 	public Class getEventListener()
@@ -44,5 +46,15 @@ public class EventListenerMetaData
 	public Method getEventHandler(String handlerName)
 	{
 		return eventHandlerMap.get(handlerName);
+	}
+	
+	public void addBindHandler(String handlerName, Method handlerMethod )
+	{
+		bindHandlerMap.put(handlerName, handlerMethod);
+	}
+	
+	public Method getBindHandler(String handlerName)
+	{
+		return bindHandlerMap.get(handlerName);
 	}
 }

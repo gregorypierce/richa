@@ -1,6 +1,8 @@
 package org.richa.tags.extjs.event;
 
 import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.commons.jelly.JellyTagException;
 import org.apache.commons.jelly.XMLOutput;
@@ -33,16 +35,28 @@ public class EventListener extends BaseExtJSTag
 			EventListeners listeners = EventListeners.getInstance() ;
 			if (listeners != null)
 			{
-				Method method = listeners.getHandlerMethod(name, bind) ;
+				Method method = listeners.getBindHandlerMethod(name, bind) ;
 				
 				try
 				{
+					//Create a listener object
+					Object listener = listeners.getEventListener(name) ;
+					
 					//Invoke the method
-					method.invoke(name) ;
+					Map beans = (Map)method.invoke(listener) ;
+					
+					//Loop through all the beans and add them to the context
+					Iterator iterbeans = beans.keySet().iterator() ;
+					while (iterbeans.hasNext())
+					{
+						String key = (String)iterbeans.next() ;
+						Object bean = beans.get(key) ;
+						addBindingVariable(key,bean) ;
+					}
 				}
 				catch (Exception e)
 				{
-					log.error("Unable to invoke method in listener: " + name + " and handler: " + bind) ;
+					log.error("Unable to invoke method in listener: " + name + " and handler: " + bind + " Exception:" + e) ;
 				}
 			}
 		}

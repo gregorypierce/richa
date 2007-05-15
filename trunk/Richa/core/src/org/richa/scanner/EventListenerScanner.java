@@ -4,18 +4,19 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javassist.bytecode.ClassFile;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.richa.annotations.BindHandler;
 import org.richa.annotations.EventHandler;
 import org.richa.annotations.EventListener;
 import org.richa.event.EventListenerMetaData;
 
 public class EventListenerScanner extends Scanner
 {
-	private static final Logger log = Logger.getLogger(EventListenerScanner.class.getName());
+	private static Log log = LogFactory.getLog(EventListenerScanner.class); 
 
 	private Map<String, EventListenerMetaData> classes;
 
@@ -58,8 +59,7 @@ public class EventListenerScanner extends Scanner
 				if (installable)
 				{
 					String eventListenerName = getEventName(classFile);
-					if (log.isLoggable(Level.FINE))
-						log.fine("found event handler class: " + name
+					log.info("found event handler class: " + name
 								+ " for event listener: " + eventListenerName);
 					// Find all annotated methods
 					Class clazz = classLoader.loadClass(classname);
@@ -80,6 +80,21 @@ public class EventListenerScanner extends Scanner
 								elmd.addEventHandler(eventHandlerName, method);
 							}
 						}
+						
+						
+						BindHandler bh = method.getAnnotation(BindHandler.class);
+						if(bh != null)
+						{
+							String bindHandlerName = bh.value();
+							if(bindHandlerName.equals(BindHandler.DEFAULT_BIND))
+							{
+								elmd.addBindHandler(method.getName(), method);
+							}
+							else
+							{
+								elmd.addBindHandler(bindHandlerName, method);
+							}
+						}
 					}
 					
 					classes.put(eventListenerName, elmd );
@@ -87,19 +102,19 @@ public class EventListenerScanner extends Scanner
 			}
 			catch (ClassNotFoundException cnfe)
 			{
-				log.log(Level.FINE, "could not load class: " + classname, cnfe);
+				log.error("could not load class: " + classname, cnfe);
 
 			}
 			catch (NoClassDefFoundError ncdfe)
 			{
-				log.log(Level.FINE,
+				log.error(
 						"could not load class (missing dependency): "
 								+ classname, ncdfe);
 
 			}
 			catch (IOException ioe)
 			{
-				log.log(Level.FINE, "could not load classfile: " + classname,
+				log.error("could not load classfile: " + classname,
 						ioe);
 			}
 		}

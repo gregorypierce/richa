@@ -12,28 +12,43 @@ import java.util.HashMap;
  */
 public class Application
 {
-	private static HashMap<String,Object> properties = new HashMap<String,Object>() ;
-
-	static
+	private static Application application ;
+	
+	private HashMap<String,Object> properties = new HashMap<String,Object>() ;
+	
+	//private constructor
+	private Application()
 	{
-		//Put the default date format string 
-		properties.put("dateformatstr", "MM/dd/YYYY") ;
 		
-		//Put the SimpleDateFormat object
-		properties.put("dateformatobj", new SimpleDateFormat((String)properties.get("defaultdateformat")));
-				
-		//Put the default time format string 
-		properties.put("timeformatstr", "MM/dd/YYYY hh:mm:ss") ;
+	}
+	
+	//Get the singleton instance
+	public static Application getInstance()
+	{
+		if (application == null)
+		{
+			application = new Application() ;
+			
+			//Put the default date format string 
+			application.set("dateformatstr", "MM/dd/yy") ;
+			
+			//Put the SimpleDateFormat object
+			application.set("dateformatobj", new SimpleDateFormat((String)application.get("dateformatstr")));
+					
+			//Put the default time format string 
+			application.set("timeformatstr", "MM/dd/yy hh:mm:ss") ;
+			
+			//Put the SimpleDateFormat object
+			application.set("timeformatobj", new SimpleDateFormat((String)application.get("timeformatstr")));
+		}
 		
-		//Put the SimpleDateFormat object
-		properties.put("timeformatobj", new SimpleDateFormat((String)properties.get("defaultdateformat")));
-
+		return application ;
 	}
 	
 	/**
 	 * Get the application property
 	 */
-	public static Object get(String name)
+	public Object get(String name)
 	{
 		return (properties.get(name)) ;
 	}
@@ -41,7 +56,7 @@ public class Application
 	/**
 	 * Set the application property
 	 */
-	public static void set(String name, Object value)
+	public  void set(String name, Object value)
 	{
 		properties.put(name, value) ;
 	}

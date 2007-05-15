@@ -1,6 +1,9 @@
 package org.richa.tags.extjs;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Stack;
 
 import org.apache.commons.jelly.JellyTagException;
@@ -8,7 +11,8 @@ import org.apache.commons.jelly.MapTagSupport;
 import org.apache.commons.jelly.XMLOutput;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.richa.event.EventListeners;
+import org.mvel.MVEL;
+import org.richa.config.Application;
 import org.richa.runner.RichaRunner;
 import org.richa.util.AppendingStringBuffer;
 import org.xml.sax.SAXException;
@@ -45,6 +49,7 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	public static final String SENDDATA = "senddata" ;
 	public static final String THEME = "theme" ;
 	public static final String BIND = "bind" ;
+	public static final String RENDER = "render" ;
 	
 	
 	public static final String FIELD = "field" ;
@@ -168,6 +173,14 @@ public abstract class BaseExtJSTag extends MapTagSupport
     {
     	try
     	{
+    		//Process all expressions in the tag
+    		processExpressions() ;
+    		
+    		//Check if this tag needs to be rendered
+    		String render = getAttribute(RENDER) ;
+    		if (render != null && render.equals(FALSE))
+    			return ;
+    		
     		//Get the Script Buffer
     		scriptBuffer = (AppendingStringBuffer)(getContext().findVariable(RichaRunner.SCRIPTBUFFER)) ;
     		
@@ -518,5 +531,89 @@ public abstract class BaseExtJSTag extends MapTagSupport
 			exclude = true ;
 		
 		return exclude ;
+	}
+	
+	
+	/**
+	 * Evaluate an expression
+	 */
+	protected String evalExpression(String expr)
+	{
+		Map variables = (Map) context.getVariable(RichaRunner.BINDINGCONTEXT);
+		
+		Object value = MVEL.eval(expr,null,variables) ;
+		
+		if (value != null)
+		{
+			if (value instanceof java.util.Date)
+			{
+				SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("dateformatobj") ;
+				
+				//Convert the value
+				String temp = fmt.format(value) ;
+				
+				return temp ;
+				
+			}
+			else if (value instanceof Timestamp)
+			{
+				SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("timeformatobj") ;
+				
+				//Convert the value
+				String temp = fmt.format(value) ;
+				
+				return temp;
+			}
+			else
+				return value.toString() ;
+		}
+		else
+			return null ;
+	}
+	
+	
+	/**
+	 * Process all expressions
+	 */
+	protected void processExpressions()
+	{
+    	//Get the iterator
+    	Iterator attrs = getAttributes().keySet().iterator();
+    	
+    	//Loop through the keys except name and serialize it
+    	while (attrs.hasNext())
+    	{
+    		//Is this is a server side event
+    		String name = (String) attrs.next() ;
+    		
+    		//Get the value of the attribute
+    		String value = (String)getAttribute(name) ;
+    		
+    		//Trim all the spaces
+    		value = value.trim() ;
+    	
+    		if (value.startsWith("#{"))
+    		{
+    			String expr = value.substring(2,value.length() - 1) ;
+    			
+    			//Evaluate the expression
+    			String evalvalue = evalExpression(expr) ;
+    			
+    			//Set the attribute
+    			setAttribute(name,evalvalue) ;
+    		}    		
+    	}	
+	}
+	
+	/**
+	 * Add a variable to the Binding context
+	 */
+	protected void addBindingVariable(String name, Object value)
+	{
+		//Get the variables
+		Map<String,Object> variables = (Map<String,Object>) context.getVariable(RichaRunner.BINDINGCONTEXT);
+		
+		//Add the var
+		variables.put(name, value) ;
 	}
 }
