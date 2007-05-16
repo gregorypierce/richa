@@ -15,7 +15,7 @@
 			<extJS:listener name="formListener" bind="testBindHandler">
 				<extJS:form name="customer" labelWidth="100" buttonAlign="left">
 					<extJS:fieldset name="legper" legend="Personal">
-						<extJS:textfield name="name" fieldLabel="Name" width="170" value="#{cust1.name}" render="#{cust1.render}"/>
+						<extJS:textfield name="name" fieldLabel="Name" width="170" value="#{cust1.name}"/>
 						<extJS:numberfield name="age" fieldLabel="Age" width="45" value="#{cust1.age}" clientclick="testing" serverchange="formHandler" senddata="field"/>
 						<extJS:datefield name="dob" fieldLabel="Date Of Birth" width="100" value="#{cust1.dob}"/>
 					</extJS:fieldset>
@@ -31,7 +31,7 @@
 				</extJS:form>
 			</extJS:listener>
 		</extJS:formwrapper>
-		<extJS:formwrapper width="700px" title="Order Information">
+		<extJS:formwrapper width="700px" title="Order Information" render="#{cust1.render}">
 			<extJS:form name="order" labelWidth="100">
 				<extJS:column width="320px">
 					<extJS:fieldset name="legord" legend="Orders">
