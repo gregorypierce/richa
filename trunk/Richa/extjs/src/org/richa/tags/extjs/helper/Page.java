@@ -1,8 +1,18 @@
 package org.richa.tags.extjs.helper ;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+
 import org.apache.commons.jelly.JellyTagException;
 import org.apache.commons.jelly.XMLOutput;
 import org.richa.tags.extjs.BaseExtJSTag;
+import org.richa.util.AppendingStringBuffer;
+import org.richa.util.JSMin;
+import org.richa.util.JSMin.UnterminatedCommentException;
+import org.richa.util.JSMin.UnterminatedRegExpLiteralException;
+import org.richa.util.JSMin.UnterminatedStringLiteralException;
 import org.xml.sax.SAXException;
 
 /**
@@ -30,7 +40,7 @@ public class Page extends BaseExtJSTag
 		endScript() ;
 		
 		//Write to the output stream
-		output.write(scriptBuffer.toString()) ;
+		output.write(jsMin(scriptBuffer)) ;
 	}
 	
 	private void startScript()
@@ -43,6 +53,40 @@ public class Page extends BaseExtJSTag
 	{	
 		scriptBuffer.appendln("})") ;
 		scriptBuffer.appendln("</script>");
+	}
+	
+	private String jsMin(AppendingStringBuffer scriptBuffer)
+	{
+		StringReader input = new StringReader(scriptBuffer.toString());
+		StringWriter output = new StringWriter() ;
+		
+		try
+		{ 	
+			JSMin jsmin = new JSMin(input, output);
+			jsmin.jsmin();
+		}
+		catch (ArrayIndexOutOfBoundsException e)
+		{
+			e.printStackTrace(new PrintWriter(output));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace(new PrintWriter(output));
+		}
+		catch (UnterminatedRegExpLiteralException e)
+		{
+			e.printStackTrace(new PrintWriter(output));
+		}
+		catch (UnterminatedCommentException e)
+		{
+			e.printStackTrace(new PrintWriter(output));
+		}
+		catch (UnterminatedStringLiteralException e)
+		{
+			e.printStackTrace(new PrintWriter(output));
+		}
+		
+		return output.toString() ;
 	}
 }
 
