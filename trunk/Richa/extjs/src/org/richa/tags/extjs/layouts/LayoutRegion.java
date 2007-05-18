@@ -17,7 +17,7 @@ public class LayoutRegion extends BaseExtJSTag
 	 */
 	protected void beforeBody(final XMLOutput output) throws JellyTagException, SAXException
 	{
-		String region = getAttribute(REGION) ;
+		String region = (String) getAttribute(REGION) ;
 		if (isEmpty(region))
 			throw new JellyTagException("region is a required parameter for this tag") ;
 		

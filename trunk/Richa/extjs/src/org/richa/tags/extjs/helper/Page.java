@@ -40,7 +40,7 @@ public class Page extends BaseExtJSTag
 		endScript() ;
 		
 		//Write to the output stream
-		output.write(jsMin(scriptBuffer)) ;
+		output.write(scriptBuffer.toString()) ;
 	}
 	
 	private void startScript()

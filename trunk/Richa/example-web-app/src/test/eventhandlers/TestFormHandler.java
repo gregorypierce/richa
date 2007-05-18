@@ -1,7 +1,9 @@
 package test.eventhandlers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.richa.annotations.BindHandler;
@@ -24,6 +26,7 @@ public class TestFormHandler
 	{
 		Map test = new HashMap() ;
 		createTestData(test);
+		
 		
 		return test ;
 	}
@@ -55,8 +58,19 @@ public class TestFormHandler
 		cust2.setComments("This is a test2") ;
 		cust2.setDob(new Date()) ;
 		
+		List cust = new ArrayList() ;
+		cust.add(cust1) ;
+		
 		test.put("cust1", cust1) ;
 		test.put("cust2", cust2) ;
+		
+		Map statelist = new HashMap() ;
+		statelist.put("GA", "Georgia") ;
+		statelist.put("CA", "California") ;
+		statelist.put("FL", "Florida") ;
+		statelist.put("AL", "Alabama") ;
+		statelist.put("NY", "New York") ;
+		
 	}
 }
 
