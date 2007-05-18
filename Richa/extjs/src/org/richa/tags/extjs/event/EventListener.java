@@ -28,7 +28,7 @@ public class EventListener extends BaseExtJSTag
 			throw new JellyTagException("name is a required parameter for this tag") ;
 		
 		//Get the bind handler
-		String bind = getAttribute(BIND) ;
+		String bind = (String) getAttribute(BIND) ;
 		if (!isEmpty(bind))
 		{
 			//Get the method
@@ -76,7 +76,5 @@ public class EventListener extends BaseExtJSTag
 		//Remove the listener
 		removeCurrentListener() ;
 	}
-	
-	
 }
 

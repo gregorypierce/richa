@@ -25,11 +25,11 @@ public class ContentPanel extends BaseExtJSTag
 	 */
 	protected void beforeBody(final XMLOutput output) throws JellyTagException, SAXException
 	{
-		String region = getAttribute(REGION) ;
+		String region = (String) getAttribute(REGION) ;
 		if (isEmpty(region))
 			throw new JellyTagException("region is a required parameter for this tag") ;
 		
-		String element = getAttribute(ELEMENT) ;
+		String element = (String) getAttribute(ELEMENT) ;
 		if (isEmpty(element))
 			throw new JellyTagException("element is a required parameter for this tag") ;
 		

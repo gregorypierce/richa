@@ -35,7 +35,7 @@ public class BorderLayout extends BaseExtJSTag
 			throw new JellyTagException("Border layouts cannot be embedded") ;
 		
 		//Get the element in which we need to create the layout
-		String element = getAttribute("element") ;
+		String element = (String) getAttribute("element") ;
 		if (isEmpty(element))
 			throw new JellyTagException("element is a required parameter for this tag") ;
 		

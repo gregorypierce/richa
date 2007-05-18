@@ -25,11 +25,11 @@ public class NestedLayoutPanel extends BaseExtJSTag
 	 */
 	protected void beforeBody(final XMLOutput output) throws JellyTagException, SAXException
 	{
-		String region = getAttribute(REGION) ;
+		String region = (String) getAttribute(REGION) ;
 		if (isEmpty(region))
 			throw new JellyTagException(REGION + " is a required parameter for this tag") ;
 		
-		String borderlayout = getAttribute(BORDERLAYOUT) ;
+		String borderlayout = (String) getAttribute(BORDERLAYOUT) ;
 		if (isEmpty(borderlayout))
 			throw new JellyTagException(BORDERLAYOUT + " is a required parameter for this tag") ;
 		

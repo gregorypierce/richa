@@ -26,41 +26,15 @@ import org.xml.sax.SAXException;
  * </p>
  */
 
-public abstract class BaseExtJSTag extends MapTagSupport
+public abstract class BaseExtJSTag extends MapTagSupport implements TagConstants
 {
 	protected static Log log = LogFactory.getLog(BaseExtJSTag.class);
-	
-	public static final String NAME = "name" ;
-	public static final String PARAMS = "params" ;
-	public static final String ID = "id" ;
-	public static final String CLASS = "class" ;
-	public static final String CLIENT = "client" ;
-	public static final String SERVER = "server" ;
-	public static final String TEXT = "text" ;
-	public static final String HIDDEN = "hidden" ;
-	public static final String ACTIVE = "active" ;
-	public static final String DISABLE = "disable" ;
-	public static final String CONTENTURL = "contentURL" ;
-	public static final String WIDTH = "width" ;
-	public static final String TITLE = "title" ;
-	public static final String REGION = "region" ;
-	public static final String ELEMENT = "element" ;
-	public static final String BORDERLAYOUT = "borderlayout" ;
-	public static final String SENDDATA = "senddata" ;
-	public static final String THEME = "theme" ;
-	public static final String BIND = "bind" ;
-	public static final String RENDER = "render" ;
-	
-	
-	public static final String FIELD = "field" ;
-	public static final String FORM = "form" ;
-	public static final String PAGE = "page" ;
-	public static final String NONE = "none" ;
 	
 	private static final String TRUE = "true" ;
 	private static final String FALSE = "false" ;
 	
 	private static final String RICHADISPATCHEVENT = "RichaDispatchEvent" ;
+	private static final String RICHABINDEVENT = "RichaBindEvent" ;
 	
 	/**
 	 * Script Buffer
@@ -109,7 +83,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	
 	/**
 	 * Get the javascript object name of the tag
-	 * @return
 	 */
 	protected String getObjectName()
 	{
@@ -118,7 +91,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	
 	/**
 	 * Get the name of the tag
-	 * @return
 	 */
 	protected String getName()
 	{
@@ -127,7 +99,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	
 	/**
 	 * Get the id of the tag
-	 * @return
 	 */
 	protected String getId()
 	{
@@ -135,8 +106,7 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	}
 	
 	/**
-	 * Get the class of the tag
-	 * @return
+	 * Get the CSS Style of the tag
 	 */
 	protected String getStyle()
 	{
@@ -145,7 +115,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	
 	/**
 	 * Default method for processing before the body
-	 * @throws JellyTagException
 	 */
 	protected void beforeBody(final XMLOutput output) throws JellyTagException, SAXException
 	{	
@@ -153,7 +122,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	
 	/**
 	 * Default method for processing after the body
-	 * @throws JellyTagException
 	 */
 	protected void afterBody(final XMLOutput output) throws JellyTagException, SAXException
 	{	
@@ -166,9 +134,10 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	{
 		skipBody = true ;
 	}
-	
-	//	 Tag interface
-    //-------------------------------------------------------------------------
+
+	/**
+	 * Default implementation of the Jelly Tag interface
+	 */
     public void doTag(final XMLOutput output) throws JellyTagException
     {
     	try
@@ -177,14 +146,17 @@ public abstract class BaseExtJSTag extends MapTagSupport
     		processExpressions() ;
     		
     		//Check if this tag needs to be rendered
-    		String render = getAttribute(RENDER) ;
-    		if (render != null && render.equals(FALSE))
-    			return ;
+    		Object render = getAttribute(RENDER) ;
+    		if (render != null && render instanceof Boolean)
+    		{
+    			if (render.equals(Boolean.FALSE))
+    				return ;
+    		}
     		
     		//Get the Script Buffer
     		scriptBuffer = (AppendingStringBuffer)(getContext().findVariable(RichaRunner.SCRIPTBUFFER)) ;
     		
-    		//Get the Event Buffer
+    		//Get the Event Buffer 
     		eventBuffer = (AppendingStringBuffer)(getContext().findVariable(RichaRunner.EVENTBUFFER)) ;
 
     		//Get the Web Context
@@ -219,9 +191,7 @@ public abstract class BaseExtJSTag extends MapTagSupport
     }
  
     /**
-     * Check if the value is empty
-     * @param value
-     * @return if it is empty
+     * Check if the attribute value is empty
      */
     protected boolean isEmpty(String value)
     {
@@ -232,9 +202,7 @@ public abstract class BaseExtJSTag extends MapTagSupport
     }
     
     /**
-     * Check if the value is numeric
-     * @param value
-     * @return true, if it is numeric
+     * Check if the attribute value is numeric
      */
     protected boolean isNumber(String value)
     {
@@ -254,9 +222,7 @@ public abstract class BaseExtJSTag extends MapTagSupport
     }
     
     /**
-     * Check if the value is a boolean
-     * @param value
-     * @return true, if it is boolean
+     * Check if the attribute value is a boolean
      */
     protected boolean isBoolean(String value)
     {
@@ -269,6 +235,24 @@ public abstract class BaseExtJSTag extends MapTagSupport
     	else
     		return false ;
     }    
+   
+	/**
+     * Serialize the creation of the the tag and its attributes. 
+     * If the add parameter is set to true, the object is also added to the active container
+     */
+    protected void serialize(boolean add)
+    {   
+	    scriptBuffer.appendln("    var " + getName() + " =  new " + getObjectName() + "({");
+    	
+	    //Serialize the attributes
+    	serializeAttributes() ;
+    	
+    	scriptBuffer.appendln("    });") ;
+    	
+    	//Add it to the current container
+    	if (add)
+    		scriptBuffer.appendln("    " + getCurrentFormName() + ".add(" + getName() + ");") ;
+    }  
     
     /**
      * Serialize all the attributes in the tag
@@ -291,7 +275,7 @@ public abstract class BaseExtJSTag extends MapTagSupport
     			if (i > 0)	     	
     				scriptBuffer.append(",") ;
     			
-    			scriptBuffer.appendln(name + ":" + serializeValue((String)getAttributes().get(name))) ;
+    			scriptBuffer.appendln(name + ":" + serializeValue(getAttributes().get(name))) ;
     			i++ ;    			    	
     		}
     	}	
@@ -344,40 +328,58 @@ public abstract class BaseExtJSTag extends MapTagSupport
 			jshandler = handler ;
 		
 		
-		eventBuffer.appendln("    RichaBindEvent(" + getName() + ",'" + getObjectName() + "','" + eventName + "'," + jshandler + ",'" + listener + "','" + handler + "','" + senddata + "');") ;   		
+		eventBuffer.appendln("    " + RICHABINDEVENT + "(" + getName() + ",'" + getObjectName() + "','" + eventName + "'," + jshandler + ",'" + listener + "','" + handler + "','" + senddata + "');") ;   		
     }
+    
     /**
-     * Serialize one value ;
-     * @param value
-     * @return
+     * Serialize an attribute based on the data type
      */
-    protected String serializeValue(String value)
+    protected String serializeValue(Object value)
     {
-    	if (isEmpty(value))
-    		return "''" ;
-    	
-    	if (isNumber(value))
-    		return value ;
-    	
-    	if (isBoolean(value))
-    		return value ;
+    	if (value instanceof String)
+    	{
+    		String temp = (String)value ;
+	    	if (isEmpty(temp))
+	    		return "''" ;
+	    	
+	    	if (isNumber(temp))
+	    		return temp ;
+	    	
+	    	if (isBoolean(temp))
+	    		return temp ;
+    	}
+    	else if (value instanceof java.util.Date)
+		{
+			SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("dateformatobj") ;
+			
+			//Convert the value
+			String temp = fmt.format(value) ;
+			
+			return "'" + temp + "'" ;			
+		}
+		else if (value instanceof Timestamp)
+		{
+			SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("timeformatobj") ;
+			
+			//Convert the value
+			String temp = fmt.format(value) ;
+			
+			return "'" + temp + "'" ;
+		}
     	
     	return ("'" + value + "'") ;
     }
     
     /**
      * Get the attribute value
-     * @param name
-     * @return value
      */
-    protected String getAttribute(String name)
+    protected Object getAttribute(String name)
     {
-    	return (String)getAttributes().get(name) ;
+    	return getAttributes().get(name) ;
     }
     
     /**
-     * Get the current form name
-     * @return
+     * Get the current form namen
      */
     protected String getCurrentFormName()
     {
@@ -386,7 +388,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
     
     /**
      * Set the current form name
-     * @return
      */
     protected void setCurrentFormName(String name)
     {
@@ -395,7 +396,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
     
     /**
      * Clear the current form name
-     * @return
      */
     protected void clearCurrentFormName()
     {
@@ -404,7 +404,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
     
     /**
      * Get the current tab panel name
-     * @return
      */
     protected String getCurrentTabPanelName()
     {
@@ -413,7 +412,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
     
     /**
      * Set the current tab panel name
-     * @return
      */
     protected void setCurrentTabPanelName(String name)
     {
@@ -422,7 +420,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
     
     /**
      * Clear the current tab panel name
-     * @return
      */
     protected void clearCurrentTabPanelName()
     {
@@ -431,7 +428,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
     
     /**
      * Get the current border layout name
-     * @return
      */
     protected String getCurrentBorderLayoutName()
     {
@@ -440,7 +436,6 @@ public abstract class BaseExtJSTag extends MapTagSupport
     
     /**
      * Set the current border layout name
-     * @return
      */
     protected void setCurrentBorderLayoutName(String name)
     {
@@ -449,29 +444,12 @@ public abstract class BaseExtJSTag extends MapTagSupport
     
     /**
      * Clear the current border layout name
-     * @return
      */
     protected void clearCurrentBorderLayoutName()
     {
     	context.setVariable(RichaRunner.CURRENTBORDERLAYOUTNAME, null) ;
     }
-    
-	/**
-     * Serialize the creation of the the tag and its attributes
-     */
-    protected void serialize(boolean add)
-    {   
-	    scriptBuffer.appendln("    var " + getName() + " =  new " + getObjectName() + "({");
-    	
-	    //Serialize the attributes
-    	serializeAttributes() ;
-    	
-    	scriptBuffer.appendln("    });") ;
-    	
-    	//Add it to thecurrent container
-    	if (add)
-    		scriptBuffer.appendln("    " + getCurrentFormName() + ".add(" + getName() + ");") ;
-    }    
+   
 	/**
 	 * Get the current listener
 	 * @return listener name
@@ -529,6 +507,8 @@ public abstract class BaseExtJSTag extends MapTagSupport
 			exclude = true ;
 		else if (name.equals(SENDDATA))
 			exclude = true ;
+		else if (name.equals(STORE))
+			exclude = true ;
 		
 		return exclude ;
 	}
@@ -537,40 +517,14 @@ public abstract class BaseExtJSTag extends MapTagSupport
 	/**
 	 * Evaluate an expression
 	 */
-	protected String evalExpression(String expr)
+	protected Object evalExpression(String expr)
 	{
 		Map variables = (Map) context.getVariable(RichaRunner.BINDINGCONTEXT);
 		
 		Object value = MVEL.eval(expr,null,variables) ;
 		
-		if (value != null)
-		{
-			if (value instanceof java.util.Date)
-			{
-				SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("dateformatobj") ;
-				
-				//Convert the value
-				String temp = fmt.format(value) ;
-				
-				return temp ;
-				
-			}
-			else if (value instanceof Timestamp)
-			{
-				SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("timeformatobj") ;
-				
-				//Convert the value
-				String temp = fmt.format(value) ;
-				
-				return temp;
-			}
-			else
-				return value.toString() ;
-		}
-		else
-			return null ;
+		return value ;
 	}
-	
 	
 	/**
 	 * Process all expressions
@@ -597,7 +551,7 @@ public abstract class BaseExtJSTag extends MapTagSupport
     			String expr = value.substring(2,value.length() - 1) ;
     			
     			//Evaluate the expression
-    			String evalvalue = evalExpression(expr) ;
+    			Object evalvalue = evalExpression(expr) ;
     			
     			//Set the attribute
     			setAttribute(name,evalvalue) ;

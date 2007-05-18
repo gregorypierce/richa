@@ -10,6 +10,25 @@ public abstract class BaseControlTag extends BaseExtJSTag
 {
     /**
      * Serialize the creation of the the tag and its attributes
+     * If the add parameter is set to true, the object is also added to the active container
+     * This method allows the object to be initialized
+     */
+    protected void serialize(String init, boolean add)
+    {   
+	    scriptBuffer.appendln("    var " + getName() + " =  new " + getObjectName() + "(" + init +  ",{");
+    	
+	    //Serialize the attributes
+    	serializeAttributes() ;
+    	
+    	scriptBuffer.appendln("    });") ;
+    	
+    	//Add it to thecurrent container
+    	if (add)
+    		scriptBuffer.appendln("    " + getCurrentFormName() + ".add(" + getName() + ");") ;
+    }   
+
+    /**
+     * Serialize the creation of the the tag and its attributes
      */
     protected void serialize(boolean add)
     {   
@@ -25,37 +44,4 @@ public abstract class BaseControlTag extends BaseExtJSTag
     		scriptBuffer.appendln("    " + getCurrentFormName() + ".add(" + getName() + ");") ;
     }    
     
-    /**
-     * Serialize the creation of the the tag and its attributes
-     */
-    protected void serialize(String data, boolean add)
-    {   
-	    scriptBuffer.appendln("    var " + getName() + " =  new " + getObjectName() + "(" + data +  ",{");
-    	
-	    //Serialize the attributes
-    	serializeAttributes() ;
-    	
-    	scriptBuffer.appendln("    });") ;
-    	
-    	//Add it to thecurrent container
-    	if (add)
-    		scriptBuffer.appendln("    " + getCurrentFormName() + ".add(" + getName() + ");") ;
-    }   
-
-    /**
-     * Serialize the apply to creation of the the tag and its attributes
-     */
-    protected void serializeApplyTo(boolean apply)
-    {
-    	scriptBuffer.appendln("    var " + getName() + " = new " + getObjectName() + "({");
-    	
-	    //Serialize the attributes
-    	serializeAttributes() ;
-    	
-    	scriptBuffer.appendln("    });") ;
-    	
-    	//Append the applyTo method call
-    	if (apply)
-    		scriptBuffer.appendln(getName() + ".applyTo('" + getAttribute("applyTo") + "');") ;
-    }  
 }

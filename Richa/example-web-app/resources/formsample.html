@@ -24,6 +24,7 @@
 						<extJS:textfield name="addr2" width="170" fieldLabel="Address2" value="#{cust1.address2}"/>
 						<extJS:textfield name="city" fieldLabel="City" width="170" value="#{cust1.city}"/>
 						<extJS:numberfield name="zip" fieldLabel="Zip" width="55" maxLength="5" value="#{cust1.zip}"/>
+						<extJS:combobox name="state" fieldLabel="State" width="170" store="#{statelist}"/>
 						<extJS:textarea name="comment" fieldLabel="Comments" width="170" value="#{cust1.comments}"/>
 					</extJS:fieldset>
 					<extJS:formbutton name="save" text="Save"/>

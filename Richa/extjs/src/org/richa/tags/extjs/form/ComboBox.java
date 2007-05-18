@@ -5,7 +5,7 @@ import org.apache.commons.jelly.XMLOutput;
 import org.xml.sax.SAXException;
 
 /**
- * This class represents a DateField tag
+ * This class represents a ComboBox tag
  * @author ram
  *
  */
