@@ -1,16 +1,18 @@
 package test.eventhandlers;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.richa.annotations.BindHandler;
+import org.richa.annotations.DataStoreHandler;
 import org.richa.annotations.EventHandler;
 import org.richa.annotations.EventListener;
+import org.richa.annotations.PageBindHandler;
 
 import test.entities.Customer;
+import test.entities.State;
 
 @EventListener("formListener")
 public class TestFormHandler
@@ -21,14 +23,44 @@ public class TestFormHandler
 		return "Ext.MessageBox.alert('FormListener', 'You called the testFormHandler method on the TestFormListener class.');";
 	}
 	
-	@BindHandler()
+	@DataStoreHandler("statelist")
+	public List testDataStoreHandler(Map<String,String> params)
+	{
+		String query = (String) params.get("query") ;
+		
+		List statelist = new LinkedList() ;
+		
+		query = query.toLowerCase() ;
+		if (query.startsWith("g") || query.equals(""))			
+			statelist.add(new State("GA", "Georgia")) ;
+		
+		if (query.startsWith("c")|| query.equals("'"))
+			statelist.add(new State("CA", "California")) ;
+		
+		if (query.startsWith("f")|| query.equals(""))
+			statelist.add(new State("FL", "Florida")) ;
+		
+		if (query.startsWith("a")|| query.equals(""))
+		{
+			statelist.add(new State("AL", "Alabama")) ;
+			statelist.add(new State("AZ", "Arizona")) ;
+			statelist.add(new State("AK", "Alaska")) ;
+		}
+		
+		if (query.startsWith("n")|| query.equals(""))
+			statelist.add(new State("NY", "New York")) ;
+		
+		return statelist ;	
+	}
+	
+	@PageBindHandler()
 	public Map testBindHandler()
 	{
 		Map test = new HashMap() ;
 		createTestData(test);
 		
 		
-		return test ;
+		return test ;	
 	}
 	
 	private void createTestData(Map test)
@@ -58,19 +90,8 @@ public class TestFormHandler
 		cust2.setComments("This is a test2") ;
 		cust2.setDob(new Date()) ;
 		
-		List cust = new ArrayList() ;
-		cust.add(cust1) ;
-		
 		test.put("cust1", cust1) ;
 		test.put("cust2", cust2) ;
-		
-		Map statelist = new HashMap() ;
-		statelist.put("GA", "Georgia") ;
-		statelist.put("CA", "California") ;
-		statelist.put("FL", "Florida") ;
-		statelist.put("AL", "Alabama") ;
-		statelist.put("NY", "New York") ;
-		
 	}
 }
 

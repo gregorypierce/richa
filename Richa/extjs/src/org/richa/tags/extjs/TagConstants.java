@@ -13,18 +13,21 @@ public interface TagConstants
 	public static final String HIDDEN = "hidden" ;
 	public static final String ACTIVE = "active" ;
 	public static final String DISABLE = "disable" ;
-	public static final String CONTENTURL = "contentURL" ;
+	public static final String CONTENTURL = "contentUrl" ;
 	public static final String WIDTH = "width" ;
 	public static final String TITLE = "title" ;
 	public static final String REGION = "region" ;
 	public static final String ELEMENT = "element" ;
-	public static final String BORDERLAYOUT = "borderlayout" ;
-	public static final String SENDDATA = "senddata" ;
+	public static final String BORDERLAYOUT = "borderLayout" ;
+	public static final String SENDDATA = "sendData" ;
 	public static final String THEME = "theme" ;
 	public static final String BIND = "bind" ;
 	public static final String RENDER = "render" ;
 	public static final String STORE = "store" ;
 	public static final String BEAN = "bean" ;
+	public static final String LISTENER = "listener" ;
+	public static final String DATASTORE = "dataStore" ;
+	
 	
 	
 	//Send Data constants

@@ -35,7 +35,7 @@ public class EventListener extends BaseExtJSTag
 			EventListeners listeners = EventListeners.getInstance() ;
 			if (listeners != null)
 			{
-				Method method = listeners.getBindHandlerMethod(name, bind) ;
+				Method method = listeners.getPageBindHandlerMethod(name, bind) ;
 				
 				try
 				{

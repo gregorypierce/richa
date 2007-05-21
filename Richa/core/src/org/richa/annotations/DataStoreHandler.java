@@ -7,9 +7,9 @@ import java.lang.annotation.Target;
 
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target(value=ElementType.METHOD)
-public @interface BindHandler
+public @interface DataStoreHandler
 {
-	public static final String DEFAULT_BIND = "!defaultbind!";
+	public static final String DEFAULT_DATASTORE = "!defaultdatastore!";
 	
-	String value() default DEFAULT_BIND;
+	String value() default DEFAULT_DATASTORE;
 }

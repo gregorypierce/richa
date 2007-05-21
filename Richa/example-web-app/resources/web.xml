@@ -41,6 +41,12 @@
         <servlet-class>org.richa.event.RichaEventServlet</servlet-class>
         <load-on-startup>3</load-on-startup>
     </servlet>
+    
+    <servlet>
+        <servlet-name>RichaDataStore</servlet-name>
+        <servlet-class>org.richa.datastore.RichaDataStoreServlet</servlet-class>
+        <load-on-startup>4</load-on-startup>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>RichaRunner</servlet-name>
@@ -60,6 +66,11 @@
     <servlet-mapping>
         <servlet-name>RichaEvent</servlet-name>
         <url-pattern>/event/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RichaDataStore</servlet-name>
+        <url-pattern>/datastore/*</url-pattern>
     </servlet-mapping>
     
 	<servlet-mapping>
