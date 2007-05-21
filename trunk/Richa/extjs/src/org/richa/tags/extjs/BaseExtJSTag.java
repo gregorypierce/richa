@@ -275,7 +275,10 @@ public abstract class BaseExtJSTag extends MapTagSupport implements TagConstants
     			if (i > 0)	     	
     				scriptBuffer.append(",") ;
     			
-    			scriptBuffer.appendln(name + ":" + serializeValue(getAttributes().get(name))) ;
+    			if (!objectParam(name))    			
+    				scriptBuffer.appendln(name + ":" + serializeValue(getAttributes().get(name))) ;
+    			else
+    				scriptBuffer.appendln(name + ":" + getAttributes().get(name)) ;
     			i++ ;    			    	
     		}
     	}	
@@ -507,12 +510,24 @@ public abstract class BaseExtJSTag extends MapTagSupport implements TagConstants
 			exclude = true ;
 		else if (name.equals(SENDDATA))
 			exclude = true ;
-		else if (name.equals(STORE))
-			exclude = true ;
 		
 		return exclude ;
 	}
-	
+
+	/**
+	 * Does this parameter need to be serialized as an object
+	 * @param name
+	 */
+	protected static boolean objectParam(String name)
+	{
+		boolean objectParam = false ;
+		
+		if (name.equals(STORE))
+			objectParam = true ;
+		
+		return objectParam ;
+	}
+
 	
 	/**
 	 * Evaluate an expression

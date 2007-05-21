@@ -42,5 +42,9 @@ public class ExtJSTagLibrary extends TagLibrary
 		
 		//Event
 		registerTag("listener",org.richa.tags.extjs.event.EventListener.class) ;
+		
+		//Data Store
+		registerTag("remotestore",org.richa.tags.extjs.data.RemoteStore.class) ;
+		registerTag("simplestore",org.richa.tags.extjs.data.SimpleStore.class) ;
 	}
 }

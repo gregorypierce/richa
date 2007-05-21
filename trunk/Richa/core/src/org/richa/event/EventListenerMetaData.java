@@ -9,52 +9,98 @@ public class EventListenerMetaData
 	private Class eventListener;
 	
 	private Map<String,Method> eventHandlerMap;
-	private Map<String,Method> bindHandlerMap;
+	private Map<String,Method> pageBindHandlerMap;
+	private Map<String,Method> dataStoreHandlerMap;
 	
+	/**
+	 * Constructor
+	 */
 	public EventListenerMetaData()
 	{
 		super();
 	}
 	
+	/**
+	 * Constructor
+	 */
 	public EventListenerMetaData(Class eventListener)
 	{
-		this(eventListener, new HashMap<String,Method>(), new HashMap<String,Method>());
+		this(eventListener, new HashMap<String,Method>(), new HashMap<String,Method>(), new HashMap<String,Method>());
 	}
 	
-	public EventListenerMetaData(Class eventListener, Map<String,Method> eventHandlerMap, Map<String,Method> bindHandlerMap)
+	/**
+	 * Constructor
+	 */
+	public EventListenerMetaData(Class eventListener, Map<String,Method> eventHandlerMap, Map<String,Method> pageBindHandlerMap,Map<String,Method> dataStoreHandlerMap)
 	{
 		this.eventListener = eventListener;
 		this.eventHandlerMap = eventHandlerMap;
-		this.bindHandlerMap = bindHandlerMap ;
+		this.pageBindHandlerMap = pageBindHandlerMap ;
+		this.dataStoreHandlerMap = dataStoreHandlerMap ;
 	}
 
+	
+	/**
+	 * Get the Event Listener
+	 */
 	public Class getEventListener()
 	{
 		return eventListener;
 	}
 
+	/**
+	 * Set Event Listener
+	 */
 	public void setEventListener(Class eventListener)
 	{
 		this.eventListener = eventListener;
 	}
 
+	/**
+	 * Add Event Listener
+	 */
 	public void addEventHandler(String handlerName, Method handlerMethod )
 	{
 		eventHandlerMap.put(handlerName, handlerMethod);
 	}
 	
+	/**
+	 * Get Event Handler
+	 */
 	public Method getEventHandler(String handlerName)
 	{
 		return eventHandlerMap.get(handlerName);
 	}
 	
-	public void addBindHandler(String handlerName, Method handlerMethod )
+	/**
+	 * Add a page bind handler
+	 */
+	public void addPageBindHandler(String handlerName, Method handlerMethod )
 	{
-		bindHandlerMap.put(handlerName, handlerMethod);
+		pageBindHandlerMap.put(handlerName, handlerMethod);
 	}
 	
-	public Method getBindHandler(String handlerName)
+	/**
+	 * Get a page bind handler
+	 */
+	public Method getPageBindHandler(String handlerName)
 	{
-		return bindHandlerMap.get(handlerName);
+		return pageBindHandlerMap.get(handlerName);
+	}
+	
+	/**
+	 * Add a data store handler
+	 */
+	public void addDataStoreHandler(String handlerName, Method handlerMethod )
+	{
+		dataStoreHandlerMap.put(handlerName, handlerMethod);
+	}
+	
+	/**
+	 * Get a data store handler
+	 */
+	public Method getDataStoreHandler(String handlerName)
+	{
+		return dataStoreHandlerMap.get(handlerName);
 	}
 }

@@ -9,9 +9,10 @@ import javassist.bytecode.ClassFile;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.richa.annotations.BindHandler;
+import org.richa.annotations.DataStoreHandler;
 import org.richa.annotations.EventHandler;
 import org.richa.annotations.EventListener;
+import org.richa.annotations.PageBindHandler;
 import org.richa.event.EventListenerMetaData;
 
 public class EventListenerScanner extends Scanner
@@ -82,17 +83,31 @@ public class EventListenerScanner extends Scanner
 						}
 						
 						
-						BindHandler bh = method.getAnnotation(BindHandler.class);
+						PageBindHandler bh = method.getAnnotation(PageBindHandler.class);
 						if(bh != null)
 						{
-							String bindHandlerName = bh.value();
-							if(bindHandlerName.equals(BindHandler.DEFAULT_BIND))
+							String pageBindHandlerName = bh.value();
+							if(pageBindHandlerName.equals(PageBindHandler.DEFAULT_BIND))
 							{
-								elmd.addBindHandler(method.getName(), method);
+								elmd.addPageBindHandler(method.getName(), method);
 							}
 							else
 							{
-								elmd.addBindHandler(bindHandlerName, method);
+								elmd.addPageBindHandler(pageBindHandlerName, method);
+							}
+						}
+						
+						DataStoreHandler dh = method.getAnnotation(DataStoreHandler.class);
+						if(dh != null)
+						{
+							String dataStoreHandlerName = dh.value();
+							if(dataStoreHandlerName.equals(DataStoreHandler.DEFAULT_DATASTORE))
+							{
+								elmd.addDataStoreHandler(method.getName(), method);
+							}
+							else
+							{
+								elmd.addDataStoreHandler(dataStoreHandlerName, method);
 							}
 						}
 					}

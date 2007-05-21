@@ -61,7 +61,7 @@ public class EventListeners
 	}
 	
 	/**
-	 * Get the event handler method object
+	 * Get an event handler method object
 	 */
 	public Method getEventHandlerMethod(String eventListener, String eventHandler)
 	{
@@ -96,9 +96,9 @@ public class EventListeners
 	}
 	
 	/**
-	 * Get the event handler method object
+	 * Get a page bind handler method
 	 */
-	public Method getBindHandlerMethod(String eventListener, String bindHandler)
+	public Method getPageBindHandlerMethod(String eventListener, String pageBindHandler)
 	{
 		Method bindMethod = null ;
 		
@@ -110,11 +110,11 @@ public class EventListeners
 			if (eventListenerClass != null)
 			{
 				// Find the method that is associated with the bind event name
-				bindMethod = eventListenerMetaData.getBindHandler(bindHandler);
+				bindMethod = eventListenerMetaData.getPageBindHandler(pageBindHandler);
 
 				if (bindMethod == null)
 				{
-					log.error("Couldn't find bind handler method for the listener: " + eventListener + " and handler: " + bindHandler);
+					log.error("Couldn't find bind handler method for the listener: " + eventListener + " and handler: " + pageBindHandler);
 				}
 			}
 			else
@@ -129,7 +129,42 @@ public class EventListeners
 		
 		return bindMethod ;
 	}
-	
+
+	/**
+	 * Get a data store handler method
+	 */
+	public Method getDataStoreHandlerMethod(String eventListener, String dataStoreHandler)
+	{
+		Method bindMethod = null ;
+		
+		EventListenerMetaData eventListenerMetaData = listeners.get(eventListener) ;
+		if (eventListenerMetaData != null)
+		{
+			Class eventListenerClass = eventListenerMetaData.getEventListener();
+
+			if (eventListenerClass != null)
+			{
+				// Find the method that is associated with the bind event name
+				bindMethod = eventListenerMetaData.getDataStoreHandler(dataStoreHandler);
+
+				if (bindMethod == null)
+				{
+					log.error("Couldn't find data store handler method for the listener: " + eventListener + " and handler: " + dataStoreHandler);
+				}
+			}
+			else
+			{
+				log.error("Couldn't find event listener class for the listener: " + eventListener);
+			}
+		}
+		else
+		{
+			log.error("No registered event listener for the listener: " + eventListener);
+		}
+		
+		return bindMethod ;
+	}
+
 	/**
 	 * Get the event listener object
 	 */

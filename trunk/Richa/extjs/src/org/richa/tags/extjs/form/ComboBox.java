@@ -29,6 +29,11 @@ public class ComboBox extends BaseControlTag
 			throw new JellyTagException("name is a required parameter for this tag") ;
 		
 		//Serialize the creation of the tag
-		serialize(true) ;	
+		serialize(true) ;
+		
+		//Get the name of the store
+		String store = (String)getAttribute(STORE) ;
+		if (isEmpty(store))
+			throw new JellyTagException("store is a required parameter for this tag") ;
 	}
 }
