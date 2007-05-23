@@ -172,6 +172,12 @@
 	<target name="deploy.jboss" depends="example-dist">
 		<copy file="${dist}/builds/${version}/${ant.project.name}.war" todir="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}" />
 	</target>
+	
+	<target name="deploy.tomcat" depends="example-explode">
+		<copy todir="${tomcat.home}/webapps/${ant.project.name}">
+			<fileset dir="${explode.dir}" />
+		</copy>		
+	</target>
 
 
 </project>
