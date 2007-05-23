@@ -178,6 +178,47 @@
 			<fileset dir="${explode.dir}" />
 		</copy>		
 	</target>
+	
+	<target name="richaCommandDispatch">
+		<echo message="${command}" />
+		
+		<condition property="command-run">
+			<equals arg1="${command}" arg2="run" />
+		</condition>
+		
+		<condition property="command-stop">
+			<equals arg1="${command}" arg2="stop" />
+		</condition>
+		
+		<antcall target="run.richa.tomcat" />
+		<antcall target="stop.richa.tomcat" />
+	</target>
+	
+	<target name="run.richa.tomcat" if="command-run">
+		<exec executable="${tomcat.home}/bin/startup.sh" output="richa.log" />
+		<echo message="***************************************" />
+		<echo message="***************************************" />
+		<echo message=" " />
+		<echo message=" " />
+		<echo message="Go to http://localhost:8080/richa in your web browser" /> 
+		<echo message=" " />
+		<echo message=" " />
+		<echo message="***************************************" />
+		<echo message="***************************************" />		
+	</target>	
+	
+	<target name="stop.richa.tomcat" if="command-stop">
+		<exec executable="${tomcat.home}/bin/shutdown.sh" output="richa.log" />
+		<echo message="***************************************" />
+		<echo message="***************************************" />
+		<echo message=" " />
+		<echo message=" " />
+		<echo message="richa has been shutdown!" />
+		<echo message=" " />
+		<echo message=" " /> 
+		<echo message="***************************************" />
+		<echo message="***************************************" />		
+	</target>	
 
 
 </project>
