@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.richa.config.Application;
+import org.richa.event.EventResponse;
 
 /**
  * Operations that can be performed on a field
@@ -12,103 +13,109 @@ import org.richa.config.Application;
  */
 public class Field extends BaseOperation
 {	
-	private String name ;
+	/**
+	 * Constructor
+	 */
+	public Field(String name, EventResponse res)
+	{
+		super(name,res) ;
+	}
 	
 	/**
 	 * Show a field
 	 */
-	public ResponseItem show() 
+	public void show() 
 	{
-		return ResponseItem.createResponseItem(name,SHOW) ;
+		res.add(ResponseItem.createResponseItem(name,SHOW)) ;
 	}
 	
 	/**
 	 * Hide a field
 	 */
-	public ResponseItem hide()
+	public void hide()
 	{
-		return ResponseItem.createResponseItem(name,HIDE) ;
+		res.add(ResponseItem.createResponseItem(name,HIDE)) ;
 	}
 	
 	/**
 	 * Disable a field
 	 */
-	public ResponseItem disable() 
+	public void disable() 
 	{
-		return ResponseItem.createResponseItem(name,DISABLE) ;
+		res.add(ResponseItem.createResponseItem(name,DISABLE)) ;
 	}
 	
 	/**
 	 * Enable a field  
 	 */
-	public ResponseItem enable() 
+	public void enable() 
 	{
-		return ResponseItem.createResponseItem(name,ENABLE) ;
+		res.add(ResponseItem.createResponseItem(name,ENABLE)) ;
 	}
 	
 	/**
 	 * Focus the field  
 	 */
-	public ResponseItem focus() 
+	public void focus() 
 	{
-		return ResponseItem.createResponseItem(name,FOCUS) ;
+		res.add(ResponseItem.createResponseItem(name,FOCUS)) ;
 	}
 	
 	/**
 	 * Set he field value
 	 */
-	public ResponseItem set(String value)
+	public void set(String value)
 	{
 		String[] params = new String[1] ;
 		params[0] = value ;
 		
-		return ResponseItem.createResponseItem(name,SET,params) ;
+		res.add(ResponseItem.createResponseItem(name,SET,params)) ;
 	}
 	
 	/**
 	 * Set the field value based on an integer
 	 */
-	public ResponseItem set(int value) 
+	public void set(int value) 
 	{
 		String temp = Integer.toString(value) ;
 		
-		return set(temp) ;
+		set(temp) ;
 	}
 	
 	/**
 	 * Set the field value based on a long
 	 */
-	public ResponseItem set(String name, long value) 
+	public void set(String name, long value) 
 	{
 		String temp = Long.toString(value) ;
 		
-		return set(temp) ;
+		set(temp) ;
 	}
 	
 	/**
 	 * Set the field value based on a float 
 	 */
-	public ResponseItem set(String name, float value) 
+	public void set(String name, float value) 
 	{
 		String temp = Float.toString(value) ;
 		
-		return set(temp) ;
+		set(temp) ;
 	}
 	
 	/**
 	 * Set the field value based on a double
 	 */
-	public ResponseItem set(String name, double value) 
+	public void set(String name, double value) 
 	{
 		String temp = Double.toString(value) ;
 		
-		return set(temp) ;		
+		set(temp) ;		
 	}
 	
 	/**
 	 * Set the field value for a date field
 	 */
-	public ResponseItem set(String name, Date value) 
+	public void set(String name, Date value) 
 	{
 		SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("dateformatobj") ;
 		
@@ -116,13 +123,13 @@ public class Field extends BaseOperation
 		String temp = fmt.format(value) ;
 		
 		//Set the value
-		return set(temp) ;
+		set(temp) ;
 	}
 	
 	/**
 	 * Set the field value for a timestamp value
 	 */
-	public ResponseItem set(String name, Timestamp value)
+	public void set(String name, Timestamp value)
 	{
 		SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("timeformatobj") ;
 		
@@ -130,6 +137,6 @@ public class Field extends BaseOperation
 		String temp = fmt.format(value) ;
 		
 		//Set the value
-		return set(temp) ;
+		set(temp) ;
 	}
 }

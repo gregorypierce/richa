@@ -200,8 +200,13 @@ RichaSuccess = function(response)
 {
 	var res = Ext.util.JSON.decode(response.responseText) ;
 	
-	if (res.CODE == "FAIL") ;
+	if (res.CODE == "FAIL") 
 		RichaShowErrorDialog("Server Error",res.DATA) ;
+	else
+	{
+		var operations = Ext.util.JSON.decode(res.DATA);
+		RichaProcessResponse(operations) ;
+	}
 }
 
 /** Function called when a client request fails **/
@@ -266,4 +271,17 @@ RichaBindEvent = function(control,controlType, event, jshandler, listener, handl
 	
 	//Bind the event
 	el.on(event,jshandler) ;
+}
+
+RichaProcessResponse = function(operations)
+{
+	var operation,script ;
+	
+	//Loop through all the operations from the server and process them
+	for (var loop = 0; loop <operations.length; loop++)
+	{
+		operation = operations[loop] ;
+		script = operation["name"] + "." + operation["operation"] + "();" ;
+		eval(script) ;
+	}
 }

@@ -1,45 +1,59 @@
 package org.richa.operations;
 
+import org.richa.event.EventResponse;
+
 /**
  * Operations that can be performed on a tab
  * @author ram
  *
  */
-public interface Tab 
+public class Tab extends BaseOperation 
 {
 	/**
-	 * Show the tab
-	 * @param name - Tab Name
-	 * @return JS Fragment that performs this operation
+	 * Constuctor
 	 */
-	public void show(String name) ;
+	public Tab (String name, EventResponse res)
+	{
+		super (name, res) ;
+	}
+	
+	/**
+	 * Show the tab
+	 */
+	public void show() 
+	{
+		res.add(ResponseItem.createResponseItem(name,HIDE)) ;
+	}
 	
 	/**
 	 * Hide the tab
-	 * @param name - Tab Name
-	 * @return JS Fragment that performs this operation
 	 */
-	public void hide(String name) ;
+	public void hide(String name)
+	{
+		res.add(ResponseItem.createResponseItem(name,HIDE)) ;
+	}
 	
 	/**
 	 * Disable the tab
-	 * @param name - Tab Name
-	 * @return JS Fragment that performs this operation
 	 */
-	public void disable(String name) ;
+	public void disable(String name) 
+	{
+		res.add(ResponseItem.createResponseItem(name,DISABLE)) ;
+	}
 	
 	/**
 	 * Enable the tab
-	 * @param name - Tab Name
-	 * @return JS Fragment that performs this operation
 	 */
-	public void enable(String name) ;
+	public void enable(String name) 
+	{
+		res.add(ResponseItem.createResponseItem(name,ENABLE)) ;
+	}
 	
 	/**
 	 * Add a tab item
-	 * @param name - Tab Item Name
-	 * @return JS Fragment that performs this operation
 	 */
-	public void addItem(String name) ;
-	
+	public void addItem(String name) 
+	{
+		res.add(ResponseItem.createResponseItem(name,ADDITEM)) ;
+	}
 }

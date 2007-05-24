@@ -242,7 +242,7 @@ public abstract class BaseExtJSTag extends MapTagSupport implements TagConstants
      */
     protected void serialize(boolean add)
     {   
-	    scriptBuffer.appendln("    var " + getName() + " =  new " + getObjectName() + "({");
+	    scriptBuffer.appendln("    " + getName() + " =  new " + getObjectName() + "({");
     	
 	    //Serialize the attributes
     	serializeAttributes() ;

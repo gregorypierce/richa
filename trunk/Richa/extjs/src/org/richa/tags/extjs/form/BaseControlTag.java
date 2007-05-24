@@ -15,7 +15,7 @@ public abstract class BaseControlTag extends BaseExtJSTag
      */
     protected void serialize(String init, boolean add)
     {   
-	    scriptBuffer.appendln("    var " + getName() + " =  new " + getObjectName() + "(" + init +  ",{");
+	    scriptBuffer.appendln("    " + getName() + " =  new " + getObjectName() + "(" + init +  ",{");
     	
 	    //Serialize the attributes
     	serializeAttributes() ;
@@ -32,7 +32,7 @@ public abstract class BaseControlTag extends BaseExtJSTag
      */
     protected void serialize(boolean add)
     {   
-	    scriptBuffer.appendln("    var " + getName() + " =  new " + getObjectName() + "({");
+	    scriptBuffer.appendln("    " + getName() + " =  new " + getObjectName() + "({");
     	
 	    //Serialize the attributes
     	serializeAttributes() ;
