@@ -1,5 +1,7 @@
 package org.richa.operations;
 
+import org.richa.event.EventResponse;
+
 /**
  * Operations that can be performed on a form
  * @author ram
@@ -7,7 +9,13 @@ package org.richa.operations;
  */
 public class FieldSet extends BaseOperation
 {
-	private String name ;
+	/**
+	 * Constructor
+	 */
+	public FieldSet(String name, EventResponse res)
+	{
+		super(name,res) ;
+	}
 	
 	/**
 	 * Show the form
@@ -41,7 +49,7 @@ public class FieldSet extends BaseOperation
 	}
 	
 	/**
-	 * Enable the form
+	 * Enable the fieldset
 	 */
 	public ResponseItem enable()
 	{

@@ -87,7 +87,18 @@ public class RichaEventServlet extends HttpServlet
 				Method eventMethod = listeners.getEventHandlerMethod(eventListener, eventHandler) ;
 				if (eventMethod != null)
 				{
-					pw.println(eventMethod.invoke(listener));
+					//Create a new EventResponse
+					EventResponse res = new EventResponse() ;
+					
+					Object[] methodParams = new Object[2] ;
+					methodParams[0] = context ;
+					methodParams[1] = res ;
+					
+					//Invoke it
+					eventMethod.invoke(listener,methodParams);
+					
+					pw.write(res.serialize()) ;
+					
 				}
 				else
 					ResponseUtils.sendResponse(pw, Response.FAIL, "Unable to load an event handler method for listener: " + eventListener + " and handler: " + eventHandler);

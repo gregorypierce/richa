@@ -1,9 +1,13 @@
 package org.richa.event;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Logger;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * EventContext object is passed to all the event handlers 
@@ -12,7 +16,11 @@ import java.util.logging.Logger;
  */
 public class EventContext
 {
-	private Map data ;
+	//Logger
+	protected static Log log = LogFactory.getLog(EventContext.class);
+	
+	//Data
+	private Map<String,String> data ;
 	
 	/**
 	 * Default constructor
@@ -20,17 +28,23 @@ public class EventContext
 	 */
 	public EventContext()
 	{
-		data = new HashMap() ;
+		data = new HashMap<String,String>() ;
 	}
 	
 	/**
 	 * Add a name/value pair to the context
-	 * @param name
-	 * @param value
 	 */
 	public void add(String name, String value)
 	{
 		data.put(name, value) ;
+	}
+	
+	/**
+	 * Get the value for a value in the context
+	 */
+	public String get(String name)
+	{
+		return ((String) data.get(name)) ;
 	}
 	
 	/**
@@ -40,7 +54,6 @@ public class EventContext
 	{
 		data.remove(name) ;
 	}
-	
 	
 	/**
 	 * Clear all the data in the context
@@ -54,7 +67,7 @@ public class EventContext
 	/**
 	 * Log the context data
 	 */
-	public void log(Logger log) 
+	public void log() 
 	{
 		log.info("Context Data......................") ;
 		
@@ -82,6 +95,25 @@ public class EventContext
 			String name = (String) iter.next() ;
 			String value = (String) data.get(name) ;
 			System.out.println("Name:" + name + " Value:" + value) ;
+		}
+	}
+	
+	/**
+	 * Populate a bean with the data in the context
+	 */
+	public void populateBean(Object bean) 
+	{
+		try
+		{
+			BeanUtils.populate(bean, data) ;
+		}
+		catch (InvocationTargetException e)
+		{
+			log.error(this,e);
+		}
+		catch (IllegalAccessException e)
+		{
+			log.error(this,e);
 		}
 	}
 }

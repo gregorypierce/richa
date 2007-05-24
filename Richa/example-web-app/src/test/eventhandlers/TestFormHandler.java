@@ -10,6 +10,8 @@ import org.richa.annotations.DataStoreHandler;
 import org.richa.annotations.EventHandler;
 import org.richa.annotations.EventListener;
 import org.richa.annotations.PageBindHandler;
+import org.richa.event.EventContext;
+import org.richa.event.EventResponse;
 
 import test.entities.Customer;
 import test.entities.State;
@@ -18,15 +20,16 @@ import test.entities.State;
 public class TestFormHandler
 {
 	@EventHandler("formHandler")
-	public String testFormHandler()
+	public void testFormHandler(EventContext context, EventResponse res)
 	{
-		return "Ext.MessageBox.alert('FormListener', 'You called the testFormHandler method on the TestFormListener class.');";
+		res.getField("name").hide() ;
+		res.getField("dob").hide();
 	}
 	
 	@DataStoreHandler("statelist")
 	public List testDataStoreHandler(Map<String,String> params)
 	{
-		String query = (String) params.get("query") ;
+		String query = (String) params.get("query").trim() ;
 		
 		List statelist = new LinkedList() ;
 		

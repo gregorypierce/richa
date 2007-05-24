@@ -29,7 +29,7 @@ public class EventResponse  extends Response
 	/**
 	 * Manages field set operations
 	 */
-	private FieldSet fieldSet ;
+	private FieldSet fieldset ;
 	
 	/**
 	 * Manages field operations
@@ -37,30 +37,10 @@ public class EventResponse  extends Response
 	private Field field ;
 	
 	/**
-	 * Manages grid operations
-	 */
-	private Grid grid ;
-	
-	/**
 	 * Manages tab operations
 	 */
 	private Tab tab ;
-	
-	/**
-	 * Manages toolbar operations
-	 */
-	private Toolbar toolbar ;
-	
-	/**
-	 * Manages menu operations
-	 */  
-	private Menu menu ;
-	
-	/**
-	 * Manages tree operations
-	 */
-	private Tree tree ;
-	
+
 	/**
 	 * Manages border layout operations
 	 */
@@ -68,12 +48,6 @@ public class EventResponse  extends Response
 	
 	//Response Fragments
 	private List<ResponseItem> responses = new ArrayList<ResponseItem>() ;
-	
-	//Result code
-	private String resultCode ;
-	
-	//Error Description
-	private String errorDesc ;
 	
 	/**
 	 * Add a new response item
@@ -96,6 +70,8 @@ public class EventResponse  extends Response
 	 */
 	public String serialize() throws JSONException
 	{
+		boolean first = true;
+		
 		if (code == Response.FAIL)
 			return super.serialize() ;
 		
@@ -109,20 +85,76 @@ public class EventResponse  extends Response
 		//Get the iterator keys
 		Iterator iter = responses.iterator() ;
 	
+		script.append("[") ;
+		
 		//Loop through all the keys
 		while (iter.hasNext())
 		{
 			//Get the item
 			ResponseItem item = (ResponseItem) iter.next() ;
 			
+			if (!first)
+				script.append(",") ;
+			else
+				first = false ;
+			
 			//Append it to the buffer
 			script.append(item.serialize()) ;
 		}
 	
+		script.append("]") ;
+		
 		//Set the data
 		res.put(Response.DATA, script.toString()) ;
 		
 		//Generate the response
 		return res.toString() ;
+	}
+	
+	/**
+	 * Return a field object for the given name
+	 */
+	public Field getField(String name)
+	{
+		if (field == null)
+			field = new Field(name, this) ;
+		else
+		{
+			field.setName(name) ;
+			field.setEventResponse(this) ;
+		}
+		
+		return field ;
+	}
+	
+	/**
+	 * Return a fieldset object for the given name
+	 */
+	public FieldSet getFieldSet(String name)
+	{
+		if (fieldset == null)
+			fieldset = new FieldSet(name, this) ;
+		else
+		{
+			fieldset.setName(name) ;
+			fieldset.setEventResponse(this) ;
+		}
+		
+		return fieldset ;
+	}
+	/**
+	 * Return a Tab object for the given name
+	 */
+	public Tab getTab(String name)
+	{
+		if (tab == null)
+			tab = new Tab(name, this) ;
+		else
+		{
+			tab.setName(name) ;
+			tab.setEventResponse(this) ;
+		}
+		
+		return tab ;
 	}
 }
