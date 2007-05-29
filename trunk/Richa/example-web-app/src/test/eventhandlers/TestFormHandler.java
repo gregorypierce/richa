@@ -31,13 +31,15 @@ public class TestFormHandler
 	{
 		String query = (String) params.get("query").trim() ;
 		
+		System.out.println( "Query: [" + query + "]" );
+		
 		List statelist = new LinkedList() ;
 		
 		query = query.toLowerCase() ;
 		if (query.startsWith("g") || query.equals(""))			
 			statelist.add(new State("GA", "Georgia")) ;
 		
-		if (query.startsWith("c")|| query.equals("'"))
+		if (query.startsWith("c")|| query.equals(""))
 			statelist.add(new State("CA", "California")) ;
 		
 		if (query.startsWith("f")|| query.equals(""))

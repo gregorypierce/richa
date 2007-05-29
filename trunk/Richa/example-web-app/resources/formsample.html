@@ -25,8 +25,8 @@
 						<extJS:textfield name="city" fieldLabel="City" width="170" value="#{cust1.city}"/>
 						<extJS:numberfield name="zip" fieldLabel="Zip" width="55" maxLength="5" value="#{cust1.zip}"/>
 						<extJS:textarea name="comment" fieldLabel="Comments" width="170" value="#{cust1.comments}"/>
-						<extJS:remotestore name="state" bean="test.entities.State" dataStore="statelist"/>
-						<extJS:combobox name="states" minChars="1" store="state" triggerAction="all" selectOnFocus="true" typeAhead="true" emptyText="Select State..." displayField="name" valueField="code" fieldLabel="State"/>
+						<extJS:simplestore name="state" bean="test.entities.State" dataStore="statelist"/>
+						<extJS:combobox name="states" minChars="1" store="state" triggerAction="all" selectOnFocus="true" typeAhead="true" emptyText="Select State..." mode="local" displayField="name" valueField="code" fieldLabel="State"/>
 					</extJS:fieldset>
 					<extJS:formbutton name="save" text="Save"/>
 					<extJS:formbutton name="cancel" text="Cancel" serverClick="formHandler" sendData="page"/>
