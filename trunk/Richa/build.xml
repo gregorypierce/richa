@@ -173,15 +173,18 @@
 		<copy file="${dist}/builds/${version}/${ant.project.name}.war" todir="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}" />
 	</target>
 	
-	<target name="deploy.tomcat" depends="example-explode">
+	<target name="deploy" depends="example-explode">
 		<copy todir="${tomcat.home}/webapps/${ant.project.name}">
 			<fileset dir="${explode.dir}" />
 		</copy>		
+		
+		<echo message="Deployed" />
 	</target>
 	
 	<target name="richaCommandDispatch">
-		<echo message="${command}" />
+		<echo message="Calling task [${command}]" />
 		
+		<!--
 		<condition property="command-run">
 			<equals arg1="${command}" arg2="run" />
 		</condition>
@@ -191,10 +194,15 @@
 		</condition>
 		
 		<antcall target="run.richa.tomcat" />
-		<antcall target="stop.richa.tomcat" />
+		<antcall target="stop.richa.tomcat" /> -->
+		<antcall target="${command}" />
 	</target>
 	
-	<target name="run.richa.tomcat" if="command-run">
+	<target name="start">
+		<antcall target="run" />
+	</target>
+	
+	<target name="run" >
 		<exec executable="${tomcat.home}/bin/startup.sh" output="richa.log" />
 		<echo message="***************************************" />
 		<echo message="***************************************" />
@@ -207,7 +215,7 @@
 		<echo message="***************************************" />		
 	</target>	
 	
-	<target name="stop.richa.tomcat" if="command-stop">
+	<target name="stop" >
 		<exec executable="${tomcat.home}/bin/shutdown.sh" output="richa.log" />
 		<echo message="***************************************" />
 		<echo message="***************************************" />

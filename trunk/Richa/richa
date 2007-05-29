@@ -9,5 +9,5 @@ if [ "${1}" == help ]
 then
    cat ${RICHA_HOME}/README
 else
-   ant -buildfile ${RICHA_HOME}/build.xml -propertyfile ${RICHA_HOME}/build.properties -Dcommand=${1} richaCommandDispatch 
+   ant -quiet -buildfile ${RICHA_HOME}/build.xml -propertyfile ${RICHA_HOME}/build.properties -Dcommand=${1} richaCommandDispatch 
 fi
