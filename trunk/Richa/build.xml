@@ -16,7 +16,7 @@
 	<property name="tmp" location="tmp" />
 	<property name="explode.dir" location="${dist}/${ant.project.name}.war" />
 
-	<property name="version" value="0.1" />
+	<property name="version" value="0.2" />
 
 	<path id="library.classpath">
 		<fileset dir="${lib}">
@@ -173,7 +173,7 @@
 		<copy file="${dist}/builds/${version}/${ant.project.name}.war" todir="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}" />
 	</target>
 	
-	<target name="deploy" depends="example-explode">
+	<target name="deploy.tomcat" depends="example-explode">
 		<copy todir="${tomcat.home}/webapps/${ant.project.name}">
 			<fileset dir="${explode.dir}" />
 		</copy>		
@@ -200,6 +200,125 @@
 	
 	<target name="start">
 		<antcall target="run" />
+	</target>
+	
+	<target name="create-app">
+		<echo message="Creating application ${arg1}" />
+		<mkdir dir="${user.dir}/${arg1}" />
+		<mkdir dir="${user.dir}/${arg1}/src" />
+		<mkdir dir="${user.dir}/${arg1}/lib" />
+		<mkdir dir="${user.dir}/${arg1}/model" />
+		<mkdir dir="${user.dir}/${arg1}/view" />
+
+		<mkdir dir="${user.dir}/${arg1}/controller" />
+		<mkdir dir="${user.dir}/${arg1}/test" />
+
+<!--
+
+		<mkdir dir="${user.dir}/${arg1}/view/images" />
+		<mkdir dir="${user.dir}/${arg1}/view/css" />
+		<mkdir dir="${user.dir}/${arg1}/view/js" />
+		
+		
+		<copy todir="${user.dir}/${arg1}/view/">
+			<fileset dir="${basedir}/extjs/resources/" />
+		</copy>		
+
+
+		<copy todir="${user.dir}/${arg1}/view/images">
+			<fileset dir="${basedir}/extjs/${resources}/images" />
+		</copy>
+
+		<copy todir="${user.dir}/${arg1}/view/js">
+			<fileset dir="${basedir}/extjs/${resources}/js" />
+		</copy>
+
+		<copy todir="${user.dir}/${arg1}/view">
+			<fileset dir="${basedir}/${resources}/">
+				<include name="*.html" />
+				<include name="*.htm" />
+				<include name="*.sim" />
+				<include name="*.jsb" />
+			</fileset>
+		</copy> -->
+		
+		
+		<copy todir="${user.dir}/${arg1}">
+			<fileset dir="${basedir}/cfg/" >
+				<include name="*.xml" />
+			</fileset>
+		</copy>
+		<mkdir dir="${user.dir}/${arg1}/dist" />
+		
+	</target>
+	
+	<target name="dir">
+		<echo message="${user.dir}" />
+	</target>
+	
+	<target name="compile-project">
+		<delete dir="${user.dir}/classes" />
+		<mkdir dir="${user.dir}/classes" />
+		
+		<!-- compile any custom classes -->
+		<javac destdir="${user.dir}/classes">
+		
+			<src path="${user.dir}/src" />
+			<src path="${user.dir}/controller" />
+			<src path="${user.dir}/model" />
+
+
+			<classpath refid="library.classpath" />
+			<classpath>
+				<fileset dir="${user.dir}/lib" />
+			</classpath>
+		</javac>
+				
+	</target>
+	
+	<target name="package" depends="compile-project">
+
+		<echo message="Making the war file - ${user.dir}/dist/${ant.project.name}.war" />
+		
+		<!-- build the deployment war file -->
+		<war destfile="${user.dir}/dist/${ant.project.name}.war" webxml="${user.dir}/web.xml">
+			<!-- <fileset dir="${tmp}" /> -->
+			<fileset dir="${user.dir}/view" />
+			<lib dir="${lib}">
+				<include name="**/*.jar" />
+				<exclude name="javax.servlet.jar" />
+				<include name="${dist}/${ant.project.name}.jar" />
+				<include name="${dist}/${ant.project.name}-extjs.jar" />
+			</lib>
+			<classes dir="${user.dir}/classes" />
+		</war>
+
+	</target>
+	
+	<target name="deploy" depends="package">
+		<echo message="Deploying project to - ${tomcat.home}/webapps" />
+		
+		<copy file="${user.dir}/dist/${ant.project.name}.war" todir="${tomcat.home}/webapps" /> 		
+	</target>	
+	
+	
+	<target name="create-controller">
+		<echo message="Not yet implemented" />
+		<echo message="Creating controller ${arg1}" />
+	</target>
+	
+	<target name="create-model">
+		<echo message="Not yet implemented" />
+	
+	</target>
+	
+	<target name="create-job">
+		<echo message="Not yet implemented" />
+	
+	</target>
+	
+	<target name="update">
+		<echo message="Not yet implemented" />
 	</target>
 	
 	<target name="run" >
