@@ -278,17 +278,22 @@
 	
 	<target name="package" depends="compile-project">
 
-		<echo message="Making the war file - ${user.dir}/dist/${ant.project.name}.war" />
+		<echo message="Making the war file - ${user.dir}/dist/test.war" />
 		
+		<echo message="Including ${dist}/${ant.project.name}.jar" />
 		<!-- build the deployment war file -->
-		<war destfile="${user.dir}/dist/${ant.project.name}.war" webxml="${user.dir}/web.xml">
+		<war destfile="${user.dir}/dist/test.war" webxml="${user.dir}/web.xml">
 			<!-- <fileset dir="${tmp}" /> -->
 			<fileset dir="${user.dir}/view" />
 			<lib dir="${lib}">
 				<include name="**/*.jar" />
 				<exclude name="javax.servlet.jar" />
-				<include name="${dist}/${ant.project.name}.jar" />
-				<include name="${dist}/${ant.project.name}-extjs.jar" />
+			</lib>
+			<lib dir="${dist}">
+				<include name="**/*.jar" />
+				<exclude name="javax.servlet.jar" />
+				<include name="${ant.project.name}.jar" />
+				<include name="${ant.project.name}-extjs.jar" />
 			</lib>
 			<classes dir="${user.dir}/classes" />
 		</war>
@@ -298,7 +303,7 @@
 	<target name="deploy" depends="package">
 		<echo message="Deploying project to - ${tomcat.home}/webapps" />
 		
-		<copy file="${user.dir}/dist/${ant.project.name}.war" todir="${tomcat.home}/webapps" /> 		
+		<copy file="${user.dir}/dist/test.war" todir="${tomcat.home}/webapps" /> 		
 	</target>	
 	
 	
