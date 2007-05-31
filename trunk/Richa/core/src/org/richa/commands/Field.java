@@ -1,4 +1,4 @@
-package org.richa.operations;
+package org.richa.commands;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -11,7 +11,7 @@ import org.richa.event.EventResponse;
  * Operations that can be performed on a field
  * @author ram
  */
-public class Field extends BaseOperation
+public class Field extends BaseCommand
 {	
 	/**
 	 * Constructor

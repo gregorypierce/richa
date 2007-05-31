@@ -91,10 +91,19 @@ public class RichaDataStoreServlet extends HttpServlet
 				Method eventMethod = listeners.getDataStoreHandlerMethod(eventListener, dataStoreHandler) ;
 				if (eventMethod != null)
 				{
-					Object[] methodParams = new Object[1] ;
-					methodParams[0] = params ;
+					//Create a list data store
+					ListDataStore resultStore = new ListDataStore() ;
 					
-					List results = (List) eventMethod.invoke(listener,methodParams);
+					//Setup the parameters
+					Object[] methodParams = new Object[2] ;
+					methodParams[0] = params ;
+					methodParams[1] = resultStore ;
+					
+					//Invoke Handler
+					eventMethod.invoke(listener,methodParams);
+					
+					//Get the data
+					List results = resultStore.getData() ;
 					
 					//Translate the results in JSON
 					sendResults(results,pw) ;

@@ -9,7 +9,7 @@ import javassist.bytecode.ClassFile;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.richa.annotations.DataStoreHandler;
+import org.richa.annotations.ListDataStoreHandler;
 import org.richa.annotations.EventHandler;
 import org.richa.annotations.EventListener;
 import org.richa.annotations.PageBindHandler;
@@ -97,11 +97,11 @@ public class EventListenerScanner extends Scanner
 							}
 						}
 						
-						DataStoreHandler dh = method.getAnnotation(DataStoreHandler.class);
+						ListDataStoreHandler dh = method.getAnnotation(ListDataStoreHandler.class);
 						if(dh != null)
 						{
 							String dataStoreHandlerName = dh.value();
-							if(dataStoreHandlerName.equals(DataStoreHandler.DEFAULT_DATASTORE))
+							if(dataStoreHandlerName.equals(ListDataStoreHandler.DEFAULT_DATASTORE))
 							{
 								elmd.addDataStoreHandler(method.getName(), method);
 							}

@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target(value=ElementType.METHOD)
-public @interface DataStoreHandler
+public @interface ListDataStoreHandler
 {
 	public static final String DEFAULT_DATASTORE = "!defaultdatastore!";
 	
