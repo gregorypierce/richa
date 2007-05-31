@@ -3,48 +3,59 @@
 
 	<property file="${basedir}/build.properties" />
 
-	<property name="core" location="core" />
-	<property name="src" location="${core}/src" />
-	<property name="example-src" location="example-web-app/src" />
+	<property name="richa.core" location="core" />
+	<property name="richa.src" location="${richa.core}/src" />
+	<property name="richa.lib" location="${richa.core}/lib" />
+	<property name="richa.build" location="classes" />
+	<property name="richa.dist" location="dist" />
+	<property name="richa.tmp" location="tmp" />
+	
+	
+	<property name="explode.dir" location="${richa.dist}/${ant.project.name}.war" />
+	
 	<property name="extjs" location="extjs" />
-	<property name="extjs-src" location="${extjs}/src" />
-	<property name="build" location="classes" />
-	<property name="lib" location="${core}/lib" />
+	<property name="extjs.resources" location="${extjs}/resources" />	
+	<property name="extjs.src" location="${extjs}/src" />
+	<property name="example.src" location="example-web-app/src" />
 	<property name="resources" location="example-web-app/resources" />
-	<property name="extjs-resources" location="${extjs}/resources" />
-	<property name="dist" location="dist" />
-	<property name="tmp" location="tmp" />
-	<property name="explode.dir" location="${dist}/${ant.project.name}.war" />
+
 
 	<property name="version" value="0.2" />
 
 	<path id="library.classpath">
-		<fileset dir="${lib}">
+		<fileset dir="${richa.lib}">
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
 
 	<path id="example.classpath">
 		<path refid="library.classpath" />
-		<pathelement location="${dist}/richa.jar" />
+		<pathelement location="${richa.dist}/richa.jar" />
 	</path>
+	
+	<taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy" classpathref="library.classpath"/>	
 
 	<target name="init">
 		<tstamp />
-		<mkdir dir="${build}" />
-		<mkdir dir="${dist}" />
+		<mkdir dir="${richa.build}" />
+		<mkdir dir="${richa.dist}" />
+		
+		<groovy>
+			File file = new File( project.getProperty("user.dir") );
+			project.setProperty( "richa.projectname" , file.getName() );
+		</groovy>
 	</target>
 
 	<target name="clean">
-		<delete dir="${build}" />
-		<delete dir="${tmp}" />
+		<delete dir="${richa.build}" />
+		<delete dir="${richa.tmp}" />
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}" debug="true" debuglevel="lines">
+		<javac srcdir="${richa.src}" destdir="${richa.build}" debug="true" debuglevel="lines">
 			<classpath id="app.classpath" refid="library.classpath" />
 		</javac>
-		<javac srcdir="${extjs-src}" destdir="${build}" debug="true" debuglevel="lines">
+		<javac srcdir="${extjs.src}" destdir="${richa.build}" debug="true" debuglevel="lines">
 			<classpath refid="library.classpath" />
 		</javac>
 	</target>
@@ -69,11 +80,11 @@
 		<copy todir="${explode.dir}/WEB-INF" file="${resources}/web.xml" />
 
 		<copy todir="${explode.dir}/WEB-INF/lib">
-			<fileset dir="${lib}">
+			<fileset dir="${richa.lib">
 				<include name="**/*.jar" />
 				<exclude name="javax.servlet.jar" />
 			</fileset>
-			<fileset dir="${dist}">
+			<fileset dir="${richa.dist}">
 				<include name="richa.jar" />
 				<include name="richa-extjs.jar" />
 			</fileset>
@@ -92,28 +103,28 @@
 
 	<!-- left the dist and deploy.jboss targets, but i think build and explode are better for dev -->
 	<target name="dist" depends="compile">
-		<jar destfile="${dist}/${ant.project.name}.jar">
-			<fileset dir="${build}">
+		<jar destfile="${richa.dist}/${ant.project.name}.jar">
+			<fileset dir="${richa.build}">
 			    <include name="org/richa/**"/>
 				<exclude name="org/richa/tags/extjs/**"/>
 			</fileset>
 		</jar>
 
-		<jar destfile="${dist}/${ant.project.name}-extjs.jar">
-			<fileset dir="${build}">
+		<jar destfile="${richa.dist}/${ant.project.name}-extjs.jar">
+			<fileset dir="${richa.build}">
 				<include name="org/richa/tags/extjs/**"/>
 			</fileset>
-			<fileset dir="${extjs-resources}">
+			<fileset dir="${extjs.resources}">
 				<include name="**"/>
 			</fileset>
 		</jar>
 	</target>
 
 	<target name="example-compile" depends="dist">
-		<javac srcdir="${example-src}" destdir="${build}" debug="true" debuglevel="lines">
+		<javac srcdir="${example-src}" destdir="${richa.build}" debug="true" debuglevel="lines">
 			<classpath id="example.app.classpath" refid="example.classpath" />
 		</javac>
-		<copy todir="${build}">
+		<copy todir="${richa.build}">
 			<fileset dir="${example-src}">
     			<exclude name="**/*.java"/>
 			</fileset>
@@ -121,21 +132,21 @@
 	</target>
 
 	<target name="example-dist" depends="example-compile">
-		<mkdir dir="${tmp}" />
+		<mkdir dir="${richa.tmp}" />
 		<!-- copy the classes over -->
-		<copy todir="${tmp}/css">
+		<copy todir="${richa.tmp}/css">
 			<fileset dir="${resources}/css" />
 		</copy>
 
-		<copy todir="${tmp}/images">
+		<copy todir="${richa.tmp}/images">
 			<fileset dir="${resources}/images" />
 		</copy>
 
-		<copy todir="${tmp}/js">
+		<copy todir="${richa.tmp}/js">
 			<fileset dir="${resources}/js" />
 		</copy>
 
-		<copy todir="${tmp}">
+		<copy todir="${richa.tmp}">
 			<fileset dir="${resources}/">
 				<include name="*.html" />
 				<include name="*.htm" />
@@ -143,34 +154,34 @@
 				<include name="*.jsb" />
 			</fileset>
 		</copy>
-		<mkdir dir="${dist}/builds/${version}" />
-		<mkdir dir="${dist}/builds/deploy" />
+		<mkdir dir="${richa.dist}/builds/${version}" />
+		<mkdir dir="${richa.dist}/builds/deploy" />
 
 		<!-- build the deployment war file -->
-		<war destfile="${dist}/builds/${version}/${ant.project.name}.war" webxml="${resources}/web.xml">
-			<fileset dir="${tmp}" />
+		<war destfile="${richa.dist}/builds/${version}/${ant.project.name}.war" webxml="${resources}/web.xml">
+			<fileset dir="${richa.tmp}" />
 
-			<lib dir="${lib}">
+			<lib dir="${richa.lib}">
 				<include name="**/*.jar" />
 				<exclude name="javax.servlet.jar" />
 				<include name="${dist}/${ant.project.name}.jar" />
 				<include name="${dist}/${ant.project.name}-extjs.jar" />
 			</lib>
 			<classes>
-				<fileset dir="${build}" id="example-classes">
+				<fileset dir="${richa.build}" id="example-classes">
 				    <exclude name="org/**"/>
 				</fileset>
 			</classes>
 		</war>
 
-		<copy file="${dist}/builds/${version}/${ant.project.name}.war" tofile="${dist}/builds/deploy/${ant.project.name}.war" />
+		<copy file="${richa.dist}/builds/${version}/${ant.project.name}.war" tofile="${richa.dist}/builds/deploy/${ant.project.name}.war" />
 
-		<delete dir="${tmp}" />
+		<delete dir="${richa.tmp}" />
 	</target>
 
 	<!-- Deploy the WAR to jboss -->
 	<target name="deploy.jboss" depends="example-dist">
-		<copy file="${dist}/builds/${version}/${ant.project.name}.war" todir="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}" />
+		<copy file="${richa.dist}/builds/${version}/${ant.project.name}.war" todir="${jboss.home}/server/${jboss.config}/${jboss.deploy.dir}" />
 	</target>
 	
 	<target name="deploy.tomcat" depends="example-explode">
@@ -183,18 +194,7 @@
 	
 	<target name="richaCommandDispatch">
 		<echo message="Calling task [${command}]" />
-		
-		<!--
-		<condition property="command-run">
-			<equals arg1="${command}" arg2="run" />
-		</condition>
-		
-		<condition property="command-stop">
-			<equals arg1="${command}" arg2="stop" />
-		</condition>
-		
-		<antcall target="run.richa.tomcat" />
-		<antcall target="stop.richa.tomcat" /> -->
+
 		<antcall target="${command}" />
 	</target>
 	
@@ -202,7 +202,7 @@
 		<antcall target="run" />
 	</target>
 	
-	<target name="create-app">
+	<target name="create-app" depends="init">
 		<echo message="Creating application ${arg1}" />
 		<mkdir dir="${user.dir}/${arg1}" />
 		<mkdir dir="${user.dir}/${arg1}/src" />
@@ -212,36 +212,6 @@
 
 		<mkdir dir="${user.dir}/${arg1}/controller" />
 		<mkdir dir="${user.dir}/${arg1}/test" />
-
-<!--
-
-		<mkdir dir="${user.dir}/${arg1}/view/images" />
-		<mkdir dir="${user.dir}/${arg1}/view/css" />
-		<mkdir dir="${user.dir}/${arg1}/view/js" />
-		
-		
-		<copy todir="${user.dir}/${arg1}/view/">
-			<fileset dir="${basedir}/extjs/resources/" />
-		</copy>		
-
-
-		<copy todir="${user.dir}/${arg1}/view/images">
-			<fileset dir="${basedir}/extjs/${resources}/images" />
-		</copy>
-
-		<copy todir="${user.dir}/${arg1}/view/js">
-			<fileset dir="${basedir}/extjs/${resources}/js" />
-		</copy>
-
-		<copy todir="${user.dir}/${arg1}/view">
-			<fileset dir="${basedir}/${resources}/">
-				<include name="*.html" />
-				<include name="*.htm" />
-				<include name="*.sim" />
-				<include name="*.jsb" />
-			</fileset>
-		</copy> -->
-		
 		
 		<copy todir="${user.dir}/${arg1}">
 			<fileset dir="${basedir}/cfg/" >
@@ -256,7 +226,7 @@
 		<echo message="${user.dir}" />
 	</target>
 	
-	<target name="compile-project">
+	<target name="compile-project" depends="init">
 		<delete dir="${user.dir}/classes" />
 		<mkdir dir="${user.dir}/classes" />
 		
@@ -278,18 +248,17 @@
 	
 	<target name="package" depends="compile-project">
 
-		<echo message="Making the war file - ${user.dir}/dist/test.war" />
+		<echo message="Making the war file - ${user.dir}/dist/${richa.projectname}.war" />
 		
-		<echo message="Including ${dist}/${ant.project.name}.jar" />
+		<echo message="Including ${richa.dist}/${ant.project.name}.jar" />
 		<!-- build the deployment war file -->
-		<war destfile="${user.dir}/dist/test.war" webxml="${user.dir}/web.xml">
-			<!-- <fileset dir="${tmp}" /> -->
+		<war destfile="${user.dir}/dist/${richa.projectname}.war" webxml="${user.dir}/web.xml">
 			<fileset dir="${user.dir}/view" />
-			<lib dir="${lib}">
+			<lib dir="${richa.lib}">
 				<include name="**/*.jar" />
 				<exclude name="javax.servlet.jar" />
 			</lib>
-			<lib dir="${dist}">
+			<lib dir="${richa.dist}">
 				<include name="**/*.jar" />
 				<exclude name="javax.servlet.jar" />
 				<include name="${ant.project.name}.jar" />
@@ -301,9 +270,9 @@
 	</target>
 	
 	<target name="deploy" depends="package">
-		<echo message="Deploying project to - ${tomcat.home}/webapps" />
+		<echo message="Deploying project [${richa.projectname}] to - ${tomcat.home}/webapps" />
 		
-		<copy file="${user.dir}/dist/test.war" todir="${tomcat.home}/webapps" /> 		
+		<copy file="${user.dir}/dist/${richa.projectname}.war" todir="${tomcat.home}/webapps" /> 		
 	</target>	
 	
 	
