@@ -1,15 +1,14 @@
 package test.eventhandlers;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
-import org.richa.annotations.DataStoreHandler;
+import org.richa.annotations.ListDataStoreHandler;
 import org.richa.annotations.EventHandler;
 import org.richa.annotations.EventListener;
 import org.richa.annotations.PageBindHandler;
+import org.richa.databinding.BindingContext;
+import org.richa.datastore.ListDataStore;
 import org.richa.event.EventContext;
 import org.richa.event.EventResponse;
 
@@ -19,56 +18,62 @@ import test.entities.State;
 @EventListener("formListener")
 public class TestFormHandler
 {
-	@EventHandler("formHandler")
-	public void testFormHandler(EventContext context, EventResponse res)
+	@EventHandler
+	public void hideFields(EventContext context, EventResponse res)
 	{
 		res.getField("name").hide() ;
 		res.getField("dob").hide();
 	}
 	
-	@DataStoreHandler("statelist")
-	public List testDataStoreHandler(Map<String,String> params)
+	@EventHandler
+	public void showFields(EventContext context, EventResponse res)
+	{
+		res.getField("name").show() ;
+		res.getField("dob").show();
+	}
+	
+	@EventHandler
+	public void enableFields(EventContext context, EventResponse res)
+	{
+		res.getField("name").enable() ;
+		res.getField("dob").enable();
+	}
+	
+	@EventHandler
+	public void disableFields(EventContext context, EventResponse res)
+	{
+		res.getField("name").disable() ;
+		res.getField("dob").disable();
+	}
+	
+	@ListDataStoreHandler("statelist")
+	public void testDataStoreHandler(Map<String,String> params, ListDataStore data)
 	{
 		String query = (String) params.get("query").trim() ;
 		
-		System.out.println( "Query: [" + query + "]" );
-		
-		List statelist = new LinkedList() ;
-		
 		query = query.toLowerCase() ;
 		if (query.startsWith("g") || query.equals(""))			
-			statelist.add(new State("GA", "Georgia")) ;
+			data.add(new State("GA", "Georgia")) ;
 		
 		if (query.startsWith("c")|| query.equals(""))
-			statelist.add(new State("CA", "California")) ;
+			data.add(new State("CA", "California")) ;
 		
 		if (query.startsWith("f")|| query.equals(""))
-			statelist.add(new State("FL", "Florida")) ;
+			data.add(new State("FL", "Florida")) ;
 		
 		if (query.startsWith("a")|| query.equals(""))
 		{
-			statelist.add(new State("AL", "Alabama")) ;
-			statelist.add(new State("AZ", "Arizona")) ;
-			statelist.add(new State("AK", "Alaska")) ;
+			data.add(new State("AL", "Alabama")) ;
+			data.add(new State("AZ", "Arizona")) ;
+			data.add(new State("AK", "Alaska")) ;
 		}
 		
 		if (query.startsWith("n")|| query.equals(""))
-			statelist.add(new State("NY", "New York")) ;
-		
-		return statelist ;	
+			data.add(new State("NY", "New York")) ;
 	}
 	
 	@PageBindHandler()
-	public Map testBindHandler()
-	{
-		Map test = new HashMap() ;
-		createTestData(test);
-		
-		
-		return test ;	
-	}
-	
-	private void createTestData(Map test)
+	public void testBindHandler(BindingContext context)
 	{
 		Customer cust1 = new Customer() ;
 		cust1.setId(1) ;
@@ -95,8 +100,8 @@ public class TestFormHandler
 		cust2.setComments("This is a test2") ;
 		cust2.setDob(new Date()) ;
 		
-		test.put("cust1", cust1) ;
-		test.put("cust2", cust2) ;
+		context.add("cust1", cust1) ;
+		context.add("cust2", cust2) ;	
 	}
 }
 
