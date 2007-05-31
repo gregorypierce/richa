@@ -58,7 +58,7 @@ public class BaseCommand
 	/**
 	 * Constructor
 	 */
-	public BaseOperation(String name, EventResponse res)
+	public BaseCommand(String name, EventResponse res)
 	{
 		this.name = name ;
 		this.res = res ;
