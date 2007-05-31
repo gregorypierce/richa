@@ -21758,7 +21758,7 @@ Ext.extend(Ext.form.Layout, Ext.Component, {
             if(!this.fieldTpl){
                 var t = new Ext.Template(
                     '<div class="x-form-item {5}">',
-                        '<label for="{0}" style="{2}">{1}{4}</label>',
+                        '<label id="lbl-{0}" for="{0}" style="{2}">{1}{4}</label>',
                         '<div class="x-form-element" id="x-form-el-{0}" style="{3}">',
                         '</div>',
                     '</div><div class="x-form-clear-left"></div>'

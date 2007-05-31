@@ -2,10 +2,10 @@ package org.richa.tags.extjs.event;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.commons.jelly.JellyTagException;
 import org.apache.commons.jelly.XMLOutput;
+import org.richa.databinding.BindingContext;
 import org.richa.event.EventListeners;
 import org.richa.tags.extjs.BaseExtJSTag;
 import org.xml.sax.SAXException;
@@ -42,15 +42,24 @@ public class EventListener extends BaseExtJSTag
 					//Create a listener object
 					Object listener = listeners.getEventListener(name) ;
 					
+					//Create new binding context
+					BindingContext context = new BindingContext() ;
+					
+					//Set up the parameters for the bean
+					Object[] params = new Object[1] ;
+					params[0] = context ;
+					
 					//Invoke the method
-					Map beans = (Map)method.invoke(listener) ;
+					method.invoke(listener, params) ;
 					
 					//Loop through all the beans and add them to the context
-					Iterator iterbeans = beans.keySet().iterator() ;
+					Iterator iterbeans = context.getIterator() ;
 					while (iterbeans.hasNext())
 					{
 						String key = (String)iterbeans.next() ;
-						Object bean = beans.get(key) ;
+						Object bean = context.get(key) ;
+						
+						//Add 
 						addBindingVariable(key,bean) ;
 					}
 				}

@@ -261,6 +261,11 @@ public abstract class BaseExtJSTag extends MapTagSupport implements TagConstants
     {
     	int i = 0;
     	
+    	//Get the name attribute and generate the id attribute based on that
+    	String objname = getName() ;
+    	if (!isEmpty(objname))
+    		setAttribute("id", objname + "-id") ;
+    	
     	//Get the iterator
     	Iterator attrs = getAttributes().keySet().iterator();
     	
@@ -279,6 +284,7 @@ public abstract class BaseExtJSTag extends MapTagSupport implements TagConstants
     				scriptBuffer.appendln(name + ":" + serializeValue(getAttributes().get(name))) ;
     			else
     				scriptBuffer.appendln(name + ":" + getAttributes().get(name)) ;
+    			
     			i++ ;    			    	
     		}
     	}	
