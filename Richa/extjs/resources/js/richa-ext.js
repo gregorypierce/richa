@@ -273,15 +273,107 @@ RichaBindEvent = function(control,controlType, event, jshandler, listener, handl
 	el.on(event,jshandler) ;
 }
 
-RichaProcessResponse = function(operations)
+RichaProcessResponse = function(commands)
 {
-	var operation,script ;
+	var command ;
 	
-	//Loop through all the operations from the server and process them
-	for (var loop = 0; loop <operations.length; loop++)
+	//Loop through all the commands from the server and process them
+	for (var loop = 0; loop <commands.length; loop++)
 	{
-		operation = operations[loop] ;
-		script = operation["name"] + "." + operation["operation"] + "();" ;
-		eval(script) ;
+		//Get the next command
+		command = commands[loop] ;
+		
+		//Get the operation
+		var operation = command["operation"] ;
+		
+		//Get the name
+		var name = command["name"] ;
+		
+		//Build the id
+		var id = name + "-id" ;
+		
+		//Get the element
+		var element = Ext.get(id) ;
+
+		//Get the tag name		
+		var tagName = element.dom.tagName.toLowerCase() ;
+
+		var script = name + "." + operation + "();" ;
+		
+		switch(tagName)
+		{
+            case "input":
+            	//Get the type of the input control
+                var type = element.dom.getAttribute("type") ;
+                
+                //Process all input controls
+                RichaProcessInputCommand(name,id,type,element,operation,script);
+        }
 	}
+}
+
+RichaProcessInputCommand = function(name,id,type,element,operation,script)
+{	
+	switch(operation)
+	{
+		case "hide":
+			RichaHideFormElement(name,id,type,element,operation,script) ;
+			break ;
+		case "show":
+			RichaShowFormElement(name,id,type,element,operation,script) ;	
+			break ;
+		case "enable":
+			RichaEnableFormElement(name,id,type,element,operation,script) ;	
+			break ;
+		case "disable":
+			RichaDisableFormElement(name,id,type,element,operation,script) ;	
+			break ;
+	}
+}
+
+RichaHideFormElement = function(name,id,type,element,operation,script)
+{
+	var domNode = RichaGetFormElement(name,id,type,element,operation,script) ;
+	if (domNode != null)
+		domNode.style.display = "none" ;
+}
+
+RichaShowFormElement = function(name,id,type,element,operation,script)
+{
+	var domNode = RichaGetFormElement(name,id,type,element,operation,script) ;
+	if (domNode != null)
+		domNode.style.display = "" ;
+}
+RichaDisableFormElement = function(name,id,type,element,operation,script)
+{
+	if (element != null)
+		eval(script) ;
+}
+
+RichaEnableFormElement = function(name,id,type,element,operation,script)
+{
+	if (element != null)
+		eval(script) ;
+}
+
+RichaGetFormElement = function(name,id,type,element,operation,script)
+{
+	var domNode, currElement;
+	
+	currElement = element ;
+
+	var lblId = "lbl-" + id ;
+	var lblElement = Ext.get(lblId) ;
+	if (lblElement != null)		
+		currElement = lblElement ;
+						
+	domNode = currElement.dom.parentNode ;
+	if (domNode.tagName.toLowerCase() == "div")
+	{
+		var class = Ext.util.Format.trim(domNode.getAttribute("class")) ;
+		if (class == "x-form-item" || class == "x-form-element")
+			return domNode ;
+	}
+	
+	return null ;
 }
