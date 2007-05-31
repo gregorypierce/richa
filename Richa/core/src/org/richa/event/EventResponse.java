@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.richa.operations.BorderLayout;
-import org.richa.operations.Field;
-import org.richa.operations.FieldSet;
-import org.richa.operations.Grid;
-import org.richa.operations.Menu;
-import org.richa.operations.ResponseItem;
-import org.richa.operations.Tab;
-import org.richa.operations.Toolbar;
-import org.richa.operations.Tree;
+import org.richa.commands.BorderLayout;
+import org.richa.commands.Field;
+import org.richa.commands.FieldSet;
+import org.richa.commands.ResponseItem;
+import org.richa.commands.Tab;
 import org.richa.runner.Response;
 import org.richa.util.AppendingStringBuffer;
 
@@ -26,6 +24,9 @@ import org.richa.util.AppendingStringBuffer;
  */
 public class EventResponse  extends Response
 {
+	//Logger
+	protected static Log log = LogFactory.getLog(EventResponse.class);
+	
 	/**
 	 * Manages field set operations
 	 */
@@ -55,6 +56,17 @@ public class EventResponse  extends Response
 	public void add(ResponseItem item)
 	{
 		responses.add(item) ;
+		
+		log.debug("Adding a Response Item to the EventRespone object") ;
+		
+		try
+		{
+			log.debug(item.serialize()) ;
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace() ;
+		}
 	}
 	
 	/**
@@ -63,6 +75,8 @@ public class EventResponse  extends Response
 	public void clearOperations()
 	{
 		responses.clear() ;
+		
+		log.debug("Clearing the EventRespone object") ;
 	}
 	
 	/**
@@ -106,6 +120,8 @@ public class EventResponse  extends Response
 		
 		//Set the data
 		res.put(Response.DATA, script.toString()) ;
+	
+		log.debug("Serializing event response" + res.toString()) ;
 		
 		//Generate the response
 		return res.toString() ;
@@ -124,6 +140,8 @@ public class EventResponse  extends Response
 			field.setEventResponse(this) ;
 		}
 		
+		log.debug("Getting a field object for EventRespone") ;
+		
 		return field ;
 	}
 	
@@ -139,6 +157,8 @@ public class EventResponse  extends Response
 			fieldset.setName(name) ;
 			fieldset.setEventResponse(this) ;
 		}
+	
+		log.debug("Getting a fieldset object for EventRespone") ;
 		
 		return fieldset ;
 	}
@@ -154,6 +174,8 @@ public class EventResponse  extends Response
 			tab.setName(name) ;
 			tab.setEventResponse(this) ;
 		}
+		
+		log.debug("Getting a tab object for the EventRespone") ;
 		
 		return tab ;
 	}

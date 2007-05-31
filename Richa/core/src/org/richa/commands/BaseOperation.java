@@ -1,8 +1,8 @@
-package org.richa.operations;
+package org.richa.commands;
 
 import org.richa.event.EventResponse;
 
-public class BaseOperation
+public class BaseCommand
 {
 	/**
 	 * Show the object

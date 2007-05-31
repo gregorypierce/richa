@@ -1,8 +1,8 @@
-package org.richa.operations;
+package org.richa.commands;
 
 import org.richa.event.EventResponse;
 
-public class BorderLayout extends BaseOperation
+public class BorderLayout extends BaseCommand
 {
 	/**
 	 * Constructor

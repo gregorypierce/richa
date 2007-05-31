@@ -1,4 +1,4 @@
-package org.richa.operations;
+package org.richa.commands;
 
 import org.richa.event.EventResponse;
 
@@ -7,7 +7,7 @@ import org.richa.event.EventResponse;
  * @author ram
  *
  */
-public class FieldSet extends BaseOperation
+public class FieldSet extends BaseCommand
 {
 	/**
 	 * Constructor

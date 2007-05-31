@@ -1,4 +1,4 @@
-package org.richa.operations;
+package org.richa.commands;
 
 public interface Toolbar 
 {
