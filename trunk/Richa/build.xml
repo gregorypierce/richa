@@ -2,6 +2,7 @@
 	<description>Rich Internet Client Has Arrived</description>
 
 	<property file="${basedir}/build.properties" />
+	<property file="${basedir}/template/persistence.properties" />
 
 	<property name="richa.core" location="core" />
 	<property name="richa.src" location="${richa.core}/src" />
@@ -20,12 +21,19 @@
 	<property name="resources" location="example-web-app/resources" />
 
 
+	
 	<property name="version" value="0.2" />
 
 	<path id="library.classpath">
 		<fileset dir="${richa.lib}">
 			<include name="**/*.jar" />
 		</fileset>
+	</path>
+
+
+	<path id="build.classpath">
+		<path refid="library.classpath" />
+		<pathelement location="${richa.dist}/richa.jar" />
 	</path>
 
 	<path id="example.classpath">
@@ -44,7 +52,21 @@
 			File file = new File( project.getProperty("user.dir") );
 			project.setProperty( "richa.projectname" , file.getName() );
 		</groovy>
+		
 	</target>
+	
+	<filterset id="project">
+		<filter token="richa.projectname" value="${richa.projectname}" />	
+	
+	</filterset>
+	
+	<filterset id="hibernate">
+		<filter token="hibernateDialect" value="${hibernateDialect}" />
+		<filter token="jdbcDriverClass" value="${jdbcDriverClass}" />
+		<filter token="jdbcUsername" value="${jdbcUsername}" />
+		<filter token="jdbcPassword" value="${jdbcPassword}" />
+		<filter token="jdbcURL" value="${jdbcURL}" />		
+	</filterset>	
 
 	<target name="clean">
 		<delete dir="${richa.build}" />
@@ -80,7 +102,7 @@
 		<copy todir="${explode.dir}/WEB-INF" file="${resources}/web.xml" />
 
 		<copy todir="${explode.dir}/WEB-INF/lib">
-			<fileset dir="${richa.lib">
+			<fileset dir="${richa.lib}">
 				<include name="**/*.jar" />
 				<exclude name="javax.servlet.jar" />
 			</fileset>
@@ -203,21 +225,51 @@
 	</target>
 	
 	<target name="create-app" depends="init">
+		<echo message="ProjectName ${arg1}" />
 		<echo message="Creating application ${arg1}" />
 		<mkdir dir="${user.dir}/${arg1}" />
 		<mkdir dir="${user.dir}/${arg1}/src" />
 		<mkdir dir="${user.dir}/${arg1}/lib" />
 		<mkdir dir="${user.dir}/${arg1}/model" />
 		<mkdir dir="${user.dir}/${arg1}/view" />
-
+		<mkdir dir="${user.dir}/${arg1}/task" />
 		<mkdir dir="${user.dir}/${arg1}/controller" />
 		<mkdir dir="${user.dir}/${arg1}/test" />
 		
-		<copy todir="${user.dir}/${arg1}">
-			<fileset dir="${basedir}/cfg/" >
+		<filter token="richa.projectname" value="${arg1}" />
+		
+		<copy todir="${user.dir}/${arg1}" filtering="true">
+			<fileset dir="${basedir}/template/" >
 				<include name="*.xml" />
 			</fileset>
+			<filterset refid="project" />
+			<filterset refid="hibernate" />	
 		</copy>
+		
+		<copy todir="${user.dir}/${arg1}/model" filtering="true">
+			<fileset dir="${basedir}/template/new-app/model" >
+				<include name="*.java" />
+			</fileset>
+			<filterset refid="project" />
+			<filterset refid="hibernate" />	
+		</copy>
+		
+		<copy todir="${user.dir}/${arg1}/controller" filtering="true">
+			<fileset dir="${basedir}/template/new-app/controller" >
+				<include name="*.java" />
+			</fileset>
+			<filterset refid="project" />
+			<filterset refid="hibernate" />	
+		</copy>		
+		
+		<copy todir="${user.dir}/${arg1}/view" filtering="true">
+			<fileset dir="${basedir}/template/new-app/view" >
+				<include name="*.*" />
+			</fileset>
+			<filterset refid="project" />
+			<filterset refid="hibernate" />	
+		</copy>		
+		
 		<mkdir dir="${user.dir}/${arg1}/dist" />
 		
 	</target>
@@ -234,13 +286,16 @@
 		<javac destdir="${user.dir}/classes">
 		
 			<src path="${user.dir}/src" />
-			<src path="${user.dir}/controller" />
-			<src path="${user.dir}/model" />
+			<src path="${user.dir}" />
 
-
-			<classpath refid="library.classpath" />
+			<classpath refid="build.classpath" />
 			<classpath>
 				<fileset dir="${user.dir}/lib" />
+			</classpath>
+			<classpath>
+				<fileset dir="${richa.core}/lib">
+					<include name="**/*" />
+				</fileset>
 			</classpath>
 		</javac>
 				
@@ -255,8 +310,11 @@
 		<war destfile="${user.dir}/dist/${richa.projectname}.war" webxml="${user.dir}/web.xml">
 			<fileset dir="${user.dir}/view" />
 			<lib dir="${richa.lib}">
-				<include name="**/*.jar" />
+				<include name="*.jar" />
 				<exclude name="javax.servlet.jar" />
+			</lib>
+			<lib dir="${richa.lib}/hibernate">
+				<include name="*.jar" />
 			</lib>
 			<lib dir="${richa.dist}">
 				<include name="**/*.jar" />
@@ -275,20 +333,47 @@
 		<copy file="${user.dir}/dist/${richa.projectname}.war" todir="${tomcat.home}/webapps" /> 		
 	</target>	
 	
+	<target name="undeploy" depends="init">
+		<echo message="Undeploying project [${richa.projectname}] from - ${tomcat.home}/webapps" />
+		
+		<delete file="${tomcat.home}/webapps/${richa.projectname}.war" /> 
+		<delete dir="${tomcat.home}/webapps/${richa.projectname}" />		
+	</target>		
+	
 	
 	<target name="create-controller">
-		<echo message="Not yet implemented" />
-		<echo message="Creating controller ${arg1}" />
+		<filter token="controllerObjectName" value="${arg1}" />
+		<copy tofile="${user.dir}/controller/${arg1}Controller.java" filtering="true">
+			<fileset dir="${basedir}/template/controller/" >
+				<include name="ControllerTemplate.java" />
+			</fileset>
+			<filterset refid="project" />
+			<filterset refid="hibernate" />
+		</copy>	
 	</target>
 	
-	<target name="create-model">
-		<echo message="Not yet implemented" />
-	
+	<target name="create-entity">
+		
+		<filter token="modelObjectName" value="${arg1}" />
+		<copy tofile="${user.dir}/model/${arg1}.java" filtering="true">
+			<fileset dir="${basedir}/template/model/" >
+				<include name="EntityTemplate.java" />
+			</fileset>
+			<filterset refid="project" />
+			<filterset refid="hibernate" />
+		</copy>	
+		
 	</target>
 	
-	<target name="create-job">
-		<echo message="Not yet implemented" />
-	
+	<target name="create-task">
+		<filter token="taskObjectName" value="${arg1}" />
+		<copy tofile="${user.dir}/task/${arg1}.java" filtering="true">
+			<fileset dir="${basedir}/template/task/" >
+				<include name="TaskTemplate.java" />
+			</fileset>
+			<filterset refid="project" />
+			<filterset refid="hibernate" />
+		</copy>		
 	</target>
 	
 	<target name="update">

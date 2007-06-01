@@ -11,9 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.richa.util.AppendingStringBuffer;
 import org.richa.util.ResponseUtils;
 
+import java.util.*;
+import javax.persistence.*;
+
 @SuppressWarnings("serial")
 public class RichaRunnerServlet extends HttpServlet
 {
+	private EntityManagerFactory 		entityManagerFactory;
+	private EntityManager 				entityManager;
+	
 	@Override
 	public void init() throws ServletException
 	{
@@ -27,6 +33,20 @@ public class RichaRunnerServlet extends HttpServlet
 
 		// Set the path in Richa Runner
 		RichaRunner.setRootPath(rootpath);
+		
+		// load the persistence unit from the context
+		/*String persistenceUnitName = getServletContext().getInitParameter("persistenceUnit");
+	 	entityManagerFactory = Persistence.createEntityManagerFactory( persistenceUnitName );
+		entityManager = entityManagerFactory.createEntityManager();*/
+	}
+	
+	@Override
+	public void destroy() 
+	{
+		super.destroy();
+		
+		/*entityManager.close();
+		entityManagerFactory.close();*/
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)

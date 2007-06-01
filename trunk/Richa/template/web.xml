@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+ 
+<web-app xmlns="http://java.sun.com/xml/ns/j3ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd"
+    version="2.5">
+    
+    <description>Richa Framework</description>
+    <display-name>Richa Framework</display-name>
+
+    <servlet>
+        <servlet-name>RichaRunner</servlet-name>
+        <servlet-class>org.richa.runner.RichaRunnerServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+        <init-param>
+        	<param-name>persistenceUnit</param-name>
+        	<param-value>@richa.projectname@</param-value>
+        </init-param>        
+    </servlet>
+    
+    <servlet>
+        <servlet-name>RichaResources</servlet-name>
+        <servlet-class>org.richa.resources.RichaResourcesServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>RichaEvent</servlet-name>
+        <servlet-class>org.richa.event.RichaEventServlet</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>RichaDataStore</servlet-name>
+        <servlet-class>org.richa.datastore.RichaDataStoreServlet</servlet-class>
+        <load-on-startup>4</load-on-startup>
+        <init-param>
+        	<param-name>persistenceUnit</param-name>
+        	<param-value>@richa.projectname@</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RichaRunner</servlet-name>
+        <url-pattern>*.rich</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RichaRunner</servlet-name>
+        <url-pattern>*.htm</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RichaRunner</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RichaEvent</servlet-name>
+        <url-pattern>/event/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RichaDataStore</servlet-name>
+        <url-pattern>/datastore/*</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>RichaResources</servlet-name>
+        <url-pattern>/resources/*</url-pattern>
+    </servlet-mapping>
+</web-app>
