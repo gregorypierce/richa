@@ -16,7 +16,7 @@ import org.richa.event.EventResponse;
 import model.ExampleCustomer;
 import model.ExampleState;
 
-@EventListener("@richa.projectname@Listener")
+@EventListener("@richa.projectname@FormController")
 public class ExampleController
 {
 	@EventHandler("@richa.projectname@FormHandler")
