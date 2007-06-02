@@ -11,9 +11,9 @@
 		</script>
 	</head>
 	<body>
-	<!--
+	
 		<extJS:formwrapper width="375px" title="Customer Information">
-			<extJS:listener name="@richa.projectname@FormListener" bind="@richa.projectname@BindHandler">
+			<extJS:listener name="@richa.projectname@FormController" bind="pageBindHandler">
 				<extJS:form name="@richa.projectname@" labelWidth="100" buttonAlign="left">
 				
 					<extJS:fieldset name="legper" legend="Personal">
@@ -30,14 +30,14 @@
 						<extJS:textarea name="comment" fieldLabel="Comments" width="170" value="#{cust1.comments}"/>
 						
 						<extJS:simplestore name="state" bean="model.ExampleState" dataStore="statelist"/>
-						<extJS:combobox name="states" minChars="1" store="state" triggerAction="all" selectOnFocus="true" typeAhead="true" emptyText="Select State..." mode="local" displayField="name" valueField="code" fieldLabel="State"/>
+						<!-- <extJS:combobox name="states" minChars="1" store="state" triggerAction="all" selectOnFocus="true" typeAhead="true" emptyText="Select State..." mode="local" displayField="name" valueField="code" fieldLabel="State"/> -->
 					</extJS:fieldset>
 				
 					<extJS:formbutton name="save" text="Save"/>
-					<extJS:formbutton name="cancel" text="Cancel" serverClick="@richa.projectname@FormHandler" sendData="page"/>
+					<extJS:formbutton name="cancel" text="Cancel" serverClick="@richa.projectname@FormHandler" sendData="page"/> 
 				</extJS:form>
 			</extJS:listener>
-		</extJS:formwrapper> -->
+		</extJS:formwrapper>
 
 	</body>
 	</html>

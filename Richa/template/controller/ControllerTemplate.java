@@ -14,7 +14,7 @@ import org.richa.event.EventResponse;
 
 import model.*;
 
-@EventListener("@controllerObjectName@Controller")
+@EventListener("@controllerObjectName@FormController")
 public class @controllerObjectName@Controller
 {
 	@EventHandler("@controllerObjectName@FormHandler")
