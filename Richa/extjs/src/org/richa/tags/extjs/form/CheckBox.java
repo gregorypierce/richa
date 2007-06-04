@@ -16,7 +16,7 @@ public class CheckBox extends BaseControlTag
 	 */
 	protected String getObjectName()
 	{
-		return ("Ext.form.CheckBox") ;
+		return ("Ext.form.Checkbox") ;
 	}
 	
 	/**

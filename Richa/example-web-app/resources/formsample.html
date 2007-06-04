@@ -11,13 +11,14 @@
 		</script>
 	</head>
 	<body>
-		<extJS:formwrapper width="375px" title="Customer Information">
+		<extJS:formwrapper width="650px" title="Customer Information">
 			<extJS:listener name="formListener" bind="testBindHandler">
 				<extJS:form name="customer" labelWidth="100" buttonAlign="left">
 					<extJS:fieldset name="legper" legend="Personal">
 						<extJS:textfield name="name" fieldLabel="Name" width="170" value="#{cust1.name}"/>
 						<extJS:numberfield name="age" fieldLabel="Age" width="45" value="#{cust1.age}" clientClick="testing" serverChange="formHandler" sendData="field"/>
 						<extJS:datefield name="dob" fieldLabel="Date Of Birth" width="100" value="#{cust1.dob}"/>
+						<extJS:checkbox name="male" fieldLabel="Male" width="100"/>
 					</extJS:fieldset>
 					<extJS:fieldset name="legaddr" legend="Address">
 						<extJS:textfield name="addr1" fieldLabel="Address 1" width="170" value="#{cust1.address1}"/>
@@ -28,8 +29,14 @@
 						<extJS:simplestore name="state" bean="test.entities.State" dataStore="statelist"/>
 						<extJS:combobox name="states" minChars="1" store="state" triggerAction="all" selectOnFocus="true" typeAhead="true" emptyText="Select State..." mode="local" displayField="name" valueField="code" fieldLabel="State"/>
 					</extJS:fieldset>
-					<extJS:formbutton name="save" text="Save"/>
-					<extJS:formbutton name="cancel" text="Cancel" serverClick="formHandler" sendData="page"/>
+					<extJS:formbutton name="hide" text="Hide" serverClick="hideFields" sendData="page"/>
+					<extJS:formbutton name="show" text="Show" serverClick="showFields" sendData="page"/>
+					<extJS:formbutton name="disable" text="Disable" serverClick="disableFields" sendData="page"/>
+					<extJS:formbutton name="enable" text="Enable" serverClick="enableFields" sendData="page"/>
+					<extJS:formbutton name="hidefs" text="HideFS" serverClick="hideFS" sendData="page"/>
+					<extJS:formbutton name="showfs" text="ShowFS" serverClick="showFS" sendData="page"/>
+					<extJS:formbutton name="disablefs" text="DisableFS" serverClick="disableFS" sendData="page"/>
+					<extJS:formbutton name="enablefs" text="EnableFS" serverClick="enableFS" sendData="page"/>
 				</extJS:form>
 			</extJS:listener>
 		</extJS:formwrapper>

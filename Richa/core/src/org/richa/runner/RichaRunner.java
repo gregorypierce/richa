@@ -12,6 +12,7 @@ import javax.servlet.ServletContext;
 import org.apache.commons.jelly.JellyContext;
 import org.apache.commons.jelly.Script;
 import org.apache.commons.jelly.XMLOutput;
+import org.richa.config.Application;
 import org.richa.util.AppendingStringBuffer;
 import org.richa.util.StringBufferWriter;
 
@@ -108,7 +109,9 @@ public class RichaRunner
 	
 	    //Check if we have a script object in the cache
 	    Script script = getScript(context) ;
-	   
+	    if (script == null)
+	    	return null ;
+	    
 	    //Run the script
 	    script.run(context, xmlOutput);
 	    
@@ -161,7 +164,11 @@ public class RichaRunner
 	    if (script == null)
 	    {	  
 	    	//Compile the script
-	    	script = context.compileScript(getResource(pagename)) ;
+	    	URL url = getResource(pagename) ;
+	    	if (url == null)
+	    		return null ;
+	    	
+	    	script = context.compileScript(url) ;
 	    	
 	    	if (isCachingEnabled())
 	    	    RichaPageCache.put(pagename, script) ;
@@ -172,11 +179,15 @@ public class RichaRunner
     
     protected URL getResource(String pageName) throws MalformedURLException
     {
-        return servletcontext.getResource(pagename);
+        return (servletcontext.getResource(pagename));        
     }
     
     protected boolean isCachingEnabled()
     {
-        return true;
+        String caching = (String) Application.getInstance().get("iscachingenabled") ;
+        if (caching.equalsIgnoreCase("true"))
+        	return true ;
+        else
+        	return false ;
     }
 }

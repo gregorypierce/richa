@@ -74,7 +74,6 @@ RichaBuildFormData = function(form)
 			value = encodeURIComponent(value); 
 		}
 		
-		
 		if(multivalue == "")
 		{
 			if (submit != "")
@@ -307,56 +306,129 @@ RichaProcessResponse = function(commands)
                 var type = element.dom.getAttribute("type") ;
                 
                 //Process all input controls
-                RichaProcessInputCommand(name,id,type,element,operation,script);
+                RichaProcessInputCommand(id,element,operation,script) ;
+                
+                break ;
+            case "fieldset":
+            	//Process all fieldset controls
+                RichaProcessFSCommand(id, name,operation,script);
+                
+                break ;
         }
 	}
 }
 
-RichaProcessInputCommand = function(name,id,type,element,operation,script)
+RichaProcessInputCommand = function(id,element,operation,script)
 {	
 	switch(operation)
 	{
 		case "hide":
-			RichaHideFormElement(name,id,type,element,operation,script) ;
+			RichaHideFormElement(id,element) ;
 			break ;
 		case "show":
-			RichaShowFormElement(name,id,type,element,operation,script) ;	
+			RichaShowFormElement(id,element) ;	
 			break ;
 		case "enable":
-			RichaEnableFormElement(name,id,type,element,operation,script) ;	
+			RichaEnableFormElement(script) ;	
 			break ;
 		case "disable":
-			RichaDisableFormElement(name,id,type,element,operation,script) ;	
+			RichaDisableFormElement(script) ;	
+			break ;
+		case "focus":
+			eval(script) ;
 			break ;
 	}
 }
 
-RichaHideFormElement = function(name,id,type,element,operation,script)
+RichaProcessFSCommand = function(id,name,operation,script)
+{	
+	eval(script) ;
+	
+	switch(operation)
+	{
+		case "enable":
+			RichaEnableFS(id,name,script) ;	
+			break ;
+		case "disable":
+			RichaDisableFS(id,name,script) ;	
+			break ;
+	}
+}
+
+RichaEnableFS = function(id,name,script)
 {
-	var domNode = RichaGetFormElement(name,id,type,element,operation,script) ;
+	var stackstr = name + ".stack" ;
+	var stack = eval(stackstr) ;
+    var slen = stack.length;
+    if(slen > 0)
+    {
+    	for(var i = 0; i < slen; i++) 
+    	{
+        	if(stack[i].isFormField)
+        	{
+            	var f = stack[i] ;
+            	var id = f.id ;
+            	var loc = id.lastIndexOf("-") ;
+            	if (loc != -1)
+            	{
+            		var fname = id.substr(0,loc) ;
+            		var tempscript = fname + ".enable();" ;
+            		RichaEnableFormElement(tempscript) ;
+            	}
+            }
+        }
+    }
+}
+
+RichaDisableFS = function(id,name,script)
+{
+	var stackstr = name + ".stack" ;
+	var stack = eval(stackstr) ;
+    var slen = stack.length;
+    if(slen > 0)
+    {
+    	for(var i = 0; i < slen; i++) 
+    	{
+        	if(stack[i].isFormField)
+        	{
+            	var f = stack[i] ;
+            	var id = f.id ;
+            	var loc = id.lastIndexOf("-") ;
+            	if (loc != -1)
+            	{
+            		var fname = id.substr(0,loc) ;
+            		var tempscript = fname + ".disable();" ;
+            		RichaDisableFormElement(tempscript) ;
+            	}
+            }
+        }
+    }
+}
+RichaHideFormElement = function(id,element)
+{
+	var domNode = RichaGetFormDivElement(id,element) ;
 	if (domNode != null)
 		domNode.style.display = "none" ;
 }
 
-RichaShowFormElement = function(name,id,type,element,operation,script)
+RichaShowFormElement = function(id,element)
 {
-	var domNode = RichaGetFormElement(name,id,type,element,operation,script) ;
+	var domNode = RichaGetFormDivElement(id,element) ;
 	if (domNode != null)
 		domNode.style.display = "" ;
 }
-RichaDisableFormElement = function(name,id,type,element,operation,script)
+
+RichaDisableFormElement = function(script)
 {
-	if (element != null)
-		eval(script) ;
+	eval(script) ;
 }
 
-RichaEnableFormElement = function(name,id,type,element,operation,script)
+RichaEnableFormElement = function(script)
 {
-	if (element != null)
-		eval(script) ;
+	eval(script) ;
 }
 
-RichaGetFormElement = function(name,id,type,element,operation,script)
+RichaGetFormDivElement = function(id,element)
 {
 	var domNode, currElement;
 	

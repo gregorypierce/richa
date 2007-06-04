@@ -10,6 +10,7 @@ import org.apache.commons.jelly.JellyTagException;
 import org.apache.commons.jelly.XMLOutput;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.richa.datastore.ListDataStore;
 import org.richa.event.EventListeners;
 import org.richa.tags.extjs.BaseExtJSTag;
 import org.richa.util.StoreUtils;
@@ -140,13 +141,22 @@ public class SimpleStore extends BaseExtJSTag
 		Method eventMethod = listeners.getDataStoreHandlerMethod(eventListener, dataStore) ;
 		if (eventMethod != null)
 		{
+			//Create a list data store
+			ListDataStore resultStore = new ListDataStore() ;
+			
+			//Setup the parameters
 			Map<String,String> params = new HashMap<String,String>() ;
 			params.put("query", "") ;
 			
-			Object[] methodParams = new Object[1] ;
+			Object[] methodParams = new Object[2] ;
 			methodParams[0] = params  ;
+			methodParams[1] = resultStore ;
 			
- 			results = (List) eventMethod.invoke(listener,methodParams);
+			//Invoke Handler
+			eventMethod.invoke(listener,methodParams);
+			
+			//Get the data
+			results = resultStore.getData() ;			
 		}
 		
 		return results ;
