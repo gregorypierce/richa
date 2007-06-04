@@ -20,39 +20,39 @@ public class FieldSet extends BaseCommand
 	/**
 	 * Show the form
 	 */
-	public ResponseItem show() 
+	public void show() 
 	{
-		return ResponseItem.createResponseItem(name,SHOW) ;
+		res.add(ResponseItem.createResponseItem(name,SHOW)) ;
 	}
 	
 	/**
 	 * Hide the fieldset
 	 */
-	public ResponseItem hide() 
+	public void hide() 
 	{
-		return ResponseItem.createResponseItem(name,HIDE) ;
+		res.add(ResponseItem.createResponseItem(name,HIDE)) ;
 	}
 	
 	/**
 	 * Focus the field  
 	 */
-	public ResponseItem focus() 
+	public void focus() 
 	{
-		return ResponseItem.createResponseItem(name,FOCUS) ;
+		res.add(ResponseItem.createResponseItem(name,FOCUS)) ;
 	}
 	/**
 	 * Disable the fielset
 	 */
-	public ResponseItem disable()
+	public void disable()
 	{
-		return ResponseItem.createResponseItem(name,DISABLE) ;
+		res.add(ResponseItem.createResponseItem(name,DISABLE)) ;
 	}
 	
 	/**
 	 * Enable the fieldset
 	 */
-	public ResponseItem enable()
+	public void enable()
 	{
-		return ResponseItem.createResponseItem(name,ENABLE) ;
+		res.add(ResponseItem.createResponseItem(name,ENABLE)) ;
 	}
 }

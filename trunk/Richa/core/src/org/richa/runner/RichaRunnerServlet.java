@@ -83,9 +83,12 @@ public class RichaRunnerServlet extends HttpServlet
 
 			// Invoke the page runner
 			AppendingStringBuffer output = runner.runPage();
-
+			
 			// Send the output
-			pw.print(output.getValue());
+			if (output != null)
+				pw.print(output.getValue());
+			else
+				System.out.println("Hello") ;
 
 		}
 		catch (Exception e)

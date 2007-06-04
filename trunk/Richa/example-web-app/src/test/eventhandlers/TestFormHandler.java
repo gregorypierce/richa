@@ -23,6 +23,7 @@ public class TestFormHandler
 	{
 		res.getField("name").hide() ;
 		res.getField("dob").hide();
+		
 	}
 	
 	@EventHandler
@@ -37,6 +38,8 @@ public class TestFormHandler
 	{
 		res.getField("name").enable() ;
 		res.getField("dob").enable();
+		res.getField("male").enable();
+		res.getField("dob").focus() ;
 	}
 	
 	@EventHandler
@@ -44,6 +47,31 @@ public class TestFormHandler
 	{
 		res.getField("name").disable() ;
 		res.getField("dob").disable();
+		res.getField("male").disable();
+	}
+	
+	@EventHandler
+	public void hideFS(EventContext context, EventResponse res)
+	{
+		res.getFieldSet("legaddr").hide();
+	}
+	
+	@EventHandler
+	public void showFS(EventContext context, EventResponse res)
+	{
+		res.getFieldSet("legaddr").show();
+	}
+	
+	@EventHandler
+	public void enableFS(EventContext context, EventResponse res)
+	{
+		res.getFieldSet("legaddr").enable();
+	}
+	
+	@EventHandler
+	public void disableFS(EventContext context, EventResponse res)
+	{
+		res.getFieldSet("legaddr").disable();
 	}
 	
 	@ListDataStoreHandler("statelist")

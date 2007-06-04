@@ -28,6 +28,9 @@ public class Application
 		if (application == null)
 		{
 			application = new Application() ;
+	
+			//Caching enabled
+			application.set("cachingenabled", "true") ;
 			
 			//Put the default date format string 
 			application.set("dateformatstr", "MM/dd/yy") ;
