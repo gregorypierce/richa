@@ -21,13 +21,13 @@
 						<extJS:checkbox name="male" fieldLabel="Male" width="100"/>
 					</extJS:fieldset>
 					<extJS:fieldset name="legaddr" legend="Address">
-						<extJS:textfield name="addr1" fieldLabel="Address 1" width="170" value="#{cust1.address1}"/>
-						<extJS:textfield name="addr2" width="170" fieldLabel="Address2" value="#{cust1.address2}"/>
+						<extJS:textfield name="address1" fieldLabel="Address 1" width="170" value="#{cust1.address1}"/>
+						<extJS:textfield name="address2" width="170" fieldLabel="Address2" value="#{cust1.address2}"/>
 						<extJS:textfield name="city" fieldLabel="City" width="170" value="#{cust1.city}"/>
 						<extJS:numberfield name="zip" fieldLabel="Zip" width="55" maxLength="5" value="#{cust1.zip}"/>
-						<extJS:textarea name="comment" fieldLabel="Comments" width="170" value="#{cust1.comments}"/>
+						<extJS:textarea name="comments" fieldLabel="Comments" width="170" value="#{cust1.comments}"/>
 						<extJS:simplestore name="state" bean="test.entities.State" dataStore="statelist"/>
-						<extJS:combobox name="states" minChars="1" store="state" triggerAction="all" selectOnFocus="true" typeAhead="true" emptyText="Select State..." mode="local" displayField="name" valueField="code" fieldLabel="State"/>
+						<extJS:combobox name="state" minChars="1" store="state" triggerAction="all" selectOnFocus="true" typeAhead="true" emptyText="Select State..." mode="local" displayField="name" valueField="code" fieldLabel="State"/>
 					</extJS:fieldset>
 					<extJS:formbutton name="hide" text="Hide" serverClick="hideFields" sendData="page"/>
 					<extJS:formbutton name="show" text="Show" serverClick="showFields" sendData="page"/>
@@ -37,6 +37,7 @@
 					<extJS:formbutton name="showfs" text="ShowFS" serverClick="showFS" sendData="page"/>
 					<extJS:formbutton name="disablefs" text="DisableFS" serverClick="disableFS" sendData="page"/>
 					<extJS:formbutton name="enablefs" text="EnableFS" serverClick="enableFS" sendData="page"/>
+					<extJS:formbutton name="setfield" text="SetField" serverClick="setFields" sendData="page"/>
 				</extJS:form>
 			</extJS:listener>
 		</extJS:formwrapper>
