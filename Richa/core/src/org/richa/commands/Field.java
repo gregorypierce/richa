@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.json.JSONArray;
 import org.richa.config.Application;
 import org.richa.event.EventResponse;
 
@@ -66,8 +67,8 @@ public class Field extends BaseCommand
 	 */
 	public void set(String value)
 	{
-		String[] params = new String[1] ;
-		params[0] = value ;
+		JSONArray params = new JSONArray() ;
+		params.put(value) ;
 		
 		res.add(ResponseItem.createResponseItem(name,SET,params)) ;
 	}
@@ -85,7 +86,7 @@ public class Field extends BaseCommand
 	/**
 	 * Set the field value based on a long
 	 */
-	public void set(String name, long value) 
+	public void set(long value) 
 	{
 		String temp = Long.toString(value) ;
 		
@@ -95,7 +96,7 @@ public class Field extends BaseCommand
 	/**
 	 * Set the field value based on a float 
 	 */
-	public void set(String name, float value) 
+	public void set(float value) 
 	{
 		String temp = Float.toString(value) ;
 		
@@ -105,7 +106,7 @@ public class Field extends BaseCommand
 	/**
 	 * Set the field value based on a double
 	 */
-	public void set(String name, double value) 
+	public void set(double value) 
 	{
 		String temp = Double.toString(value) ;
 		
@@ -115,7 +116,7 @@ public class Field extends BaseCommand
 	/**
 	 * Set the field value for a date field
 	 */
-	public void set(String name, Date value) 
+	public void set(Date value) 
 	{
 		SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("dateformatobj") ;
 		
@@ -129,7 +130,7 @@ public class Field extends BaseCommand
 	/**
 	 * Set the field value for a timestamp value
 	 */
-	public void set(String name, Timestamp value)
+	public void set(Timestamp value)
 	{
 		SimpleDateFormat fmt = (SimpleDateFormat) Application.getInstance().get("timeformatobj") ;
 		
