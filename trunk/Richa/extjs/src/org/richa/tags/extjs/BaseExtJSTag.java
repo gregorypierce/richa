@@ -33,8 +33,8 @@ public abstract class BaseExtJSTag extends MapTagSupport implements TagConstants
 	private static final String TRUE = "true" ;
 	private static final String FALSE = "false" ;
 	
-	private static final String RICHADISPATCHEVENT = "RichaDispatchEvent" ;
-	private static final String RICHABINDEVENT = "RichaBindEvent" ;
+	private static final String RICHADISPATCHEVENT = "Richa.Core.dispatchEvent" ;
+	private static final String RICHABINDEVENT = "Richa.Core.bindEvent" ;
 	
 	/**
 	 * Script Buffer
