@@ -3,9 +3,9 @@ package test.eventhandlers;
 import java.util.Date;
 import java.util.Map;
 
-import org.richa.annotations.ListDataStoreHandler;
 import org.richa.annotations.EventHandler;
 import org.richa.annotations.EventListener;
+import org.richa.annotations.ListDataStoreHandler;
 import org.richa.annotations.PageBindHandler;
 import org.richa.databinding.BindingContext;
 import org.richa.datastore.ListDataStore;
@@ -18,6 +18,29 @@ import test.entities.State;
 @EventListener("formListener")
 public class TestFormHandler
 {
+	@EventHandler
+	public void setFields(EventContext context, EventResponse res)
+	{
+		res.getField("name").set("Ram Venkataraman");
+		res.getField("dob").set(new Date());
+		
+		Customer cust = new Customer() ;
+		cust.setId(5) ;
+		cust.setAge(37) ;
+		cust.setName("Ram Venkataraman") ;
+		cust.setAddress1("6610 Bradford Place") ;
+		cust.setAddress2("") ;
+		cust.setCity("Cumming") ;
+		cust.setState("Georgia") ;
+		cust.setZip(30040) ;
+		cust.setComments("Good Customer") ;
+		cust.setDob(new Date()) ;
+		cust.setRender(false) ;
+		
+		res.getForm("customer").set(cust) ;
+		
+	}
+	
 	@EventHandler
 	public void hideFields(EventContext context, EventResponse res)
 	{
