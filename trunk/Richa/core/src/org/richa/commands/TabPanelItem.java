@@ -3,16 +3,30 @@ package org.richa.commands;
 import org.richa.event.EventResponse;
 
 /**
- * Operations that can be performed on a tab
+ * Operations that can be performed on a tab panel item
  * @author ram
  *
  */
-public class Tab extends BaseCommand 
+public class TabPanelItem extends BaseCommand 
 {
+	private String tabPanel ;
+	
+	
+	public String getTabPanel()
+	{
+		return tabPanel ;
+	}
+	
+	public void setTabPanel(String tabPanel)
+	{
+		this.tabPanel = tabPanel ;
+	}
+	
+	
 	/**
 	 * Constuctor
 	 */
-	public Tab (String name, EventResponse res)
+	public TabPanelItem (String tab, String name, EventResponse res)
 	{
 		super (name, res) ;
 	}
@@ -47,13 +61,5 @@ public class Tab extends BaseCommand
 	public void enable(String name) 
 	{
 		res.add(ResponseItem.createResponseItem(name,ENABLE)) ;
-	}
-	
-	/**
-	 * Add a tab item
-	 */
-	public void addItem(String name) 
-	{
-		res.add(ResponseItem.createResponseItem(name,ADDITEM)) ;
 	}
 }

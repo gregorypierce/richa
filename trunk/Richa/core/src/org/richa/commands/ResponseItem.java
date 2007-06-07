@@ -1,5 +1,6 @@
 package org.richa.commands;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,7 +27,7 @@ public class ResponseItem
 	private String operation ;
 	
 	//Parameters to be passed to the operation
-	private String[] params ;
+	private JSONArray params ;
 	
 	//Constructor
 	private ResponseItem()
@@ -74,7 +75,7 @@ public class ResponseItem
 	/**
 	 * Get the parameters to be passed to the operation
 	 */
-	public String[] getParams()
+	public JSONArray getParams()
 	{
 		return params;
 	}
@@ -82,7 +83,7 @@ public class ResponseItem
 	/**
 	 * Set the parameters to be passed to the operation
 	 */
-	public void setParams(String[] params)
+	public void setParams(JSONArray params)
 	{
 		this.params = params;
 	}
@@ -120,7 +121,7 @@ public class ResponseItem
 	/**
 	 * Helper method to create a response item based on the name, operation and parameters
 	 */
-	public static ResponseItem createResponseItem(String name, String operation, String[] params)
+	public static ResponseItem createResponseItem(String name, String operation, JSONArray params)
 	{
 		//Create the response item
 		ResponseItem item = createResponseItem(name,operation) ;

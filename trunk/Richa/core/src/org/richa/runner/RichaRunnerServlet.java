@@ -11,14 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.richa.util.AppendingStringBuffer;
 import org.richa.util.ResponseUtils;
 
-import java.util.*;
-import javax.persistence.*;
-
 @SuppressWarnings("serial")
 public class RichaRunnerServlet extends HttpServlet
 {
-	private EntityManagerFactory 		entityManagerFactory;
-	private EntityManager 				entityManager;
 	
 	@Override
 	public void init() throws ServletException

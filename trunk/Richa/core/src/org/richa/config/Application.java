@@ -43,6 +43,10 @@ public class Application
 			
 			//Put the SimpleDateFormat object
 			application.set("timeformatobj", new SimpleDateFormat((String)application.get("timeformatstr")));
+			
+			//Caching default 
+			application.set("iscachingenabled", "true") ;
+			
 		}
 		
 		return application ;

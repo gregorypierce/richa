@@ -1,9 +1,14 @@
 package org.richa.commands;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.richa.event.EventResponse;
 
 public class BaseCommand
 {
+	//Logger
+	protected static Log log = LogFactory.getLog(BaseCommand.class);
+	
 	/**
 	 * Show the object
 	 */

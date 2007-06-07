@@ -11,8 +11,10 @@ import org.json.JSONObject;
 import org.richa.commands.BorderLayout;
 import org.richa.commands.Field;
 import org.richa.commands.FieldSet;
+import org.richa.commands.Form;
 import org.richa.commands.ResponseItem;
-import org.richa.commands.Tab;
+import org.richa.commands.TabPanel;
+import org.richa.commands.TabPanelItem;
 import org.richa.runner.Response;
 import org.richa.util.AppendingStringBuffer;
 
@@ -38,14 +40,25 @@ public class EventResponse  extends Response
 	private Field field ;
 	
 	/**
-	 * Manages tab operations
+	 * Manages form operations
 	 */
-	private Tab tab ;
+	private Form form ;
+	
+	/**
+	 * Manages tab panel operations
+	 */
+	private TabPanel tabPanel ;
 
 	/**
-	 * Manages border layout operations
+	 * Manages tab panel item operations
 	 */
-	private BorderLayout borderlayout ;
+	private TabPanelItem tabPanelItem ;
+	
+	/**
+	 * Manages borderlayout operations
+	 */
+	private BorderLayout borderLayout ;
+	
 	
 	//Response Fragments
 	private List<ResponseItem> responses = new ArrayList<ResponseItem>() ;
@@ -162,21 +175,79 @@ public class EventResponse  extends Response
 		
 		return fieldset ;
 	}
+	
 	/**
-	 * Return a Tab object for the given name
+	 * Return a TabPanel object for the given name
 	 */
-	public Tab getTab(String name)
+	public TabPanel getTabPanel(String name)
 	{
-		if (tab == null)
-			tab = new Tab(name, this) ;
+		if (tabPanel == null)
+			tabPanel = new TabPanel(name, this) ;
 		else
 		{
-			tab.setName(name) ;
-			tab.setEventResponse(this) ;
+			tabPanel.setName(name) ;
+			tabPanel.setEventResponse(this) ;
 		}
 		
-		log.debug("Getting a tab object for the EventRespone") ;
+		log.debug("Getting a tab panel object for the EventRespone") ;
 		
-		return tab ;
+		return tabPanel ;
+	}
+	
+	
+	/**
+	 * Return a TabPanelItem object for the given name
+	 */
+	public TabPanelItem getTabPanel(String tabPanel,String name)
+	{
+		if (tabPanelItem == null)
+			tabPanelItem = new TabPanelItem(tabPanel, name, this) ;
+		else
+		{
+			tabPanelItem.setTabPanel(tabPanel) ;
+			tabPanelItem.setName(name) ;
+			tabPanelItem.setEventResponse(this) ;
+		}
+		
+		log.debug("Getting a tab panel item object for the EventRespone") ;
+		
+		return tabPanelItem ;
+	}
+	
+	
+	/**
+	 * Return a BorderLayout object for the given name
+	 */
+	public BorderLayout getBorderLayout(String name)
+	{
+		if (borderLayout == null)
+			borderLayout = new BorderLayout(name, this) ;
+		else
+		{
+			borderLayout.setName(name) ;
+			borderLayout.setEventResponse(this) ;
+		}
+		
+		log.debug("Getting a border layout object for the EventRespone") ;
+		
+		return borderLayout ;
+	}
+	
+	/**
+	 * Returns a Form object for the given name
+	 */
+	public Form getForm(String name)
+	{
+		if (form == null)
+			form = new Form(name, this) ;
+		else
+		{
+			form.setName(name) ;
+			form.setEventResponse(this) ;
+		}
+		
+		log.debug("Getting a form object for the EventRespone") ;
+		
+		return form ;
 	}
 }
