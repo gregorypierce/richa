@@ -1,4 +1,7 @@
-/* Richa Core */
+/***************************************
+* Core Richa Objects
+* Author: Ram
+*/
 
 Richa = {}
 

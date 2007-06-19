@@ -1,10 +1,14 @@
+/***************************************
+* ExtJS specific objects
+* Author: Ram
+*/
 Richa.ExtJS = {}
 
 Richa.ExtJS.Core =  
 {
     processResponse : function(commands)
     {
-	    var command ;
+	    var command,script ;
 	
 	    //Loop through all the commands from the server and process them
 	    for (var loop = 0; loop <commands.length; loop++)
@@ -14,6 +18,9 @@ Richa.ExtJS.Core =
 		
 		    //Get the operation
 		    var operation = command["operation"] ;
+		    
+		    //Get the object type
+		    var objecttype = command["objecttype"] ;
 		
 		    //Get the name
 		    var name = command["name"] ;
@@ -27,22 +34,14 @@ Richa.ExtJS.Core =
 		    //Get the element
 		    var element = Ext.get(id) ;
 
-		    //Get the tag name		
-		    var tagName = element.dom.tagName.toLowerCase() ;
-
-			var script ;
-			
 			if (params == null)
 			    script = name + "." + operation + "();" ;
 					
-		    switch(tagName)
+		    switch(objecttype)
 		    {
-                case "input":
-            	    //Get the type of the input commands
-                    var type = element.dom.getAttribute("type") ;
-                
-                    //Process all input controls
-                    Richa.ExtJS.Input.processCommand(id,element,operation,params,script) ;
+                case "field":
+                    //Process all field controls
+                    Richa.ExtJS.Field.processCommand(id,element,operation,params,script) ;
                 
                     break ;
                     
@@ -57,34 +56,47 @@ Richa.ExtJS.Core =
                     Richa.ExtJS.Form.processCommand(operation,params);
                 	
                 	break ;
+                	
+                case "tabpanel":
+                	//Process all TabPanel commands
+                    Richa.ExtJS.TabPanel.processCommand(name, operation,params);
+                	
+                	break ;   
+                
+                case "layout":
+                	//Process all Layout commands
+                    Richa.ExtJS.Layout.processCommand(name,operation,params);
+                	
+                	break ; 
+                	       
             }
 	    }
     }
 }	
 
-Richa.ExtJS.Input = 
+Richa.ExtJS.Field = 
 {
 	processCommand : function(id,element,operation,params,script)
     {	
 	    switch(operation)
 	    {
 			case "hide":
-				Richa.ExtJS.Input.hide(id,element) ;
+				Richa.ExtJS.Field.hide(id,element) ;
 				break ;
 			case "show":
-				Richa.ExtJS.Input.show(id,element) ;	
+				Richa.ExtJS.Field.show(id,element) ;	
 				break ;
 			case "enable":
-				Richa.ExtJS.Input.enable(script) ;	
+				Richa.ExtJS.Field.enable(script) ;	
 				break ;
 			case "disable":
-				Richa.ExtJS.Input.disable(script) ;	
+				Richa.ExtJS.Field.disable(script) ;	
 				break ;
 			case "focus":
 				eval(script) ;
 				break ;
 			case "set":
-				Richa.ExtJS.Input.set(id,element,params) ;
+				Richa.ExtJS.Field.set(id,element,params) ;
 		}
 	},
 	
@@ -95,14 +107,14 @@ Richa.ExtJS.Input =
 	
 	hide : function(id,element)
 	{
-		var domNode = Richa.ExtJS.Input.get(id,element) ;
+		var domNode = Richa.ExtJS.Field.get(id,element) ;
 		if (domNode != null)
 			domNode.style.display = "none" ;
 	},
 
 	show : function(id,element)
 	{
-		var domNode = Richa.ExtJS.Input.get(id,element) ;
+		var domNode = Richa.ExtJS.Field.get(id,element) ;
 		if (domNode != null)
 			domNode.style.display = "" ;
 	},
@@ -145,8 +157,6 @@ Richa.ExtJS.FieldSet =
 {
 	processCommand : function(id,name,operation,params,script)
 	{	
-		eval(script) ;
-	
 		switch(operation)
 		{
 			case "enable":
@@ -155,6 +165,10 @@ Richa.ExtJS.FieldSet =
 			case "disable":
 				Richa.ExtJS.FieldSet.disable(id,name,script) ;	
 				break ;
+			case "hide":
+				eval(script) ;
+			case "show":
+				eval(script) ;
 		}
 	},
 
@@ -176,7 +190,7 @@ Richa.ExtJS.FieldSet =
 	            	{
 	            		var fname = id.substr(0,loc) ;
 	            		var tempscript = fname + ".enable();" ;
-	            		Richa.ExtJS.Input.enable(tempscript) ;
+	            		Richa.ExtJS.Field.enable(tempscript) ;
 	            	}
 	            }
 	        }
@@ -201,7 +215,7 @@ Richa.ExtJS.FieldSet =
 	            	{
 	            		var fname = id.substr(0,loc) ;
 	            		var tempscript = fname + ".disable();" ;
-	            		Richa.ExtJS.Input.disable(tempscript) ;
+	            		Richa.ExtJS.Field.disable(tempscript) ;
 	            	}
 	            }
 	        }
@@ -237,4 +251,137 @@ Richa.ExtJS.Form =
 				element.dom.value = fields[field] ;
 		}
 	}
+}
+
+Richa.ExtJS.Layout = 
+{
+	processCommand : function(name, operation,params)
+    {	
+	    switch(operation)
+	    {
+	    	case "expand":
+				Richa.ExtJS.Layout.expand(name,params) ;
+	    		break ;
+	    		
+			case "collapse":
+				Richa.ExtJS.Layout.collapse(name, params) ;
+				break ;
+				
+			case "hide":
+				Richa.ExtJS.Layout.hide(name,params) ;
+	    		break ;
+	    		
+			case "show":
+				Richa.ExtJS.Layout.show(name, params) ;
+				break ;
+		}
+	},
+	
+	collapse : function(name, params)
+	{
+		var region = params[0] ;
+		
+		var layoutRegion = eval(name + ".getRegion('" + region + "');") ;
+		if (layoutRegion != null)
+			layoutRegion.collapse() ;
+		
+	},
+	
+	expand : function(name, params)
+	{
+		var region = params[0] ;
+		
+		var layoutRegion = eval(name + ".getRegion('" + region + "');") ;
+		if (layoutRegion != null)
+			layoutRegion.expand() ;
+		
+	},
+	
+	hide : function(name, params)
+	{
+		var region = params[0] ;
+		
+		var layoutRegion = eval(name + ".getRegion('" + region + "');") ;
+		if (layoutRegion != null)
+			layoutRegion.hide() ;
+		
+	},
+	
+	show : function(name, params)
+	{
+		var region = params[0] ;
+		
+		var layoutRegion = eval(name + ".getRegion('" + region + "');") ;
+		if (layoutRegion != null)
+			layoutRegion.show() ;
+		
+	}
+}
+
+Richa.ExtJS.TabPanel = 
+{
+	processCommand : function(name,operation,params)
+    {	
+	    switch(operation)
+	    {
+			case "hide":
+				Richa.ExtJS.TabPanel.hideTab(name,params) ;
+				break ;
+			case "show":
+				Richa.ExtJS.TabPanel.showTab(name,params) ;
+				break ;
+			case "enable":
+				Richa.ExtJS.TabPanel.enableTab(name,params) ;
+				break ;
+			case "disable":
+				Richa.ExtJS.TabPanel.disableTab(name,params) ;
+				break ;
+			case "activate":
+				Richa.ExtJS.TabPanel.activate(name,params) ;
+				break ;
+		}
+	},
+	
+	hideTab : function(name,params)
+	{
+		var tabpanelitem = params[0] ;
+		var script = name + '.hideTab("tabitem-' + tabpanelitem + '-id");' ;
+		
+		eval(script) ;
+	},
+	
+	showTab : function(name,params)
+	{
+		var tabpanelitem = params[0] ;
+		var script = name + '.unhideTab("tabitem-' + tabpanelitem + '-id");' ;
+		
+		eval(script) ;
+	},
+	
+	enableTab : function(name,params)
+	{
+		var tabpanelitem = params[0] ;
+		var script = name + '.enableTab("tabitem-' + tabpanelitem + '-id");' ;
+		
+		eval(script) ;
+	},
+	
+	disableTab : function(name,params)
+	{
+		var tabpanelitem = params[0] ;
+		var script = name + '.disableTab("tabitem-' + tabpanelitem + '-id");' ;
+		
+		eval(script) ;
+	},
+	
+	activate : function(name,params)
+	{
+		var tabpanelitem = params[0] ;
+		var script = name + '.activate("tabitem-' + tabpanelitem + '-id");' ;
+		
+		eval(script) ;
+	},
+	
+	
+	
 }
