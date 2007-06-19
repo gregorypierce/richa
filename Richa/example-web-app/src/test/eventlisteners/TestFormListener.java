@@ -97,6 +97,30 @@ public class TestFormListener
 		res.getFieldSet("legaddr").disable();
 	}
 	
+	@EventHandler
+	public void collapsePanel(EventContext context, EventResponse res)
+	{
+		res.getBorderLayout("laycustomer").collapse("east");
+	}
+	
+	@EventHandler
+	public void expandPanel(EventContext context, EventResponse res)
+	{
+		res.getBorderLayout("laycustomer").expand("east");
+	}
+	
+	@EventHandler
+	public void hidePanel(EventContext context, EventResponse res)
+	{
+		res.getBorderLayout("laycustomer").hide("east");
+	}
+	
+	@EventHandler
+	public void showPanel(EventContext context, EventResponse res)
+	{
+		res.getBorderLayout("laycustomer").show("east");
+	}
+	
 	@ListDataStoreHandler("statelist")
 	public void testDataStoreHandler(Map<String,String> params, ListDataStore data)
 	{
