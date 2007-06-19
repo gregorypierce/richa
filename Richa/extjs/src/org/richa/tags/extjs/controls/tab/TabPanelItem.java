@@ -44,7 +44,7 @@ public class TabPanelItem extends BaseExtJSTag
 		output.write("<div id=\"" + "tabitem-" + name + "-id" + "\">\n") ;
 		
 		//Generate a tab Panel Item creation
-		scriptBuffer.appendln("    " + "var " + name + " = " + getCurrentTabPanelName() + ".addTab(\"tabitem-" + name + "-id\",\"" + text + "\");") ;
+		scriptBuffer.appendln("    "  + name + " = " + getCurrentTabPanelName() + ".addTab(\"tabitem-" + name + "-id\",\"" + text + "\");") ;
 		
 		//Does this tab need to be active
 		String active = (String) getAttribute(ACTIVE) ;

@@ -43,7 +43,7 @@ public class BorderLayout extends BaseExtJSTag
 			element = "Ext.get(" + element + ")" ;
 		
 		//Generate a border layout creation
-		scriptBuffer.appendln("    var " + getName() + " = new " + getObjectName() + "(" + element + ");") ;
+		scriptBuffer.appendln("    " + getName() + " = new " + getObjectName() + "(" + element + ");") ;
 		
 		//Set the current layout name as current
 		setCurrentBorderLayoutName(name) ;

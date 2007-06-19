@@ -58,7 +58,7 @@ public class TabPanel extends BaseExtJSTag
 	//Create the tab panel
 	protected void serializeCreation()
 	{
-		scriptBuffer.appendln("    var " + getName() + " = new " + getObjectName() + "(\"tab-" + getName() + "-id\", {");
+		scriptBuffer.appendln("    " + getName() + " = new " + getObjectName() + "(\"tab-" + getName() + "-id\", {");
 		
 		//Serialize all the attributes
 		serializeAttributes() ;
