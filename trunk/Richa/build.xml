@@ -143,11 +143,11 @@
 	</target>
 
 	<target name="example-compile" depends="dist">
-		<javac srcdir="${example-src}" destdir="${richa.build}" debug="true" debuglevel="lines">
+		<javac srcdir="${example.src}" destdir="${richa.build}" debug="true" debuglevel="lines">
 			<classpath id="example.app.classpath" refid="example.classpath" />
 		</javac>
 		<copy todir="${richa.build}">
-			<fileset dir="${example-src}">
+			<fileset dir="${example.src}">
     			<exclude name="**/*.java"/>
 			</fileset>
 		</copy>
