@@ -1,4 +1,4 @@
-package test.eventhandlers;
+package test.eventlisteners;
 
 import java.util.Date;
 import java.util.Map;
