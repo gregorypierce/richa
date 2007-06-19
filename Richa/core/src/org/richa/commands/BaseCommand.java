@@ -33,6 +33,12 @@ public class BaseCommand
 	 * Set the object's value
 	 */
 	protected static final String SET = "set" ;
+
+	
+	/**
+	 * Activate 
+	 */
+	protected static final String ACTIVATE = "activate" ;
 	
 	/**
 	 * Set the focus the object

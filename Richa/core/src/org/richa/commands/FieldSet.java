@@ -9,6 +9,8 @@ import org.richa.event.EventResponse;
  */
 public class FieldSet extends BaseCommand
 {
+	private static final String FIELDSET = "fieldset" ;
+	
 	/**
 	 * Constructor
 	 */
@@ -22,7 +24,7 @@ public class FieldSet extends BaseCommand
 	 */
 	public void show() 
 	{
-		res.add(ResponseItem.createResponseItem(name,SHOW)) ;
+		res.add(ResponseItem.createResponseItem(name,FIELDSET,SHOW)) ;
 	}
 	
 	/**
@@ -30,7 +32,7 @@ public class FieldSet extends BaseCommand
 	 */
 	public void hide() 
 	{
-		res.add(ResponseItem.createResponseItem(name,HIDE)) ;
+		res.add(ResponseItem.createResponseItem(name,FIELDSET,HIDE)) ;
 	}
 	
 	/**
@@ -38,14 +40,14 @@ public class FieldSet extends BaseCommand
 	 */
 	public void focus() 
 	{
-		res.add(ResponseItem.createResponseItem(name,FOCUS)) ;
+		res.add(ResponseItem.createResponseItem(name,FIELDSET,FOCUS)) ;
 	}
 	/**
 	 * Disable the fielset
 	 */
 	public void disable()
 	{
-		res.add(ResponseItem.createResponseItem(name,DISABLE)) ;
+		res.add(ResponseItem.createResponseItem(name,FIELDSET,DISABLE)) ;
 	}
 	
 	/**
@@ -53,6 +55,6 @@ public class FieldSet extends BaseCommand
 	 */
 	public void enable()
 	{
-		res.add(ResponseItem.createResponseItem(name,ENABLE)) ;
+		res.add(ResponseItem.createResponseItem(name,FIELDSET,ENABLE)) ;
 	}
 }

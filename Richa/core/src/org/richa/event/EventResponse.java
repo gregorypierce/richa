@@ -14,7 +14,6 @@ import org.richa.commands.FieldSet;
 import org.richa.commands.Form;
 import org.richa.commands.ResponseItem;
 import org.richa.commands.TabPanel;
-import org.richa.commands.TabPanelItem;
 import org.richa.runner.Response;
 import org.richa.util.AppendingStringBuffer;
 
@@ -49,11 +48,6 @@ public class EventResponse  extends Response
 	 */
 	private TabPanel tabPanel ;
 
-	/**
-	 * Manages tab panel item operations
-	 */
-	private TabPanelItem tabPanelItem ;
-	
 	/**
 	 * Manages borderlayout operations
 	 */
@@ -193,27 +187,6 @@ public class EventResponse  extends Response
 		
 		return tabPanel ;
 	}
-	
-	
-	/**
-	 * Return a TabPanelItem object for the given name
-	 */
-	public TabPanelItem getTabPanel(String tabPanel,String name)
-	{
-		if (tabPanelItem == null)
-			tabPanelItem = new TabPanelItem(tabPanel, name, this) ;
-		else
-		{
-			tabPanelItem.setTabPanel(tabPanel) ;
-			tabPanelItem.setName(name) ;
-			tabPanelItem.setEventResponse(this) ;
-		}
-		
-		log.debug("Getting a tab panel item object for the EventRespone") ;
-		
-		return tabPanelItem ;
-	}
-	
 	
 	/**
 	 * Return a BorderLayout object for the given name

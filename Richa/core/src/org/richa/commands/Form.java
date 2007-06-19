@@ -19,6 +19,8 @@ import org.richa.event.EventResponse;
  */
 public class Form extends BaseCommand
 {	
+	private static final String FORM = "form" ;
+	
 	/**
 	 * Constructor
 	 */
@@ -84,6 +86,6 @@ public class Form extends BaseCommand
 		
 		params.put(obj) ;
 		
-		res.add(ResponseItem.createResponseItem(name,SET,params)) ;
+		res.add(ResponseItem.createResponseItem(name,FORM,SET,params)) ;
 	}	
 }
