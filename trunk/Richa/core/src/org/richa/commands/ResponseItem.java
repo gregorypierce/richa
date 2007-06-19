@@ -16,12 +16,16 @@ public class ResponseItem
 	private static final  String EMPTY = "" ;
 	
 	private static final  String NAME = "name" ;
+	private static final  String OBJECTTYPE = "objecttype" ;
 	private static final  String OPERATION = "operation" ;
 	private static final  String PARAMS = "params" ;
 	
 	
 	//Name of the object to perform the operation
 	private String name ;
+	
+	//Type of the object
+	private String objecttype ;
 	
 	//Operation to be performed
 	private String operation ;
@@ -35,6 +39,7 @@ public class ResponseItem
 		params = null ;
 		name = EMPTY ;
 		operation = EMPTY ;
+		objecttype = EMPTY ;
 	}
 	
 	/**
@@ -70,7 +75,22 @@ public class ResponseItem
 	{
 		this.operation = operation;
 	}
+	
+	/**
+	 * Get the object type 
+	 */
+	public String getObjectType()
+	{
+		return objecttype;
+	}
 
+	/**
+	 * Set the object type
+	 */
+	public void setObjectType(String objecttype)
+	{
+		this.objecttype = objecttype;
+	}
 
 	/**
 	 * Get the parameters to be passed to the operation
@@ -97,6 +117,7 @@ public class ResponseItem
 		
 		//Add the items to the JSON object
 		json.put(NAME, name) ;
+		json.put(OBJECTTYPE, objecttype) ;
 		json.put(OPERATION, operation) ;
 		json.put(PARAMS, params) ;
 		
@@ -107,12 +128,13 @@ public class ResponseItem
 	/**
 	 * Helper method to create a response item based on the name and operation
 	 */
-	public static ResponseItem createResponseItem(String name, String operation)
+	public static ResponseItem createResponseItem(String name, String objecttype, String operation)
 	{
 		ResponseItem item = new ResponseItem() ;
 		
 		//Set the attributes
 		item.setName(name) ;
+		item.setObjectType(objecttype) ;
 		item.setOperation(operation) ;
 		
 		return item ;
@@ -121,10 +143,10 @@ public class ResponseItem
 	/**
 	 * Helper method to create a response item based on the name, operation and parameters
 	 */
-	public static ResponseItem createResponseItem(String name, String operation, JSONArray params)
+	public static ResponseItem createResponseItem(String name, String objecttype, String operation, JSONArray params)
 	{
 		//Create the response item
-		ResponseItem item = createResponseItem(name,operation) ;
+		ResponseItem item = createResponseItem(name,objecttype,operation) ;
 		
 		//Set the parameters
 		item.setParams(params) ;

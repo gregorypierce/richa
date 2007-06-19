@@ -14,6 +14,8 @@ import org.richa.event.EventResponse;
  */
 public class Field extends BaseCommand
 {	
+	private static final String FIELD = "field" ;
+	
 	/**
 	 * Constructor
 	 */
@@ -27,7 +29,7 @@ public class Field extends BaseCommand
 	 */
 	public void show() 
 	{
-		res.add(ResponseItem.createResponseItem(name,SHOW)) ;
+		res.add(ResponseItem.createResponseItem(name,FIELD,SHOW)) ;
 	}
 	
 	/**
@@ -35,7 +37,7 @@ public class Field extends BaseCommand
 	 */
 	public void hide()
 	{
-		res.add(ResponseItem.createResponseItem(name,HIDE)) ;
+		res.add(ResponseItem.createResponseItem(name,FIELD,HIDE)) ;
 	}
 	
 	/**
@@ -43,7 +45,7 @@ public class Field extends BaseCommand
 	 */
 	public void disable() 
 	{
-		res.add(ResponseItem.createResponseItem(name,DISABLE)) ;
+		res.add(ResponseItem.createResponseItem(name,FIELD,DISABLE)) ;
 	}
 	
 	/**
@@ -51,7 +53,7 @@ public class Field extends BaseCommand
 	 */
 	public void enable() 
 	{
-		res.add(ResponseItem.createResponseItem(name,ENABLE)) ;
+		res.add(ResponseItem.createResponseItem(name,FIELD,ENABLE)) ;
 	}
 	
 	/**
@@ -59,7 +61,7 @@ public class Field extends BaseCommand
 	 */
 	public void focus() 
 	{
-		res.add(ResponseItem.createResponseItem(name,FOCUS)) ;
+		res.add(ResponseItem.createResponseItem(name,FIELD,FOCUS)) ;
 	}
 	
 	/**
@@ -70,7 +72,7 @@ public class Field extends BaseCommand
 		JSONArray params = new JSONArray() ;
 		params.put(value) ;
 		
-		res.add(ResponseItem.createResponseItem(name,SET,params)) ;
+		res.add(ResponseItem.createResponseItem(name,FIELD,SET,params)) ;
 	}
 	
 	/**
