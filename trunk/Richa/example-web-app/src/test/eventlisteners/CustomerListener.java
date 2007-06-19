@@ -1,4 +1,4 @@
-package test.eventhandlers;
+package test.eventlisteners;
 
 import org.richa.annotations.EventHandler;
 import org.richa.annotations.EventListener;
