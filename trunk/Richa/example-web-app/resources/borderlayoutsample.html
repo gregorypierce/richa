@@ -7,24 +7,30 @@
 	<body>
     	<div id="center">
 		    <extJS:formwrapper width="375px" title="Customer Information">
-				<extJS:form name="customer" labelWidth="100" buttonAlign="left">
-				    <extJS:fieldset name="legper" legend="Personal">
-						<extJS:textfield name="name" fieldLabel="Name" width="170"/>
-						<extJS:numberfield name="age" fieldLabel="Age" width="45"/>
-						<extJS:datefield name="dob" fieldLabel="Date Of Birth" width="100"/>
-					</extJS:fieldset>
-					<extJS:fieldset name="legaddr" legend="Address">
-						<extJS:textfield name="addr1" fieldLabel="Address 1" width="170"/>
-						<extJS:textfield name="addr2" width="170" fieldLabel="Address2"/>
-						<extJS:textfield name="city"  fieldLabel = "City" width="170"/>
-						<extJS:numberfield name="zip" fieldLabel="Zip" width="55" maxLength="5"/>
-						<extJS:textarea name="comment" fieldLabel="Comments" width="170"/>
-					</extJS:fieldset>
-					<extJS:formbutton name="save" text="Save"/>
-				</extJS:form>
+			    <extJS:listener name="formListener">
+					<extJS:form name="customer" labelWidth="100" buttonAlign="left">
+					    <extJS:fieldset name="legper" legend="Personal">
+							<extJS:textfield name="name" fieldLabel="Name" width="170"/>
+							<extJS:numberfield name="age" fieldLabel="Age" width="45"/>
+							<extJS:datefield name="dob" fieldLabel="Date Of Birth" width="100"/>
+						</extJS:fieldset>
+						<extJS:fieldset name="legaddr" legend="Address">
+							<extJS:textfield name="addr1" fieldLabel="Address 1" width="170"/>
+							<extJS:textfield name="addr2" width="170" fieldLabel="Address2"/>
+							<extJS:textfield name="city"  fieldLabel = "City" width="170"/>
+							<extJS:numberfield name="zip" fieldLabel="Zip" width="55" maxLength="5"/>
+							<extJS:textarea name="comment" fieldLabel="Comments" width="170"/>
+						</extJS:fieldset>
+						<extJS:formbutton name="collapse" text="Collapse" serverClick="collapsePanel" />
+						<extJS:formbutton name="expand" text="Expand" serverClick="expandPanel" />
+						<extJS:formbutton name="hide" text="Hide" serverClick="hidePanel" />
+						<extJS:formbutton name="show" text="Show" serverClick="showPanel" />
+					</extJS:form>
+				</extJS:listener>
 			</extJS:formwrapper>
 		</div>
 		<div id="south">
+			<H1>Hello World</H1>
 		</div>
 
 		<div id="north">
@@ -42,18 +48,17 @@
 		<div id="autoTabs">
 		</div>
 
-	
 		<extJS:borderlayout name="laycustomer" element="document.body">
 			<extJS:layoutregion region="north" initialSize="25" titlebar="false"/>
-			<extJS:layoutregion region="east" split="true" initialSize="202" minSize="175" maxSize="400" titlebar="true" collapsible="true"/>
-			<extJS:layoutregion region="west" split="true" initialSize="200" minSize="175" maxSize="400" titlebar="true" collapsible="true"/>
+			<extJS:layoutregion region="east" split="true" initialSize="202" minSize="175" maxSize="400" titlebar="true" title="East" collapsible="true" collapsedTitle="East"/>
+			<extJS:layoutregion region="west" split="true" initialSize="200" minSize="175" maxSize="400" titlebar="true" title="West" collapsible="true" collapsedTitle="West"/>
 			<extJS:layoutregion region="center" titlebar="true" autoScroll="true" resizeTabs="true" minTabWidth="50" preferredTabWidth="150"/>
 			<extJS:layoutregion region="south" split="true" initialSize="100" minSize="100" titlebar="true" collapsible="true"/>
 			<extJS:contentpanel region="north" element="north"/>
-			<extJS:contentpanel region="east" element="east" title="East" collapsible="true"/>
-			<extJS:contentpanel region="west" element="west" title="West" collapsible="true"/>
-			<extJS:contentpanel region="south" element="south" title="South" collapsible="true"/>
-			<extJS:contentpanel region="center" element="center" title="Customer" collapsible="false"/>
+			<extJS:contentpanel region="east" element="east"/>
+			<extJS:contentpanel region="west" element="west"/>
+			<extJS:contentpanel region="south" element="south"/>
+			<extJS:contentpanel region="center" element="center"/>
 		</extJS:borderlayout>
 	</body>
 	</html>
