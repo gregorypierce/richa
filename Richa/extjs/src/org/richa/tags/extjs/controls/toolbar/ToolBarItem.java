@@ -6,20 +6,12 @@ import org.richa.tags.extjs.BaseExtJSTag;
 import org.xml.sax.SAXException;
 
 /**
- * This class represents a ToolBar tag
+ * This class represents a ToolBarItem tag
  * @author ram
  *
  */
-public class ToolBar extends BaseExtJSTag
-{
-	/**
-	 * Return the javascript object name to generate
-	 */
-	protected String getObjectName()
-	{
-		return ("Ext.Toolbar") ;
-	}
-	
+public abstract class ToolBarItem extends BaseExtJSTag
+{	
 	/**
 	 * Generate html and js before the body is processed
 	 */
@@ -30,19 +22,16 @@ public class ToolBar extends BaseExtJSTag
 		if (isEmpty(name))
 			throw new JellyTagException("name is a required parameter for this tag") ;
 		
+		//Check if there a menu active 
+		String toolbar = getCurrentToolBarName() ;
+		if (toolbar != null)
+			throw new JellyTagException("toolbar items must be embedded inside toolbar tags") ;
+		
 		//Generate menu creation
 		serialize(false) ;
 		
-		//Set the toolbar name
-		setCurrentToolBarName(name) ;
-	}
-	
-	/**
-	 * Generate html and js after the body is processed
-	 */
-	protected void afterBody(final XMLOutput output) throws JellyTagException, SAXException
-	{	
-	    //Clear the toolbar name
-	    clearCurrentToolBarName() ;
+		//Append the menu item to the menu
+		scriptBuffer.append("    " + toolbar + ".addItem(" + name + ");") ;
+		
 	}   
 }
